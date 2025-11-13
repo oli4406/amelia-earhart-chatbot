@@ -1,6 +1,11 @@
 import {Link} from 'react-router'
+import { useEffect } from 'react'
 
 export default function Home() {
+    useEffect(() => {
+        document.title = 'Amelia Earhart Chatbot';
+      }, []);
+
     return(
         <div>
         <h1>Welcome to the Amelia Earhart Chatbot!</h1>
