@@ -15,6 +15,10 @@ function ChatPage() {
     setValue('')
   }
 
+  useEffect(() => {
+    document.title = 'Chat | Amelia Earhart Chatbot';
+  }, []);
+
   // auto-scroll to bottom when messages change
   useEffect(() => {
     const el = containerRef.current
