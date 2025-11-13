@@ -40,3 +40,78 @@
 .read-the-docs {
   color: #888;
 }
+
+/* ChatPage / messages window styles */
+.chat-container {
+  padding: 20px;
+}
+
+.messages-wrapper {
+  margin-bottom: 12px;
+}
+
+.messages-window {
+  width: 100%;
+  height: 160px;
+  /* make the messages container visually invisible and match page background */
+  border: none;
+  padding: 0;
+  /* Always show vertical scroller */
+  overflow-y: scroll;
+  overflow-x: hidden;
+  white-space: normal;
+  display: block;
+  box-sizing: border-box;
+  background: transparent;
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 transparent;
+}
+
+.empty-message {
+  color: #6b7280;
+  padding: 6px 0;
+}
+
+.message-line {
+  padding: 8px 6px;
+  border-bottom: 1px solid #eef2f700;
+  color: #ffffff;
+  text-align: left;
+  word-wrap: break-word;
+}
+
+/* WebKit scrollbar styling for Chrome/Safari/Edge */
+.messages-window::-webkit-scrollbar {
+  width: 10px;
+}
+.messages-window::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 6px;
+}
+.messages-window::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 6px;
+}
+.messages-window::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* InputField styles */
+.input-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.input-field {
+  flex: 1;
+  padding: 8px;
+  font-size: 1rem;
+}
+
+.send-button {
+  padding: 8px 12px;
+  font-size: 1rem;
+  cursor: pointer;
+}
