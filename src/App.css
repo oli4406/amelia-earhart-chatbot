@@ -79,6 +79,33 @@
   color: #ffffff;
   text-align: left;
   word-wrap: break-word;
+  display: flex;
+  margin-bottom: 0.5rem;
+}
+
+.message-line.user {
+  justify-content: flex-end;            /* pushes user bubble to the right */
+}
+
+.message-line.user .message-bubble {
+  background: #2166f3;
+  color: #ffffff;
+}
+
+.message-line.bot {
+  justify-content: flex-start;          /* amelia bubbles on the left */
+}
+
+.message-line.bot .message-bubble {
+  background: #12263a;
+  color: #f5f7ff;
+}
+
+/* Actual bubbling for the messages */
+.message-bubble {
+  max-width: 70%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 12px;
 }
 
 /* WebKit scrollbar styling for Chrome/Safari/Edge */
