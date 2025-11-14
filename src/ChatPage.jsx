@@ -40,8 +40,11 @@ function ChatPage() {
             </div>
           ) : (
             messages.map((m, i) => (
-              <div key={i} className="message-line">
-                {m}
+              <div key={i} className={`message-line ${i % 2 === 0 ? 'user' : 'bot'}`}>
+                <div className="message-bubble">
+                  {m}
+                </div>
+                {/* Added alternating messages (later change to Amelia vs user) and bubbled messages */}
               </div>
             ))
           )}
