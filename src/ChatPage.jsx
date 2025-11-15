@@ -3,15 +3,36 @@ import InputField from './InputField'
 import { useState, useRef, useEffect } from 'react'
 import './App.css'
 
+let nextId = 1
 
 function ChatPage() {
   const [value, setValue] = useState('')
-  const [messages, setMessages] = useState([])
+  const [messages, setMessages] = useState([   /* messages are stored as an array*/
+    {
+      id: nextId++,
+      role: 'bot',
+      text: "Hello, I'm Amelia Earhart. Want to talk about the skies?"
+    }
+  ])
+  
   const containerRef = useRef(null)
 
   const handleSubmit = () => {
-    if (!value.trim()) return
-    setMessages((prev) => [...prev, value.trim()])
+    const trimmed = value.trim()
+    if (!trimmed) return
+    const userMsg = {         /*added a user messge object so your not talking to yourself */
+      id: nextId++,
+      role: 'user',
+      text: trimmed
+    }
+
+    const botReplyTxt = placeholderReply(trimmed)
+    const botMsg = {         /*here is the Amelia text, placeholder to simulate convo */
+      id: nextId++,
+      role: 'bot',
+      text: botReplyTxt
+    }
+    setMessages((prev) => [...prev, userMsg, botMsg])
     setValue('')
   }
 
@@ -40,9 +61,9 @@ function ChatPage() {
             </div>
           ) : (
             messages.map((m, i) => (
-              <div key={i} className={`message-line ${i % 2 === 0 ? 'user' : 'bot'}`}>
+              <div key={i} className={`message-line ${i % 2 === 0 ? 'bot' : 'user'}`}>    {/*switched around the sides of the conversation */}
                 <div className="message-bubble">
-                  {m}
+                  {m.text}    {/*renders the text, not the whole object*/}
                 </div>
                 {/* Added alternating messages (later change to Amelia vs user) and bubbled messages */}
               </div>
@@ -54,6 +75,10 @@ function ChatPage() {
       <InputField value={value} onChange={setValue} onSubmit={handleSubmit} />
     </div>
   )
+}
+//placeholder text for the 'bot' to simulate a conversation
+function placeholderReply(userText){
+  return "Placeholder Text"
 }
 
 export default ChatPage
