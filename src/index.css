@@ -107,3 +107,31 @@ nav {
 .nav--collapsed .nav-inner {
   display: none;
 }
+
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.settings-modal {
+  background: #36383d;
+  color: #f5f7ff;
+  border-radius: 10px;
+  padding: 2.5;
+  min-width: 320px;
+  position: relative;
+}
+
+.settings-close {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  border: none;
+  background: transparent;
+  color: #f5f7ff;
+  font-size: 1.25rem;
+}
