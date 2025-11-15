@@ -1,5 +1,5 @@
 
-import InputField from './InputField'
+import ChatField from './ChatField.jsx'
 import { useState, useRef, useEffect } from 'react'
 import './App.css'
 
@@ -58,7 +58,7 @@ function ChatPage() {
         </div>
       </div>
 
-      <InputField value={value} onChange={setValue} onSubmit={handleSubmit} />
+      <ChatField value={value} onChange={setValue} onSubmit={handleSubmit} />
     </div>
   )
 }

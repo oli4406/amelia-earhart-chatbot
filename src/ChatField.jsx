@@ -1,4 +1,4 @@
-export default function InputField({ value, onChange, onSubmit }) {
+export default function ChatField({ value, onChange, onSubmit }) {
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             e.preventDefault();
