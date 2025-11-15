@@ -8,30 +8,16 @@ let nextId = 1
 function ChatPage() {
   const [value, setValue] = useState('')
   const [messages, setMessages] = useState([   /* messages are stored as an array*/
-    {
-      id: nextId++,
-      role: 'bot',
-      text: "Hello, I'm Amelia Earhart. Want to talk about the skies?"
-    }
-  ])
-  
+    {id: nextId++, role: 'bot', text: "Hello, I'm Amelia Earhart. Want to talk about the skies?"}])
   const containerRef = useRef(null)
 
   const handleSubmit = () => {
     const trimmed = value.trim()
-    if (!trimmed) return
-    const userMsg = {         /*added a user messge object so your not talking to yourself */
-      id: nextId++,
-      role: 'user',
-      text: trimmed
-    }
+    if (!trimmed) return       /*added a user messge object so your not talking to yourself */
+    const userMsg = {id: nextId++, role: 'user', text: trimmed}
 
-    const botReplyTxt = placeholderReply(trimmed)
-    const botMsg = {         /*here is the Amelia text, placeholder to simulate convo */
-      id: nextId++,
-      role: 'bot',
-      text: botReplyTxt
-    }
+    const botReplyTxt = placeholderReply(trimmed) /*here is the Amelia text, placeholder to simulate convo */
+    const botMsg = {id: nextId++, role: 'bot', text: botReplyTxt}
     setMessages((prev) => [...prev, userMsg, botMsg])
     setValue('')
   }
