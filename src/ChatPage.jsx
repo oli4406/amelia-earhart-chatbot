@@ -21,6 +21,7 @@ function ChatPage() {
         // original behaviour: only consider currentUser as proof of login
         return !!localStorage.getItem('currentUser')
       } catch (e) {
+        console.log('Error checking login status:', e)
         return false
       }
     }
