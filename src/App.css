@@ -109,7 +109,7 @@
   border-radius: 12px;
 }
 
-/* WebKit scrollbar styling for Chrome/Safari/Edge */
+
 .messages-window::-webkit-scrollbar {
   width: 10px;
 }
@@ -142,4 +142,16 @@
   padding: 8px 12px;
   font-size: 1rem;
   cursor: pointer;
+}
+
+
+:root {
+  
+  --cursor-hot-x: 0;
+  --cursor-hot-y: 0;
+}
+
+
+:root, html, body, .App {
+  cursor: url("./assets/Heinkel%20He111%281%29.png") var(--cursor-hot-x) var(--cursor-hot-y), auto;
 }
