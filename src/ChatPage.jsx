@@ -18,25 +18,17 @@ function ChatPage() {
     // persist user input to localStorage history only if user is logged in
     const isLoggedIn = () => {
       try {
-        // original behaviour: only consider currentUser as proof of login
-        return !!localStorage.getItem('currentUser')
+        // accept either 'currentUser' or legacy 'hasUser' flag
+        return !!localStorage.getItem('currentUser') || !!localStorage.getItem('hasUser')
       } catch (e) {
         console.warn('Failed to access localStorage', e)
         return false
       }
     }
 
-    if (isLoggedIn()) {
-      try {
-        const raw = localStorage.getItem('chat_history')
-        const arr = raw ? JSON.parse(raw) : []
-        arr.push({ id: userMsg.id, text: userMsg.text, ts: Date.now() })
-        localStorage.setItem('chat_history', JSON.stringify(arr))
-      } catch (err) {
-        // ignore storage errors
-        console.warn('Failed to save chat history', err)
-      }
-    } else {
+    // only show a transient notice if user is not logged in; actual save
+    // of the question+answer pair happens after we receive the bot reply
+    if (!isLoggedIn()) {
       // show a transient notice to the user that history wasn't saved
       setSaveNotice(true)
       window.setTimeout(() => setSaveNotice(false), 3000)
@@ -67,10 +59,36 @@ function ChatPage() {
       }
 
       const botMsg = {id: nextId++, role: 'bot', text: serverText}
+
+      // persist the question/answer pair after receiving the server reply
+      if (isLoggedIn()) {
+        try {
+          const raw = localStorage.getItem('chat_history')
+          const arr = raw ? JSON.parse(raw) : []
+          arr.push({ id: userMsg.id, question: userMsg.text, answer: serverText, ts: Date.now() })
+          localStorage.setItem('chat_history', JSON.stringify(arr))
+        } catch (err) {
+          console.warn('Failed to save chat history', err)
+        }
+      }
+
       setMessages((prev) => [...prev, botMsg])
     } catch (err) {
       console.error('Error communicating with server:', err)
       const botMsg = {id: nextId++, role: 'bot', text: 'Sorry, the response got lost somewhere over the Pacific Ocean.'}
+
+      // On error also save the Q/A pair (with the error text as answer) if logged in
+      if (isLoggedIn()) {
+        try {
+          const raw = localStorage.getItem('chat_history')
+          const arr = raw ? JSON.parse(raw) : []
+          arr.push({ id: userMsg.id, question: userMsg.text, answer: botMsg.text, ts: Date.now() })
+          localStorage.setItem('chat_history', JSON.stringify(arr))
+        } catch (err) {
+          console.warn('Failed to save chat history', err)
+        }
+      }
+
       setMessages((prev) => [...prev, botMsg])
     }
   }

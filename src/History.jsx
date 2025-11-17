@@ -59,7 +59,15 @@ export default function History() {
                                         <strong>#{i + 1}</strong>
                                         <span className="history-ts">{new Date(h.ts).toLocaleString()}</span>
                                     </div>
-                                    <div className="history-text">{h.text}</div>
+                                    {/* support both legacy single-field entries and new Q/A pairs */}
+                                    {h.question && h.answer ? (
+                                        <div className="history-qa">
+                                            <div className="history-question"><strong>Q:</strong> {h.question}</div>
+                                            <div className="history-answer"><strong>A:</strong> {h.answer}</div>
+                                        </div>
+                                    ) : (
+                                        <div className="history-text">{h.text || JSON.stringify(h)}</div>
+                                    )}
                                     <div className="history-actions">
                                         <button className="btn small" onClick={() => deleteEntry(h.id)}>
                                             Delete
