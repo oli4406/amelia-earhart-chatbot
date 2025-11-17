@@ -1,11 +1,20 @@
 import {Link} from 'react-router-dom';
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 
 export default function NavBar() {
   const [loggedIn, setLoggedIn] = useState(false);
     const [collapsed, setCollapsed] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
+    const [fontSize, setFontSize] = useState('100%');
+    const [theme, setTheme] = useState('dark');
 
+
+    useEffect(() => {
+        const root = document.documentElement;
+        root.dataset.fontSize = fontSize;
+        root.dataset.theme = theme;
+    }, [fontSize, theme]);
+    
     return (
       <>
         <nav className={`nav ${collapsed ? 'nav--collapsed' : ''}`}>
@@ -48,6 +57,39 @@ export default function NavBar() {
             <div className="settings-modal">
                 <button className="settings-close" onClick={() => setShowSettings(false)}> x </button>
                 <div className="settings-body">
+                    <h2 id="settings-title">Settings</h2>
+                    <section className="settings-section">
+                        <h3>Text size</h3>
+                        <div className="text-sizing">
+                            <label>
+                                <input type="radio" name="text-size" value="75%" checked={fontSize === '75%'} onChange={(e) => setFontSize(e.target.value)}/>
+                                75%
+                            </label>
+                            <label>
+                                <input type="radio" name="text-size" value="100%" checked={fontSize === '100%'} onChange={(e) => setFontSize(e.target.value)}/>
+                                100%
+                            </label>
+                            <label>
+                                <input type="radio" name="text-size" value="125%" checked={fontSize === '125%'} onChange={(e) => setFontSize(e.target.value)}/>
+                                125%
+                            </label>
+                            <label>
+                                <input type="radio" name="text-size" value="150%" checked={fontSize === '150%'} onChange={(e) => setFontSize(e.target.value)}/>
+                                150%
+                            </label>
+                            <label>
+                                <input type="radio" name="text-size" value="200%" checked={fontSize === '200%'} onChange={(e) => setFontSize(e.target.value)}/>
+                                200%
+                            </label>
+                        </div>
+                    </section>
+                    <section className="accessibility-section">
+                        <h3>Theme</h3>
+                        <div className="theme-buttons">
+                            <button type="button" className={`theme-button ${theme === 'dark' ? 'theme-button--active' : ''}`} onClick={() => setTheme('dark')}>Dark Mode</button>
+                            <button type="button" className={`theme-button ${theme === 'light' ? 'theme-button--active' : ''}`} onClick={() => setTheme('light')}>Light Mode</button>
+                        </div>
+                    </section>
                 </div>
             </div>
           </div>

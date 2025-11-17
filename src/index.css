@@ -77,6 +77,9 @@ nav {
   background-color: #111;
   overflow-x: hidden;
   padding-top: 20px;
+  background: var(--sidebar-color);
+  color: var(--text-color);
+  font-size: 16px;
 }
 
 .navButtons {
@@ -140,4 +143,80 @@ nav {
 
 .settings-body{
   min-height: 60vh;
+}
+
+:root[data-theme="light"] .nav-toggle {
+  color: #111827;
+}
+
+:root[data-font-size="75%"] {
+  font-size: 14px;
+}
+
+:root[data-font-size="100%"] {
+  font-size: 16px;
+}
+
+:root[data-font-size="125%"] {
+  font-size: 20px;
+}
+
+:root[data-font-size="150%"] {
+  font-size: 24px;
+}
+
+:root[data-font-size="200%"] {
+  font-size: 32px;
+}
+
+:root[data-theme="dark"] {
+  --panel-color: #36383d;
+  --sidebar-color: #111;
+}
+
+:root[data-theme="light"] {
+  --bg-color: #e5e7eb;
+  --text-color: #111827;
+  --panel-color: #e5e7eb;
+  --sidebar-color: #d1d5db;
+}
+
+.theme-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.theme-button {
+  padding: 0.4rem 1.2rem;
+  border-radius: 999px;
+  border: 1px solid #9ca3af;
+  background: transparent;
+  font-size: 0.95rem;
+}
+
+.theme-button--active {
+  background: #2563eb;
+  color: #ffffff
+}
+
+:root[data-theme="light"] .theme-button--active {
+  background: #2563eb;
+  color: #f9fafb;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.nav.nav--collapsed {
+  background: var(--bg-color);
+  color:(#111827);      
+}
+
+.text-sizing {
+  display: flex;
+  gap: 1rem;
 }
