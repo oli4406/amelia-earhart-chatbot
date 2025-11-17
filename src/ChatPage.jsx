@@ -18,7 +18,7 @@ function ChatPage() {
     // persist user input to localStorage history only if user is logged in
     const isLoggedIn = () => {
       try {
-        // simple client-side check: presence of a currentUser key
+        // original behaviour: only consider currentUser as proof of login
         return !!localStorage.getItem('currentUser')
       } catch (e) {
         return false

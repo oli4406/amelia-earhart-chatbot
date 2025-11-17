@@ -8,43 +8,23 @@ export default function History() {
 
     useEffect(() => {
         document.title = 'Chat History | Amelia Earhart Chatbot'
-        try {
-            const hasUser = !!localStorage.getItem('currentUser')
-            setLoggedIn(hasUser)
-            if (hasUser) {
-                const raw = localStorage.getItem('chat_history')
-                setHistory(raw ? JSON.parse(raw) : [])
-            } else {
-                setHistory([])
-            }
-        } catch (e) {
-            setLoggedIn(false)
-            setHistory([])
-        }
-        }, [])
-
-        // keep in sync if another tab changes login/history
-        useEffect(() => {
-            const onStorage = (e) => {
-                if (e.key === 'currentUser' || e.key === 'chat_history') {
-                    try {
-                        const hasUser = !!localStorage.getItem('currentUser')
-                        setLoggedIn(hasUser)
-                        if (hasUser) {
-                            const raw = localStorage.getItem('chat_history')
-                            setHistory(raw ? JSON.parse(raw) : [])
-                        } else {
-                            setHistory([])
-                        }
-                    } catch (err) {
-                        setLoggedIn(false)
+                try {
+                    // Accept either currentUser or legacy hasUser flag
+                    const hasUser = !!localStorage.getItem('currentUser') || !!localStorage.getItem('hasUser')
+                    setLoggedIn(hasUser)
+                    if (hasUser) {
+                        const raw = localStorage.getItem('chat_history')
+                        setHistory(raw ? JSON.parse(raw) : [])
+                    } else {
                         setHistory([])
                     }
+                } catch (e) {
+                    setLoggedIn(false)
+                    setHistory([])
                 }
-            }
-            window.addEventListener('storage', onStorage)
-            return () => window.removeEventListener('storage', onStorage)
         }, [])
+
+    
 
     const clearHistory = () => {
         localStorage.removeItem('chat_history')
