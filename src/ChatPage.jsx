@@ -15,6 +15,31 @@ function ChatPage() {
     const trimmed = value.trim()
     if (!trimmed) return       /*added a user messge object so your not talking to yourself */
     const userMsg = {id: nextId++, role: 'user', text: trimmed}
+    // persist user input to localStorage history only if user is logged in
+    const isLoggedIn = () => {
+      try {
+        // simple client-side check: presence of a currentUser key
+        return !!localStorage.getItem('currentUser')
+      } catch (e) {
+        return false
+      }
+    }
+
+    if (isLoggedIn()) {
+      try {
+        const raw = localStorage.getItem('chat_history')
+        const arr = raw ? JSON.parse(raw) : []
+        arr.push({ id: userMsg.id, text: userMsg.text, ts: Date.now() })
+        localStorage.setItem('chat_history', JSON.stringify(arr))
+      } catch (err) {
+        // ignore storage errors
+        console.warn('Failed to save chat history', err)
+      }
+    } else {
+      // show a transient notice to the user that history wasn't saved
+      setSaveNotice(true)
+      window.setTimeout(() => setSaveNotice(false), 3000)
+    }
 
     const botReplyTxt = placeholderReply(trimmed) /*here is the Amelia text, placeholder to simulate convo */
     const botMsg = {id: nextId++, role: 'bot', text: botReplyTxt}
@@ -33,6 +58,8 @@ function ChatPage() {
     // smooth scroll to bottom so user sees the newest question
     el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
   }, [messages])
+
+  const [saveNotice, setSaveNotice] = useState(false)
 
   return (
     <div className="App chat-container">
@@ -59,6 +86,11 @@ function ChatPage() {
       </div>
 
       <InputField value={value} onChange={setValue} onSubmit={handleSubmit} />
+      {saveNotice && (
+        <div style={{ color: '#b45309', marginTop: 8 }}>
+          Sign in to save your questions to History.
+        </div>
+      )}
     </div>
   )
 }

@@ -155,3 +155,46 @@
 :root, html, body, .App {
   cursor: url("./assets/Heinkel%20He111%281%29.png") var(--cursor-hot-x) var(--cursor-hot-y), auto;
 }
+
+/* History list styles */
+.history-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.history-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 12px;
+  border-radius: 8px;
+  text-align: left;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.history-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.history-text {
+  white-space: pre-wrap;
+  color: inherit;
+  margin-bottom: 8px;
+}
+
+.history-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn.small {
+  padding: 6px 8px;
+  font-size: 0.85rem;
+}
+
