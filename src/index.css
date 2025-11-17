@@ -181,6 +181,13 @@ nav {
   --sidebar-color: #d1d5db;
 }
 
+:root[data-theme="contrast"] {
+  --bg-color: #000000;
+  --text-color: #ffff00;
+  --panel-color: #000000;
+  --sidebar-color: #000000;
+}
+
 .theme-buttons {
   display: flex;
   justify-content: center;
