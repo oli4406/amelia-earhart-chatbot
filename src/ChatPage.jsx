@@ -137,6 +137,11 @@ function ChatPage() {
           Sign in to save your questions to History.
         </div>
       )}
+
+        <p className="keyboard-tips">
+          <strong>Keyboard Tips:</strong> Press Enter to send. Shift+Enter for a new line. Press Esc to close the Settings panel.
+        </p>
+      
     </div>
   )
 }

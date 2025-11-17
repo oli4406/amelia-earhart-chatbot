@@ -198,3 +198,13 @@
   font-size: 0.85rem;
 }
 
+.keyboard-tips {
+  display: none;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+html[data-show-keyboard-tips="true"] .keyboard-tips {
+  display: block;
+}

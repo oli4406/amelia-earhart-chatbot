@@ -7,13 +7,15 @@ export default function NavBar() {
     const [showSettings, setShowSettings] = useState(false);
     const [fontSize, setFontSize] = useState('100%');
     const [theme, setTheme] = useState('dark');
+    const [showKeyboardTips, setShowKeyboardTips] = useState(false);
 
 
     useEffect(() => {
         const root = document.documentElement;
         root.dataset.fontSize = fontSize;
         root.dataset.theme = theme;
-    }, [fontSize, theme]);
+        root.dataset.showKeyboardTips = showKeyboardTips ? 'true' : 'false';
+    }, [fontSize, theme, showKeyboardTips]);
     
     return (
       <>
@@ -59,7 +61,7 @@ export default function NavBar() {
                 <div className="settings-body">
                     <h2 id="settings-title">Settings</h2>
                     <section className="settings-section">
-                        <h3>Text size</h3>
+                        <h3>Text Size</h3>
                         <div className="text-sizing">
                             <label>
                                 <input type="radio" name="text-size" value="75%" checked={fontSize === '75%'} onChange={(e) => setFontSize(e.target.value)}/>
@@ -90,6 +92,13 @@ export default function NavBar() {
                             <button type="button" className={`theme-button ${theme === 'light' ? 'theme-button--active' : ''}`} onClick={() => setTheme('light')}>Light Mode</button>
                             <button type="button" className={`theme-button ${theme === 'contrast' ? 'theme-button--active' : ''}`} onClick={() => setTheme('contrast')}>High Contrast</button>
                         </div>
+                    </section>
+                    <section className="accessibility-section">
+                        <h3>Keyboard Tips</h3>
+                        <label>
+                            <input type="checkbox" checked={showKeyboardTips} onChange={(e) => setShowKeyboardTips(e.target.checked)}/>
+                            Show Keyboard Tips
+                        </label>
                     </section>
                 </div>
             </div>
