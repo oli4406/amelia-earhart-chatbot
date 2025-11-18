@@ -1,4 +1,4 @@
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {useState} from 'react'
 const loggedIn = true; // Placeholder for actual authentication logic
 
@@ -6,6 +6,23 @@ export default function NavBar() {
 
   const [collapsed, setCollapsed] = useState(false)
   const toggleNav = () => {setCollapsed((prev) => !prev);};
+  const [showSettings, setShowSettings] = useState(false);
+  const [fontSize, setFontSize] = useState('100%');
+  const [theme, setTheme] = useState('dark');
+  const [showKeyboardTips, setShowKeyboardTips] = useState(false);
+  const [messageDensity, setMessageDensity] = useState('default');
+  const navigate = useNavigate();
+
+  //handle login/logout button click
+  //to be expanded once user tokens are implemented
+  const handleLoginClick = () => loggedIn ? navigate('/') : navigate('/login');
+
+  //handle settings button click
+  const handleSettingsClick = () => {
+    setShowSettings(true);
+    };
+
+  <button className="nav-toggle" onClick={toggleNav}>☰</button>
     return (
       <>
         <nav className={`nav ${collapsed ? 'nav--collapsed' : ''}`}>
@@ -18,8 +35,8 @@ export default function NavBar() {
             {loggedIn && (<Link style={{display:'block',margin: '10px auto'}} to="/history">History</Link>)}
 
             <div className='navButtons'>
-                <button>{loggedIn ? 'Log out' : 'Login/Signup'}</button>
-                <button>Settings</button>
+                <button onClick={handleLoginClick}>{loggedIn ? 'Log out' : 'Login/Signup'}</button>
+                <button onClick={handleSettingsClick}>Settings</button>
             </div>
           </div>
         </nav>

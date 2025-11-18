@@ -4,6 +4,7 @@ import ChatPage from './ChatPage.jsx'
 import History from './History.jsx'
 import Login from './Login.jsx'
 import Register from './Register.jsx'
+import ForgotPassword from './ForgotPassword.jsx'
 
 
 export default function App() {
