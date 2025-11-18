@@ -26,7 +26,7 @@ export default function NavBar() {
     return (
       <>
         <nav className={`nav ${collapsed ? 'nav--collapsed' : ''}`}>
-          <button className="nav-toggle" onClick={() => setCollapsed((prev) => !prev)}>
+          <button className="nav-toggle" onClick={toggleNav}>
             {collapsed ? '☰' : '☰'}
           </button>
           <div className="nav-inner">

@@ -55,8 +55,26 @@ button:focus-visible {
 }
 
 .input-group {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
+
+
+.input-group input,
+input.input-field,
+.login-form input,
+.register-form input,
+textarea {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 16px; 
+  line-height: 1.25;
+  min-height: 44px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-sizing: border-box;
+  color: inherit;
+}
+
 
 @media (prefers-color-scheme: light) {
   :root {

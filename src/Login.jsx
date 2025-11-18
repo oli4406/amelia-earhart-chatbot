@@ -1,7 +1,6 @@
 import {useState} from 'react'
 import {Link} from 'react-router-dom'
 
-
 // harry watson will be working on this file next
 export default function Login(){
     const [email, setEmail] = useState('')
@@ -17,11 +16,10 @@ export default function Login(){
             return
         }
     }
-    //to add forgot password login functionality later
 
     return(
         <div className="login-container">
-            <h2>Login</h2>
+            <h2>Login Here</h2>
             <form onSubmit={handleLogin} className="login-form">
                 <div className="input-group">
                     <input 
