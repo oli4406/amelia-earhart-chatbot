@@ -131,7 +131,7 @@ function ChatPage() {
         </div>
       </div>
 
-      <InputField value={value} onChange={setValue} onSubmit={handleSubmit} />
+      <ChatField value={value} onChange={setValue} onSubmit={handleSubmit} />
     </div>
   )
 }

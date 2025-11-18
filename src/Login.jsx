@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom'
 
 
 // harry watson will be working on this file next
-export default function LoginPage(){
+export default function Login(){
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
