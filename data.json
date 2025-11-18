@@ -1,0 +1,145 @@
+[
+  {
+    "flights": [
+      {
+        "departure_airport": {
+          "name": "London Gatwick Airport",
+          "id": "LGW",
+          "time": "2025-12-06 15:55"
+        },
+        "arrival_airport": {
+          "name": "Copenhagen Airport",
+          "id": "CPH",
+          "time": "2025-12-06 18:50"
+        },
+        "duration": 115,
+        "airplane": "Airbus A320",
+        "airline": "easyJet",
+        "airline_logo": "https://www.gstatic.com/flights/airline_logos/70px/U2.png",
+        "travel_class": "Economy",
+        "flight_number": "U2 8721",
+        "legroom": "29 in",
+        "extensions": [
+          "Below average legroom (29 in)",
+          "Carbon emissions estimate: 92 kg"
+        ]
+      }
+    ],
+    "total_duration": 115,
+    "carbon_emissions": {
+      "this_flight": 93000,
+      "typical_for_this_route": 89000,
+      "difference_percent": 4
+    },
+    "price": 146,
+    "type": "Round trip",
+    "airline_logo": "https://www.gstatic.com/flights/airline_logos/70px/U2.png",
+    "departure_token": "WyJDalJJV0VOWVVqSnlPQzFHTmpCQlFsOXFjVUZDUnkwdExTMHRMUzB0TFhaMFpuRXlNRUZCUVVGQlIydGpWazFuUW05TlJqQkJFZ1pWTWpnM01qRWFDZ2pTY1JBQ0dnTkhRbEE0SEhDK2xRRT0iLFtbIkxHVyIsIjIwMjUtMTItMDYiLCJDUEgiLG51bGwsIlUyIiwiODcyMSJdXV0="
+  },
+  {
+    "flights": [
+      {
+        "departure_airport": {
+          "name": "London Gatwick Airport",
+          "id": "LGW",
+          "time": "2025-12-06 13:40"
+        },
+        "arrival_airport": {
+          "name": "Copenhagen Airport",
+          "id": "CPH",
+          "time": "2025-12-06 16:30"
+        },
+        "duration": 110,
+        "airplane": "Boeing 737",
+        "airline": "Norwegian",
+        "airline_logo": "https://www.gstatic.com/flights/airline_logos/70px/D8.png",
+        "travel_class": "Economy",
+        "flight_number": "D8 3515",
+        "legroom": "29 in",
+        "extensions": [
+          "Below average legroom (29 in)",
+          "Carbon emissions estimate: 93 kg"
+        ]
+      }
+    ],
+    "total_duration": 110,
+    "carbon_emissions": {
+      "this_flight": 93000,
+      "typical_for_this_route": 89000,
+      "difference_percent": 4
+    },
+    "price": 166,
+    "type": "Round trip",
+    "airline_logo": "https://www.gstatic.com/flights/airline_logos/70px/D8.png",
+    "departure_token": "WyJDalJJV0VOWVVqSnlPQzFHTmpCQlFsOXFjVUZDUnkwdExTMHRMUzB0TFhaMFpuRXlNRUZCUVVGQlIydGpWazFuUW05TlJqQkJFZ1pFT0RNMU1UVWFDd2pZZ1FFUUFob0RSMEpRT0J4d3pLb0IiLFtbIkxHVyIsIjIwMjUtMTItMDYiLCJDUEgiLG51bGwsIkQ4IiwiMzUxNSJdXV0="
+  },
+  {
+    "flights": [
+      {
+        "departure_airport": {
+          "name": "London Gatwick Airport",
+          "id": "LGW",
+          "time": "2025-12-06 09:15"
+        },
+        "arrival_airport": {
+          "name": "Oslo lufthavn",
+          "id": "OSL",
+          "time": "2025-12-06 12:25"
+        },
+        "duration": 130,
+        "airplane": "Boeing 737MAX 8 Passenger",
+        "airline": "Norwegian",
+        "airline_logo": "https://www.gstatic.com/flights/airline_logos/70px/DY.png",
+        "travel_class": "Economy",
+        "flight_number": "DY 1303",
+        "legroom": "29 in",
+        "extensions": [
+          "Below average legroom (29 in)",
+          "Carbon emissions estimate: 97 kg"
+        ]
+      },
+      {
+        "departure_airport": {
+          "name": "Oslo lufthavn",
+          "id": "OSL",
+          "time": "2025-12-06 17:25"
+        },
+        "arrival_airport": {
+          "name": "Copenhagen Airport",
+          "id": "CPH",
+          "time": "2025-12-06 18:40"
+        },
+        "duration": 75,
+        "airplane": "Boeing 737",
+        "airline": "Norwegian",
+        "airline_logo": "https://www.gstatic.com/flights/airline_logos/70px/DY.png",
+        "travel_class": "Economy",
+        "flight_number": "DY 948",
+        "legroom": "29 in",
+        "extensions": [
+          "Below average legroom (29 in)",
+          "Wi-Fi for a fee",
+          "Carbon emissions estimate: 65 kg"
+        ],
+        "plane_and_crew_by": "Norwegian"
+      }
+    ],
+    "layovers": [
+      {
+        "duration": 300,
+        "name": "Oslo lufthavn",
+        "id": "OSL"
+      }
+    ],
+    "total_duration": 505,
+    "carbon_emissions": {
+      "this_flight": 163000,
+      "typical_for_this_route": 89000,
+      "difference_percent": 83
+    },
+    "price": 217,
+    "type": "Round trip",
+    "airline_logo": "https://www.gstatic.com/flights/airline_logos/70px/DY.png",
+    "departure_token": "WyJDalJJV0VOWVVqSnlPQzFHTmpCQlFsOXFjVUZDUnkwdExTMHRMUzB0TFhaMFpuRXlNRUZCUVVGQlIydGpWazFuUW05TlJqQkJFZ3hFV1RFek1ETjhSRms1TkRnYUN3akVxUUVRQWhvRFIwSlFPQnh3Z044QiIsW1siTEdXIiwiMjAyNS0xMi0wNiIsIk9TTCIsbnVsbCwiRFkiLCIxMzAzIl0sWyJPU0wiLCIyMDI1LTEyLTA2IiwiQ1BIIixudWxsLCJEWSIsIjk0OCJdXV0="
+  }
+]
