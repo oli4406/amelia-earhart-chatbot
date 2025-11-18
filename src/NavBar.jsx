@@ -8,6 +8,7 @@ export default function NavBar() {
     const [fontSize, setFontSize] = useState('100%');
     const [theme, setTheme] = useState('dark');
     const [showKeyboardTips, setShowKeyboardTips] = useState(false);
+    const [messageDensity, setMessageDensity] = useState('comfortable');
 
 
     useEffect(() => {
@@ -15,7 +16,8 @@ export default function NavBar() {
         root.dataset.fontSize = fontSize;
         root.dataset.theme = theme;
         root.dataset.showKeyboardTips = showKeyboardTips ? 'true' : 'false';
-    }, [fontSize, theme, showKeyboardTips]);
+        root.dataset.messageDensity = messageDensity;
+    }, [fontSize, theme, showKeyboardTips,messageDensity]);
     
     return (
       <>
@@ -99,6 +101,17 @@ export default function NavBar() {
                             <input type="checkbox" checked={showKeyboardTips} onChange={(e) => setShowKeyboardTips(e.target.checked)}/>
                             Show Keyboard Tips
                         </label>
+                    </section>
+                    <section className="accessibility-section">
+                        <h3>Message Spacing</h3>
+                        <div className="settings-row">
+                            <label>
+                                <input type="radio" name="message-density" value="default" checked={messageDensity === 'default'} onChange={(e) => setMessageDensity(e.target.value)}/>Default
+                            </label>
+                            <label>
+                                <input type="radio" name="message-density" value="comfortable" checked={messageDensity === 'comfortable'} onChange={(e) => setMessageDensity(e.target.value)}/>Comfortable
+                            </label>
+                        </div>
                     </section>
                 </div>
             </div>

@@ -208,3 +208,22 @@
 html[data-show-keyboard-tips="true"] .keyboard-tips {
   display: block;
 }
+
+:root[data-message-density="default"] .message-line {
+  margin-bottom: 0.75rem;
+}
+
+:root[data-message-density="comfortable"] .message-line {
+  margin-bottom: 1.5rem;
+}
+
+:root[data-message-density="default"] .message-bubble {
+  padding: 0.5rem 0.8rem;
+}
+
+:root[data-message-density="comfortable"] .message-bubble {
+  padding: 0.75rem 1rem;
+  font-size: 1.05rem;
+  letter-spacing: 0.03em;
+  line-height: 1.5;
+}
