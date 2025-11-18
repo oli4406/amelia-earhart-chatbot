@@ -8,7 +8,7 @@ export default function NavBar() {
     const [fontSize, setFontSize] = useState('100%');
     const [theme, setTheme] = useState('dark');
     const [showKeyboardTips, setShowKeyboardTips] = useState(false);
-    const [messageDensity, setMessageDensity] = useState('comfortable');
+    const [messageDensity, setMessageDensity] = useState('default');
 
 
     useEffect(() => {
@@ -17,7 +17,7 @@ export default function NavBar() {
         root.dataset.theme = theme;
         root.dataset.showKeyboardTips = showKeyboardTips ? 'true' : 'false';
         root.dataset.messageDensity = messageDensity;
-    }, [fontSize, theme, showKeyboardTips,messageDensity]);
+    }, [fontSize, theme, showKeyboardTips, messageDensity]);
     
     return (
       <>
@@ -104,13 +104,9 @@ export default function NavBar() {
                     </section>
                     <section className="accessibility-section">
                         <h3>Message Spacing</h3>
-                        <div className="settings-row">
-                            <label>
-                                <input type="radio" name="message-density" value="default" checked={messageDensity === 'default'} onChange={(e) => setMessageDensity(e.target.value)}/>Default
-                            </label>
-                            <label>
-                                <input type="radio" name="message-density" value="comfortable" checked={messageDensity === 'comfortable'} onChange={(e) => setMessageDensity(e.target.value)}/>Comfortable
-                            </label>
+                        <div className="theme-buttons">
+                                <button type="button" classname={`theme-button ${messageDensity=== 'default' ? 'theme-button--active' : ''}`} onClick={() => setMessageDensity('default')}>Default</button>
+                                <button type="button" classname={`theme-button ${messageDensity=== 'comfortable' ? 'theme-button--active' : ''}`} onClick={() => setMessageDensity('comfortable')}>Comfortable</button>
                         </div>
                     </section>
                 </div>
