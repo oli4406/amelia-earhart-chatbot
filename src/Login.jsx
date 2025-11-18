@@ -15,6 +15,7 @@ export default function Login(){
             setError("Please enter both email and password to continue")
             return
         }
+        //login logic here
     }
 
     return(

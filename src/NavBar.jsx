@@ -1,17 +1,21 @@
 import {Link, useNavigate} from 'react-router-dom';
-import {useState} from 'react'
-const loggedIn = true; // Placeholder for actual authentication logic
+import {useState, useEffect} from 'react'
+const loggedIn = false; // Placeholder for actual authentication logic
 
 export default function NavBar() {
 
   const [collapsed, setCollapsed] = useState(false)
   const toggleNav = () => {setCollapsed((prev) => !prev);};
   const [showSettings, setShowSettings] = useState(false);
-  const [fontSize, setFontSize] = useState('100%');
+  const [fontSize, setFontSize] = useState('200%');
   const [theme, setTheme] = useState('dark');
   const [showKeyboardTips, setShowKeyboardTips] = useState(false);
   const [messageDensity, setMessageDensity] = useState('default');
   const navigate = useNavigate();
+
+
+
+
 
   //handle login/logout button click
   //to be expanded once user tokens are implemented

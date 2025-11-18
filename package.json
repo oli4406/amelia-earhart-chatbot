@@ -30,6 +30,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
+    "tailwindcss": "^4.1.17",
     "vite": "^7.2.2"
   },
   "description": "This is a Chatbot with the persona of Amelia Earhart, with the primary function of giving requested flight information to the user.",
