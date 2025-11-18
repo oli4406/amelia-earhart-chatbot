@@ -11,15 +11,86 @@ function ChatPage() {
     {id: nextId++, role: 'bot', text: "Hello, I'm Amelia Earhart. Want to talk about the skies?"}])
   const containerRef = useRef(null)
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => { // async function so we can await server response
     const trimmed = value.trim()
-    if (!trimmed) return       /*added a user messge object so your not talking to yourself */
+    if (!trimmed) return
     const userMsg = {id: nextId++, role: 'user', text: trimmed}
+    // persist user input to localStorage history only if user is logged in
+    const isLoggedIn = () => {
+      try {
+        // accept either 'currentUser' or legacy 'hasUser' flag
+        return !!localStorage.getItem('currentUser') || !!localStorage.getItem('hasUser')
+      } catch (e) {
+        console.warn('Failed to access localStorage', e)
+        return false
+      }
+    }
 
-    const botReplyTxt = placeholderReply(trimmed) /*here is the Amelia text, placeholder to simulate convo */
-    const botMsg = {id: nextId++, role: 'bot', text: botReplyTxt}
-    setMessages((prev) => [...prev, userMsg, botMsg])
+    // only show a transient notice if user is not logged in; actual save
+    // of the question+answer pair happens after we receive the bot reply
+    if (!isLoggedIn()) {
+      // show a transient notice to the user that history wasn't saved
+      setSaveNotice(true)
+      window.setTimeout(() => setSaveNotice(false), 3000)
+    }
+
+    // optimistic update: show user message immediately
+    setMessages((prev) => [...prev, userMsg])
     setValue('')
+
+    try {
+      const res = await fetch('http://localhost:3000/api/chat/message', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({message: trimmed}),
+      })
+
+      // check for HTTP error
+
+      // try to parse JSON, fallback to plain text
+      let serverText
+      const contentType = res.headers.get('content-type') || ''
+      if (contentType.includes('application/json')) {
+        const data = await res.json()
+
+        serverText = data.reply ?? data.message ?? JSON.stringify(data)
+      } else {
+        serverText = await res.text()
+      }
+
+      const botMsg = {id: nextId++, role: 'bot', text: serverText}
+
+      // persist the question/answer pair after receiving the server reply
+      if (isLoggedIn()) {
+        try {
+          const raw = localStorage.getItem('chat_history')
+          const arr = raw ? JSON.parse(raw) : []
+          arr.push({ id: userMsg.id, question: userMsg.text, answer: serverText, ts: Date.now() })
+          localStorage.setItem('chat_history', JSON.stringify(arr))
+        } catch (err) {
+          console.warn('Failed to save chat history', err)
+        }
+      }
+
+      setMessages((prev) => [...prev, botMsg])
+    } catch (err) {
+      console.error('Error communicating with server:', err)
+      const botMsg = {id: nextId++, role: 'bot', text: 'Sorry, the response got lost somewhere over the Pacific Ocean.'}
+
+      // On error also save the Q/A pair (with the error text as answer) if logged in
+      if (isLoggedIn()) {
+        try {
+          const raw = localStorage.getItem('chat_history')
+          const arr = raw ? JSON.parse(raw) : []
+          arr.push({ id: userMsg.id, question: userMsg.text, answer: botMsg.text, ts: Date.now() })
+          localStorage.setItem('chat_history', JSON.stringify(arr))
+        } catch (err) {
+          console.warn('Failed to save chat history', err)
+        }
+      }
+
+      setMessages((prev) => [...prev, botMsg])
+    }
   }
 
   useEffect(() => {
@@ -34,6 +105,8 @@ function ChatPage() {
     el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
   }, [messages])
 
+  const [saveNotice, setSaveNotice] = useState(false)
+
   return (
     <div className="App chat-container">
       <h1>Amelia Earhart Chatbot — Plan your flights!</h1>
@@ -47,7 +120,7 @@ function ChatPage() {
             </div>
           ) : (
             messages.map((m, i) => (
-              <div key={i} className={`message-line ${i % 2 === 0 ? 'bot' : 'user'}`}>    {/*switched around the sides of the conversation */}
+              <div key={i} className={`message-line ${i % 2 === 0 ? 'bot' : 'user'}`}>  {/*alternating message styles for bot vs user*/}
                 <div className="message-bubble">
                   {m.text}    {/*renders the text, not the whole object*/}
                 </div>
@@ -58,15 +131,9 @@ function ChatPage() {
         </div>
       </div>
 
-      <ChatField value={value} onChange={setValue} onSubmit={handleSubmit} />
+      <InputField value={value} onChange={setValue} onSubmit={handleSubmit} />
     </div>
   )
 }
-//placeholder text for the 'bot' to simulate a conversation
-function placeholderReply(userText){
-  return "Placeholder Text"
-}
 
 export default ChatPage
-
-
