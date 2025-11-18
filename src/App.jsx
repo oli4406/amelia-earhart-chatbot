@@ -4,6 +4,7 @@ import ChatPage from './ChatPage.jsx'
 import History from './History.jsx'
 import Login from './Login.jsx'
 import Register from './Register.jsx'
+import ForgotPassword from './ForgotPassword.jsx'
 
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
       <Route path="/history" element={<History />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forgotpassword" element={<ForgotPassword />} />
     </Routes>
   )
 }

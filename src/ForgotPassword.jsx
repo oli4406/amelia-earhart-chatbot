@@ -1,27 +1,30 @@
 import {useState} from 'react'
 import {Link} from 'react-router-dom'
 
-// harry watson will be working on this file next
-export default function Login(){
+export default function ForgotPassword(){
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [error, setError] = useState('')
+    const[error, setError] = useState('')
 
-
-    //handle login functionality
-    const handleLogin = (s) => {
+    //handle password reset functionality
+    const handlePasswordReset = (s) => {
         s.preventDefault()
         if(!email || !password){
             setError("Please enter both email and password to continue")
             return
         }
-        //login logic here
+        if(email.indexOf('@') === -1){
+            setError("Please enter a valid email address")
+            return
+        }
+        //reset password logic here
     }
 
     return(
-        <div className="login-container">
-            <h2>Login Here</h2>
-            <form onSubmit={handleLogin} className="login-form">
+        <div className="forgotpassword-container">
+            <h2>Forgot Password</h2>
+            <form onSubmit={handlePasswordReset} className="forgotpassword-form">
                 <div className="input-group">
                     <input 
                         type="text" 
@@ -40,16 +43,13 @@ export default function Login(){
                 </div>
                 {error && <p className="error">{error}</p>}
                 <button 
-                    onClick={handleLogin} 
-                    className="login-button" 
-                    type="submit">Login
+                    onClick={handlePasswordReset} 
+                    className="forgotpassword-button" 
+                    type="submit">Reset Password
                 </button>
             </form>
-            <p className="forgotpassword-link">
-                <Link to="/forgotpassword">Forgot Password</Link>
-            </p>
-            <p className="register-link">
-                Don't have an account? <Link to="/register">Register here</Link>
+            <p className="login-link">
+                <Link to="/login">Back to Login</Link>
             </p>
         </div>
     )

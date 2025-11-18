@@ -1,5 +1,5 @@
 
-import InputField from './InputField'
+import ChatField from './ChatField.jsx'
 import { useState, useRef, useEffect } from 'react'
 import './App.css'
 
@@ -131,17 +131,7 @@ function ChatPage() {
         </div>
       </div>
 
-      <InputField value={value} onChange={setValue} onSubmit={handleSubmit} />
-      {saveNotice && (
-        <div style={{ color: '#b45309', marginTop: 8 }}>
-          Sign in to save your questions to History.
-        </div>
-      )}
-
-        <p className="keyboard-tips">
-          <strong>Keyboard Tips:</strong> Press Enter to send. Shift+Enter for a new line. Press Esc to close the Settings panel.
-        </p>
-      
+      <ChatField value={value} onChange={setValue} onSubmit={handleSubmit} />
     </div>
   )
 }

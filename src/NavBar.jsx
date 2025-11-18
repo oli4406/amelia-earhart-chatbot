@@ -1,58 +1,47 @@
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {useState, useEffect} from 'react'
+const loggedIn = false; // Placeholder for actual authentication logic
 
 export default function NavBar() {
-  const [loggedIn, setLoggedIn] = useState(false);
-    const [collapsed, setCollapsed] = useState(false);
-    const [showSettings, setShowSettings] = useState(false);
-    const [fontSize, setFontSize] = useState('100%');
-    const [theme, setTheme] = useState('dark');
-    const [showKeyboardTips, setShowKeyboardTips] = useState(false);
-    const [messageDensity, setMessageDensity] = useState('default');
+
+  const [collapsed, setCollapsed] = useState(false)
+  const toggleNav = () => {setCollapsed((prev) => !prev);};
+  const [showSettings, setShowSettings] = useState(false);
+  const [fontSize, setFontSize] = useState('200%');
+  const [theme, setTheme] = useState('dark');
+  const [showKeyboardTips, setShowKeyboardTips] = useState(false);
+  const [messageDensity, setMessageDensity] = useState('default');
+  const navigate = useNavigate();
 
 
-    useEffect(() => {
-        const root = document.documentElement;
-        root.dataset.fontSize = fontSize;
-        root.dataset.theme = theme;
-        root.dataset.showKeyboardTips = showKeyboardTips ? 'true' : 'false';
-        root.dataset.messageDensity = messageDensity;
-    }, [fontSize, theme, showKeyboardTips, messageDensity]);
-    
+
+
+
+  //handle login/logout button click
+  //to be expanded once user tokens are implemented
+  const handleLoginClick = () => loggedIn ? navigate('/') : navigate('/login');
+
+  //handle settings button click
+  const handleSettingsClick = () => {
+    setShowSettings(true);
+    };
+
+  <button className="nav-toggle" onClick={toggleNav}>☰</button>
     return (
       <>
         <nav className={`nav ${collapsed ? 'nav--collapsed' : ''}`}>
-          <button className="nav-toggle" onClick={() => setCollapsed((prev) => !prev)}>
+          <button className="nav-toggle" onClick={toggleNav}>
             {collapsed ? '☰' : '☰'}
           </button>
           <div className="nav-inner">
             <Link style={{display:'block',margin: '10px auto'}} to="/">Home</Link>
             <Link style={{display:'block',margin: '10px auto'}} to="/chat">Chat</Link>
             {loggedIn && (<Link style={{display:'block',margin: '10px auto'}} to="/history">History</Link>)}
-      <div className='navButtons'>
-        <button onClick={() => {
-          if (!loggedIn) {
-            // sign in: set currentUser and hasUser so other parts of the app will save history
-            try {
-              localStorage.setItem('currentUser', JSON.stringify({ name: 'Demo User' }))
-              localStorage.setItem('hasUser', '1')
-            } catch (e) {
-              console.warn('failed to set login keys', e)
-            }
-            setLoggedIn(true)
-          } else {
-            // sign out: remove keys
-            try {
-              localStorage.removeItem('currentUser')
-              localStorage.removeItem('hasUser')
-            } catch (e) {
-              console.warn('failed to remove login keys', e)
-            }
-            setLoggedIn(false)
-          }
-        }}>{loggedIn ? 'Log out' : 'Login/Signup'}</button>
-        <button type="button" onClick={() => setShowSettings(true)}>Settings</button>
-      </div>
+
+            <div className='navButtons'>
+                <button onClick={handleLoginClick}>{loggedIn ? 'Log out' : 'Login/Signup'}</button>
+                <button onClick={handleSettingsClick}>Settings</button>
+            </div>
           </div>
         </nav>
         
