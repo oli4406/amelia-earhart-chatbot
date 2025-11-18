@@ -132,6 +132,10 @@ function ChatPage() {
       </div>
 
       <ChatField value={value} onChange={setValue} onSubmit={handleSubmit} />
+      <p className="keyboard-tips">
+        <strong>Keyboard tips:</strong> Press Enter to send, Shift+Enter for a new
+        line. Press Esc to close the Settings panel.
+      </p>
     </div>
   )
 }

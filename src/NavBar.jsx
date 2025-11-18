@@ -26,7 +26,14 @@ export default function NavBar() {
     setShowSettings(true);
     };
 
-  <button className="nav-toggle" onClick={toggleNav}>☰</button>
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.fontSize = fontSize;
+    root.dataset.theme = theme;
+    root.dataset.showKeyboardTips = showKeyboardTips ? 'true' : 'false';
+    root.dataset.messageDensity = messageDensity;
+  }, [fontSize, theme, showKeyboardTips, messageDensity]);
+
     return (
       <>
         <nav className={`nav ${collapsed ? 'nav--collapsed' : ''}`}>
