@@ -46,6 +46,9 @@ export default function Login(){
                     type="submit">Login
                 </button>
             </form>
+            <p className="forgotpassword-link">
+                <Link to="/forgotpassword">Forgot Password</Link>
+            </p>
             <p className="register-link">
                 Don't have an account? <Link to="/register">Register here</Link>
             </p>

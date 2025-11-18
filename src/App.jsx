@@ -14,6 +14,7 @@ export default function App() {
       <Route path="/history" element={<History />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forgotpassword" element={<ForgotPassword />} />
     </Routes>
   )
 }
