@@ -7,7 +7,7 @@ export default function NavBar() {
   const [collapsed, setCollapsed] = useState(false)
   const toggleNav = () => {setCollapsed((prev) => !prev);};
   const [showSettings, setShowSettings] = useState(false);
-  const [fontSize, setFontSize] = useState('200%');
+  const [fontSize, setFontSize] = useState('100%');
   const [theme, setTheme] = useState('dark');
   const [showKeyboardTips, setShowKeyboardTips] = useState(false);
   const [messageDensity, setMessageDensity] = useState('default');
@@ -26,6 +26,23 @@ export default function NavBar() {
     setShowSettings(true);
     };
 
+    useEffect(() => {
+    try {
+        const raw = localStorage.getItem('userAccessibilitySettings');
+        if (!raw) return;
+
+        const saved = JSON.parse(raw);
+        if (saved.fontSize) setFontSize(saved.fontSize);
+        if (saved.theme) setTheme(saved.theme);
+        if (typeof saved.showKeyboardTips === 'boolean') {
+            setShowKeyboardTips(saved.showKeyboardTips);
+        }
+        if (saved.messageDensity) setMessageDensity(saved.messageDensity);
+    } catch (e) {
+        console.warn('Failed to load accesibility settings', e);
+    }
+  }, []);
+
   useEffect(() => {
     const root = document.documentElement;
     root.dataset.fontSize = fontSize;
@@ -33,6 +50,18 @@ export default function NavBar() {
     root.dataset.showKeyboardTips = showKeyboardTips ? 'true' : 'false';
     root.dataset.messageDensity = messageDensity;
   }, [fontSize, theme, showKeyboardTips, messageDensity]);
+
+  useEffect(() => {
+    if (!loggedIn) return;
+
+    const settings = { fontSize, theme, showKeyboardTips, messageDensity};
+
+    try {
+        localStorage.setItem('userAccessibilitySettings', JSON.stringify(settings));
+    } catch (e) {
+        console.warn('Failed to save accessibility settings', e);
+    }
+  }, [loggedIn, fontSize, theme, showKeyboardTips, messageDensity]);
 
     return (
       <>
