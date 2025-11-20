@@ -11,13 +11,14 @@ export default function Register() {
 
     useEffect(() => {
         try {
-            setRegistered(!!localStorage.getItem('hasUser'))
+            //setRegistered(!!localStorage.getItem('hasUser'))
         } catch (e) {
             setRegistered(false)
         }
     }, [])
 
-    const handleRegister = () => {
+    const handleRegister = (s) => {
+        s.preventDefault()
         if (!email || !password || !confirmPassword) {
             setError('All fields are required')
             return
@@ -29,7 +30,7 @@ export default function Register() {
         try {
             localStorage.setItem('hasUser', '1')
             localStorage.setItem('currentUser', JSON.stringify({ name: 'New User' }))
-            setRegistered(true)
+            //setRegistered(true)
         } catch (e) {
             console.warn('failed to register', e)
         }
@@ -37,7 +38,7 @@ export default function Register() {
     }
 
     return (
-        <div style={{ padding: 16 }}>
+        <div className="register-container">
             <h2>Register Account</h2>
             {registered ? (
                 <p>Already registered.</p>
@@ -68,7 +69,9 @@ export default function Register() {
                                 onChange={(e) => {setConfirmPassword(e.target.value); if(error) setError('')}}
                             />
                         </div>
-                        {error && <p className="error">{error}</p>}
+                        <div className="error-message">
+                            {error && <p className="error">{error}</p>}
+                        </div>
                         <button
                             className="register-button"
                             type="submit">Register
@@ -79,7 +82,7 @@ export default function Register() {
                     </p>
                 </div>    
                     )}
-                </div>
+        </div>
   )
 }
 

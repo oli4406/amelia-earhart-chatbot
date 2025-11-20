@@ -15,6 +15,10 @@ export default function Login(){
             setError("Please enter both email and password to continue")
             return
         }
+        if(email.indexOf('@') === -1){
+            setError("Please enter a valid email address")
+            return
+        }
         //login logic here
     }
 
@@ -38,7 +42,9 @@ export default function Login(){
                         onChange={(e) => {setPassword(e.target.value); if(error) setError('')}}
                     />
                 </div>
-                {error && <p className="error">{error}</p>}
+                <div className="error-message">
+                    {error && <p className="error">{error}</p>}
+                </div>
                 <button 
                     onClick={handleLogin} 
                     className="login-button" 

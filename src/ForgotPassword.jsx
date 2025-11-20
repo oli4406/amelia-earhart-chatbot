@@ -41,7 +41,9 @@ export default function ForgotPassword(){
                         onChange={(e) => {setPassword(e.target.value); if(error) setError('')}}
                     />
                 </div>
+                <div className="error-message">
                 {error && <p className="error">{error}</p>}
+                </div>
                 <button 
                     onClick={handlePasswordReset} 
                     className="forgotpassword-button" 
