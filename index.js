@@ -65,8 +65,18 @@ async function searchFlights(departure, destination, departDate, returnDate) {
 
 app.post('/api/chat/message', async (req, res) => {
     console.log(`Message from client: ${req.body.message}`);
-    const flights = await searchFlights("LGW", "CPH", "2025-12-06", "2025-12-13");
-    res.send({ reply: `There is a flight on ${flights[0].flights[0].departure_airport.time} from London to Copenhagen for £${flights[0].price} with ${flights[0].flights[0].airline} (${flights[0].flights[0].flight_number}).` });
+
+    let response = "";
+    
+    if (req.body.message.includes("flight")) { // User is asking for flight details
+      const flights = await searchFlights("LGW", "CPH", "2025-12-06", "2025-12-13");
+      response = `There is a flight on ${flights[0].flights[0].departure_airport.time} from London to Copenhagen for £${flights[0].price} with ${flights[0].flights[0].airline} (${flights[0].flights[0].flight_number}).`
+    } else if (req.body.message.includes("?")) { // User is asking an unknown question
+      response = "I'm sorry, but I could fly across the Atlantic before I knew how to answer that question.";
+    } else { // Unknown message
+      response = "Flying may not be all plain sailing, but the fun of it is worth the price."; // Temp Amelia quote
+    }
+    res.send({ reply: response });
 });
 
 app.listen(port, () => {
