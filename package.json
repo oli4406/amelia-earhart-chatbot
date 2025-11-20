@@ -4,13 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "client": "vite",
-    "server": "node index.js",
-    "dev": "concurrently \"npm run client\" \"npm run server\"",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "start": "node index.js"
+  "client": "cd FrontEnd && vite",
+  "server": "node BackEnd/index.js",
+  "dev": "concurrently \"npm run client\" \"npm run server\"",
+  "build": "cd FrontEnd && vite build",
+  "lint": "eslint .",
+  "preview": "cd FrontEnd && vite preview",
+  "start": "node BackEnd/index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
