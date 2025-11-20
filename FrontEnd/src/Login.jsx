@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
 
 // harry watson will be working on this file next
@@ -7,6 +7,9 @@ export default function Login(){
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
 
+    useEffect(() => {
+    document.title = 'Login | Amelia Earhart Chatbot';
+  }, []);
 
     //handle login functionality
     const handleLogin = (s) => {

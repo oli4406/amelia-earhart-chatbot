@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
 
 export default function ForgotPassword(){
@@ -6,6 +6,10 @@ export default function ForgotPassword(){
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const[error, setError] = useState('')
+
+    useEffect(() => {
+    document.title = 'Forgot Password | Amelia Earhart Chatbot';
+  }, []);
 
     //handle password reset functionality
     const handlePasswordReset = (s) => {
@@ -20,6 +24,7 @@ export default function ForgotPassword(){
         }
         //reset password logic here
     }
+
 
     return(
         <div className="forgotpassword-container">

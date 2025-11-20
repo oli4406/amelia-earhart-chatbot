@@ -10,6 +10,7 @@ export default function Register() {
     const navigate = useNavigate()
 
     useEffect(() => {
+            document.title = 'Register | Amelia Earhart Chatbot';
         try {
             //setRegistered(!!localStorage.getItem('hasUser'))
         } catch (e) {
