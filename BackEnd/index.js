@@ -14,10 +14,6 @@ const SERPAPI_KEY = process.env.SERPAPI_API_KEY;
 app.use(express.json());
 app.use(cors({ origin: 'http://localhost:5173' }));
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
-
 async function searchFlights(departure, destination, departDate, returnDate) {
   let data;
   try {
