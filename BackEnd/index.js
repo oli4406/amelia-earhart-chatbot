@@ -131,6 +131,11 @@ async function searchFlights(departure, destination, departDate, returnDate) {
 }
 
 app.post('/api/chat/message', async (req, res) => {
+
+  if (req.body.message.substring(0,5) != "[DEV]") { // TEMP bypass to reduce usage during testing
+    res.send({ reply: "Better do a good deed near at home than go far away to burn incense.\n\nPrefix your message with [DEV] to access the gemini (to reduce the usage during testing)" });
+  }
+
   console.log(`Message from client: ${req.body.message}`);
 
   // Get current date for context
