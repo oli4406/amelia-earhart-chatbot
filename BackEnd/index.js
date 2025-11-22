@@ -2,7 +2,6 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import { getJson } from 'serpapi';
-import process from 'process';
 import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
@@ -16,22 +15,34 @@ const app = express();
 const port = Number(process.env.PORT || 3000);
 const SERPAPI_KEY = process.env.SERPAPI_API_KEY;
 
-const fallbackText = "I am sorry, my instruments seem to be playing up. Flying may not be all plain sailing, but the fun of it is worth the price.";
+// parse JSON and enable CORS once
+app.use(express.json());
+
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'OPTIONS'],
+    credentials: true,
+  })
+);
+
+const fallbackText =
+  "I am sorry, my instruments seem to be playing up. Flying may not be all plain sailing, but the fun of it is worth the price.";
 
 // Define the flight search function declaration for Gemini
 const searchFlightsFunctionDeclaration = {
-  name: "searchFlights",
-  description: "Returns the best flight between two airports on specified dates.",
+  name: 'searchFlights',
+  description: 'Returns the best flight between two airports on specified dates.',
   parameters: {
     type: SchemaType.OBJECT,
     properties: {
-      origin: { type: SchemaType.STRING, description: "IATA code of the departure airport" },
-      destination: { type: SchemaType.STRING, description: "IATA code of the arrival airport" },
-      departure_date: { type: SchemaType.STRING, description: "YYYY-MM-DD departure date" },
-      return_date: { type: SchemaType.STRING, nullable: true, description: "YYYY-MM-DD return date or null if not specified by user" }
+      origin: { type: SchemaType.STRING, description: 'IATA code of the departure airport' },
+      destination: { type: SchemaType.STRING, description: 'IATA code of the arrival airport' },
+      departure_date: { type: SchemaType.STRING, description: 'YYYY-MM-DD departure date' },
+      return_date: { type: SchemaType.STRING, nullable: true, description: 'YYYY-MM-DD return date or null if not specified by user' },
     },
-    required: ["origin", "destination", "departure_date"]
-  }
+    required: ['origin', 'destination', 'departure_date'],
+  },
 };
 
 // Generation config with function declaration
@@ -62,9 +73,11 @@ const config = {
   7. Never ask the user for a year unless completely unavoidable.
 
   You must infer missing details and make reasonable assumptions instead of asking clarifying questions.`,
-  tools: [{
-    functionDeclarations: [searchFlightsFunctionDeclaration]
-  }]
+  tools: [
+    {
+      functionDeclarations: [searchFlightsFunctionDeclaration],
+    },
+  ],
 };
 
 // Configure the Gemini client
@@ -72,9 +85,9 @@ const ai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // Get the model with the specified model and configuration
 const model = ai.getGenerativeModel({
-  model: "gemini-2.5-flash",
+  model: 'gemini-2.5-flash',
   systemInstruction: config.systemInstruction,
-  tools: config.tools
+  tools: config.tools,
 });
 
 // Start a new chat session and pass in the initial greeting
@@ -82,17 +95,13 @@ const chat = model.startChat({
   history: [],
 });
 
-app.use(express.json());
-app.use(cors({ origin: 'http://localhost:5173' }));
-
 async function searchFlights(departure, destination, departDate, returnDate) {
   console.log(`Searching flights from ${departure} to ${destination} departing on ${departDate} returning on ${returnDate || 'N/A'}`);
   let data;
   try {
-    data = fs.readFileSync("BackEnd/data.json");
+    data = fs.readFileSync('BackEnd/data.json', 'utf8');
   } catch (error) {
     console.error(error);
-
     throw error;
   }
 
@@ -100,50 +109,7 @@ async function searchFlights(departure, destination, departDate, returnDate) {
   const flightType = returnDate ? 1 : 2;
 
   return JSON.parse(data); // temp bypass to avoid API calls during dev
-
-  // try { 
-  //   const json = await getJson({
-  //     engine: "google_flights",
-  //     api_key: SERPAPI_KEY,
-  //     departure_id: departure,
-  //     arrival_id: destination,
-  //     type: 1, // 1 for round trip, 2 for one way, 3 for multi-city
-  //     outbound_date: departDate,
-  //     return_date: returnDate,
-  //     currency: "GBP",
-  //   });
-
-  //   console.log(json.best_flights || json.flights);
-  //   const data = JSON.stringify(json.best_flights);
-  //   fs.writeFile("data.json", data, (error) => {
-  //     // throwing the error
-  //     // in case of a writing problem
-  //     if (error) {
-  //       // logging the error
-  //       console.error(error);
-
-  //       throw error;
-  //     }
-
-  //     console.log("data.json written correctly");
-  //   });
-  //   return json.best_flights || json.flights || [];
-  // } catch (error) {
-  //   console.error(`Error searching flights: ${error}`);
-  //   return [];
-  // }
 }
-
-// parse JSON and enable CORS once
-app.use(express.json());
-
-app.use(
-  cors({
-    origin: 'http://localhost:5173',
-    methods: ['GET', 'POST', 'OPTIONS'],
-    credentials: true,
-  })
-);
 
 // quick health + debug endpoints (do not expose in production)
 app.get('/', (req, res) => res.send('OK'));
@@ -275,13 +241,9 @@ app.post('/api/chat/message', async (req, res) => {
     const initialResponse = await chat.sendMessage(messageWithDate);
     console.log(`Initial chat response: \n${JSON.stringify(initialResponse)}\n`);
 
-    // Check if response is wrapped into an outer 'response' object
     const structuredResponse = initialResponse.response || initialResponse;
 
-    // Look for the function call object deep inside the response
-    const functionCallPart = structuredResponse.candidates?.[0]?.content?.parts?.find(
-      part => part.functionCall
-    )
+    const functionCallPart = structuredResponse.candidates?.[0]?.content?.parts?.find(part => part.functionCall);
 
     if (!functionCallPart) {
       // No function call detected, return the text response
@@ -294,7 +256,7 @@ app.post('/api/chat/message', async (req, res) => {
     console.log(`Tool call detected: ${JSON.stringify(tool_call)}`);
 
     let result;
-    if (tool_call.name === "searchFlights") {
+    if (tool_call.name === 'searchFlights') {
       console.log(`Invoking searchFlights with arguments: ${JSON.stringify(tool_call.args)}`);
       result = await searchFlights(tool_call.args.origin, tool_call.args.destination, tool_call.args.departure_date, tool_call.args.return_date);
     }

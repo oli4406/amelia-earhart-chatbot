@@ -173,6 +173,16 @@ nav {
   display: none;
 }
 
+.page-user-name {
+  position: fixed;
+  right: 20px;
+  top: 12px;
+  font-weight: 500;
+  z-index: 1001;
+  pointer-events: none;
+  color: var(--text-color);
+}
+
 .settings-overlay {
   position: fixed;
   inset: 0;
