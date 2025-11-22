@@ -14,9 +14,13 @@
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
+    "expressv": "^1.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^9.0.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router": "^7.9.5",

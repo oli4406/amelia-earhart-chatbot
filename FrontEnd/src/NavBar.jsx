@@ -1,9 +1,10 @@
 import {Link, useNavigate} from 'react-router-dom';
 import {useState, useEffect} from 'react'
-const loggedIn = false; // Placeholder for actual authentication logic
+
 
 export default function NavBar() {
 
+  const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem('authToken')));
   const [collapsed, setCollapsed] = useState(false)
   const toggleNav = () => {setCollapsed((prev) => !prev);};
   const [showSettings, setShowSettings] = useState(false);
@@ -11,21 +12,45 @@ export default function NavBar() {
   const [theme, setTheme] = useState('dark');
   const [showKeyboardTips, setShowKeyboardTips] = useState(false);
   const [messageDensity, setMessageDensity] = useState('default');
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const onStorage = (e) => {
+      if (e.key === 'authToken') setLoggedIn(Boolean(e.newValue));
+    };
+        const onAuthChanged = () => {
+      setLoggedIn(Boolean(localStorage.getItem('authToken')));
+    };
+    window.addEventListener('storage', onStorage);
+    window.addEventListener('authChanged', onAuthChanged);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('authChanged', onAuthChanged);
+    };
+  }, []);
 
+  //handle logout button click
+  const handleLogoutClick = () => {
+    localStorage.removeItem('authToken');
+    setLoggedIn(false);
+    window.dispatchEvent(new Event('authChanged'));
+    navigate('/');
+  };
 
-
-
-  //handle login/logout button click
-  //to be expanded once user tokens are implemented
-  const handleLoginClick = () => loggedIn ? navigate('/') : navigate('/login');
+  //handle login button click
+    const handleLoginClick = () => {
+    if (loggedIn) {
+      handleLogoutClick();
+      return;
+    }
+    navigate('/login');
+  };
 
   //handle settings button click
   const handleSettingsClick = () => {
     setShowSettings(true);
     };
-
     useEffect(() => {
     try {
         const raw = localStorage.getItem('userAccessibilitySettings');
@@ -52,6 +77,38 @@ export default function NavBar() {
   }, [fontSize, theme, showKeyboardTips, messageDensity]);
 
   useEffect(() => {
+    if (!loggedIn) {
+      setUser(null);
+      return;
+    }
+
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+          setUser(null);
+          return;
+        }
+        const res = await fetch('http://localhost:3000/api/user',{
+          method: 'GET',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) {
+          setUser(null);
+          return;
+        }
+        const data = await res.json();
+        setUser({ firstName: data.firstName, lastName: data.lastName, email: data.email });
+      } catch (e) {
+        console.error('Failed to fetch user data', e);
+        setUser(null);
+      }
+    };
+
+    fetchUser();
+  }, [loggedIn]);
+
+  useEffect(() => {
     if (!loggedIn) return;
 
     const settings = { fontSize, theme, showKeyboardTips, messageDensity};
@@ -65,6 +122,8 @@ export default function NavBar() {
 
     return (
       <>
+        {/* displays first and last name when logged in */}
+        <div className="page-user-name">{user ? `Welcome, ${user.firstName} ${user.lastName}` : ''}</div>
         <nav className={`nav ${collapsed ? 'nav--collapsed' : ''}`}>
           <button className="nav-toggle" onClick={toggleNav}>
             {collapsed ? '☰' : '☰'}
@@ -75,12 +134,14 @@ export default function NavBar() {
             {loggedIn && (<Link style={{display:'block',margin: '10px auto'}} to="/history">History</Link>)}
 
             <div className='navButtons'>
-                <button onClick={handleLoginClick}>{loggedIn ? 'Log out' : 'Login/Signup'}</button>
-                <button onClick={handleSettingsClick}>Settings</button>
+              <button onClick={loggedIn ? handleLogoutClick : handleLoginClick}>
+                   {loggedIn ? 'Log out' : 'Login/Signup'}
+              </button>
+              <button onClick={handleSettingsClick}>Settings</button>
             </div>
           </div>
         </nav>
-        
+  
         {showSettings && (
           <div className="settings-overlay">
             <div className="settings-modal">
@@ -130,8 +191,8 @@ export default function NavBar() {
                     <section className="accessibility-section">
                         <h3>Message Spacing</h3>
                         <div className="theme-buttons">
-                                <button type="button" classname={`theme-button ${messageDensity=== 'default' ? 'theme-button--active' : ''}`} onClick={() => setMessageDensity('default')}>Default</button>
-                                <button type="button" classname={`theme-button ${messageDensity=== 'comfortable' ? 'theme-button--active' : ''}`} onClick={() => setMessageDensity('comfortable')}>Comfortable</button>
+                                <button type="button" className={`theme-button ${messageDensity === 'default' ? 'theme-button--active' : ''}`} onClick={() => setMessageDensity('default')}>Default</button>
+                                <button type="button" className={`theme-button ${messageDensity === 'comfortable' ? 'theme-button--active' : ''}`} onClick={() => setMessageDensity('comfortable')}>Comfortable</button>
                         </div>
                     </section>
                 </div>

@@ -1,34 +1,156 @@
 import dotenv from 'dotenv';
-import express, { response } from 'express';
+import express from 'express';
 import cors from 'cors';
 import { getJson } from 'serpapi';
-import process from 'process';
 import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
-
-import * as fs from 'fs'; // temp file writing
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import * as fs from 'fs';
 
 dotenv.config();
 
 const app = express();
-const port = 3000;
+const port = Number(process.env.PORT || 3000);
 const SERPAPI_KEY = process.env.SERPAPI_API_KEY;
 
-const fallbackText = "I am sorry, my instruments seem to be playing up. Flying may not be all plain sailing, but the fun of it is worth the price.";
+// parse JSON and enable CORS once
+app.use(express.json());
+
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'OPTIONS'],
+    credentials: true,
+  })
+);
+
+// quick health + debug endpoints (do not expose in production)
+app.get('/', (req, res) => res.send('OK'));
+app.get('/debug/headers', (req, res) => res.json({ headers: req.headers }));
+
+// request logger
+app.use((req, res, next) => {
+  console.log(new Date().toISOString(), req.method, req.url);
+  next();
+});
+
+// connect to MongoDB
+mongoose
+  .connect('mongodb://localhost:27017/amelia-earhart-chatbot')
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch(error => {
+    console.error('Error connecting to MongoDB:', error);
+  });
+
+// define User schema for table
+const UserSchema = new mongoose.Schema(
+  {
+    email: { type: String, required: true, unique: true },
+    passwordHash: { type: String, required: true },
+    firstName: { type: String },
+    lastName: { type: String },
+  },
+  { timestamps: true }
+);
+
+//define Message schema for table
+const messageSchema = new mongoose.Schema(
+  {
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    question: { type: String, required: true },
+    answer: { type: String, required: true },
+    ts: { type: Date, default: Date.now },
+  },
+  { timestamps: true }
+);
+const Message = mongoose.models.Message || mongoose.model('Message', messageSchema);
+
+const User = mongoose.models.User || mongoose.model('User', UserSchema);
+
+// auth middleware
+const TokenVerificationSecret = (req, res, next) => {
+  const raw = req.headers['authorization'] || '';
+  const token = raw.replace(/^Bearer\s+/i, '') || null;
+  if (!token) return res.status(401).send({ message: 'Access Denied. No token provided.' });
+  try {
+    req.user = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret');
+    next();
+  } catch (err) {
+    return res.status(401).send({ message: 'Invalid Token' });
+  }
+};
+
+// register
+app.post('/api/register', async (req, res) => {
+  try {
+    const { email, password, firstName, lastName } = req.body;
+    if (!email || !password || !firstName || !lastName) return res.status(400).send({ message: 'Please enter all fields to continue' });
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) return res.status(409).send({ message: 'User already exists' });
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(password, salt);
+
+    const newUser = new User({ email, passwordHash, firstName, lastName });
+    await newUser.save();
+    res.status(201).send({ message: 'User registered successfully' });
+  } catch (error) {
+    console.error('Register error:', error);
+    res.status(500).send({ message: 'Error registering user' });
+  }
+});
+
+// get user (protected)
+app.get('/api/user', TokenVerificationSecret, async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id).select('-passwordHash');
+    if (!user) return res.status(404).send({ message: 'User not found' });
+    res.send(user);
+  } catch (error) {
+    console.error('Get user error:', error);
+    res.status(500).send({ message: 'Error fetching user data' });
+  }
+});
+
+// login (POST only)
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) return res.status(400).send({ message: 'Email and password required' });
+  try {
+    const user = await User.findOne({ email });
+    if (!user) return res.status(401).send({ message: 'Invalid email or password' });
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
+    if (!isMatch) return res.status(401).send({ message: 'Invalid email or password' });
+    const token = jwt.sign({ _id: user._id, email: user.email }, process.env.JWT_SECRET || 'dev_secret', {
+      expiresIn: '1h',
+    });
+    res.send({ token });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).send({ message: 'Error logging in' });
+  }
+});
+
+const fallbackText =
+  "I am sorry, my instruments seem to be playing up. Flying may not be all plain sailing, but the fun of it is worth the price.";
 
 // Define the flight search function declaration for Gemini
 const searchFlightsFunctionDeclaration = {
-  name: "searchFlights",
-  description: "Returns the best flight between two airports on specified dates.",
+  name: 'searchFlights',
+  description: 'Returns the best flight between two airports on specified dates.',
   parameters: {
     type: SchemaType.OBJECT,
     properties: {
-      origin: { type: SchemaType.STRING, description: "IATA code of the departure airport" },
-      destination: { type: SchemaType.STRING, description: "IATA code of the arrival airport" },
-      departure_date: { type: SchemaType.STRING, description: "YYYY-MM-DD departure date" },
-      return_date: { type: SchemaType.STRING, nullable: true, description: "YYYY-MM-DD return date or null if not specified by user" }
+      origin: { type: SchemaType.STRING, description: 'IATA code of the departure airport' },
+      destination: { type: SchemaType.STRING, description: 'IATA code of the arrival airport' },
+      departure_date: { type: SchemaType.STRING, description: 'YYYY-MM-DD departure date' },
+      return_date: { type: SchemaType.STRING, nullable: true, description: 'YYYY-MM-DD return date or null if not specified by user' },
     },
-    required: ["origin", "destination", "departure_date"]
-  }
+    required: ['origin', 'destination', 'departure_date'],
+  },
 };
 
 // Generation config with function declaration
@@ -59,9 +181,11 @@ const config = {
   7. Never ask the user for a year unless completely unavoidable.
 
   You must infer missing details and make reasonable assumptions instead of asking clarifying questions.`,
-  tools: [{
-    functionDeclarations: [searchFlightsFunctionDeclaration]
-  }]
+  tools: [
+    {
+      functionDeclarations: [searchFlightsFunctionDeclaration],
+    },
+  ],
 };
 
 // Configure the Gemini client
@@ -69,9 +193,9 @@ const ai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // Get the model with the specified model and configuration
 const model = ai.getGenerativeModel({
-  model: "gemini-2.5-flash",
+  model: 'gemini-2.5-flash',
   systemInstruction: config.systemInstruction,
-  tools: config.tools
+  tools: config.tools,
 });
 
 // Start a new chat session and pass in the initial greeting
@@ -79,17 +203,13 @@ const chat = model.startChat({
   history: [],
 });
 
-app.use(express.json());
-app.use(cors({ origin: 'http://localhost:5173' }));
-
 async function searchFlights(departure, destination, departDate, returnDate) {
   console.log(`Searching flights from ${departure} to ${destination} departing on ${departDate} returning on ${returnDate || 'N/A'}`);
   let data;
   try {
-    data = fs.readFileSync("BackEnd/data.json");
+    data = fs.readFileSync('BackEnd/data.json', 'utf8');
   } catch (error) {
     console.error(error);
-
     throw error;
   }
 
@@ -97,44 +217,18 @@ async function searchFlights(departure, destination, departDate, returnDate) {
   const flightType = returnDate ? 1 : 2;
 
   return JSON.parse(data); // temp bypass to avoid API calls during dev
-
-  // try { 
-  //   const json = await getJson({
-  //     engine: "google_flights",
-  //     api_key: SERPAPI_KEY,
-  //     departure_id: departure,
-  //     arrival_id: destination,
-  //     type: 1, // 1 for round trip, 2 for one way, 3 for multi-city
-  //     outbound_date: departDate,
-  //     return_date: returnDate,
-  //     currency: "GBP",
-  //   });
-
-  //   console.log(json.best_flights || json.flights);
-  //   const data = JSON.stringify(json.best_flights);
-  //   fs.writeFile("data.json", data, (error) => {
-  //     // throwing the error
-  //     // in case of a writing problem
-  //     if (error) {
-  //       // logging the error
-  //       console.error(error);
-
-  //       throw error;
-  //     }
-
-  //     console.log("data.json written correctly");
-  //   });
-  //   return json.best_flights || json.flights || [];
-  // } catch (error) {
-  //   console.error(`Error searching flights: ${error}`);
-  //   return [];
-  // }
 }
 
 app.post('/api/chat/message', async (req, res) => {
+  if (!req.body || typeof req.body.message !== 'string') {
+    return res.status(400).send({ reply: fallbackText });
+  }
 
-  if (req.body.message.substring(0,5) != "[DEV]") { // TEMP bypass to reduce usage during testing
-    res.send({ reply: "Better do a good deed near at home than go far away to burn incense.\n\nPrefix your message with [DEV] to access the gemini (to reduce the usage during testing)" });
+  if (req.body.message.substring(0, 5) !== '[DEV]') {
+    return res.send({
+      reply:
+        "Better do a good deed near at home than go far away to burn incense.\n\nPrefix your message with [DEV] to access the gemini (to reduce the usage during testing)",
+    });
   }
 
   console.log(`Message from client: ${req.body.message}`);
@@ -142,26 +236,19 @@ app.post('/api/chat/message', async (req, res) => {
   // Get current date for context
   const today = new Date().toISOString().split('T')[0];
   const userMessage = req.body.message;
-  const messageWithDate = `
-  [Current Date: ${today}]
-  User: ${userMessage}`;
+  const messageWithDate = `\n  [Current Date: ${today}]\n  User: ${userMessage}`;
 
   try {
     const initialResponse = await chat.sendMessage(messageWithDate);
     console.log(`Initial chat response: \n${JSON.stringify(initialResponse)}\n`);
 
-    // Check if response is wrapped into an outer 'response' object
     const structuredResponse = initialResponse.response || initialResponse;
 
-    // Look for the function call object deep inside the response
-    const functionCallPart = structuredResponse.candidates?.[0]?.content?.parts?.find(
-      part => part.functionCall
-    )
+    const functionCallPart = structuredResponse.candidates?.[0]?.content?.parts?.find(part => part.functionCall);
 
     if (!functionCallPart) {
-      // No function call detected, return the text response
-      console.log("Model returned text, no function call detected.");
-      const responseText = initialResponse.response.candidates?.[0]?.content?.parts?.[0]?.text || fallbackText;
+      console.log('Model returned text, no function call detected.');
+      const responseText = structuredResponse.candidates?.[0]?.content?.parts?.[0]?.text || fallbackText;
       return res.send({ reply: responseText });
     }
 
@@ -169,9 +256,9 @@ app.post('/api/chat/message', async (req, res) => {
     console.log(`Tool call detected: ${JSON.stringify(tool_call)}`);
 
     let result;
-    if (tool_call.name === "searchFlights") {
+    if (tool_call.name === 'searchFlights') {
       console.log(`Invoking searchFlights with arguments: ${JSON.stringify(tool_call.args)}`);
-      result = await searchFlights(tool_call.args.origin, tool_call.args.destination, tool_call.args.departure_date, tool_call.args.return_date)
+      result = await searchFlights(tool_call.args.origin, tool_call.args.destination, tool_call.args.departure_date, tool_call.args.return_date);
     }
 
     console.log(`tool_call result (stringified):\n${JSON.stringify(result)}\n`);
@@ -180,19 +267,17 @@ app.post('/api/chat/message', async (req, res) => {
       {
         functionResponse: {
           name: tool_call.name,
-          response: { flights: result }
-        }
-      }
+          response: { flights: result },
+        },
+      },
     ]);
 
-    console.log(`Final chat response: \n${finalResponse.response.candidates?.[0]?.content?.parts?.[0]?.text}\n`);
-
-  const responseText = finalResponse.response.candidates?.[0]?.content?.parts?.[0]?.text || fallbackText;
-    res.send({ reply: responseText });
-
+    const responseText = finalResponse.response?.candidates?.[0]?.content?.parts?.[0]?.text || fallbackText;
+    console.log(`Final chat response: \n${responseText}\n`);
+    return res.send({ reply: responseText });
   } catch (error) {
     console.error(`Error handling chat message: ${error}`);
-    res.status(500).send({ reply: fallbackText });
+    return res.status(500).send({ reply: fallbackText });
   }
 });
 
