@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "client": "cd FrontEnd && vite",
+    "client": "cd FrontEnd && vite --host 0.0.0.0",
     "server": "node BackEnd/index.js",
     "dev": "concurrently \"npm run client\" \"npm run server\"",
     "build": "cd FrontEnd && vite build",
@@ -38,7 +38,7 @@
     "eslint-plugin-react-refresh": "^0.4.22",
     "globals": "^16.4.0",
     "tailwindcss": "^4.1.17",
-    "vite": "^7.2.2"
+    "vite": "^7.2.4"
   },
   "description": "This is a Chatbot with the persona of Amelia Earhart, with the primary function of giving requested flight information to the user.",
   "main": "eslint.config.js",

@@ -26,8 +26,7 @@ app.use(
   })
 );
 
-const fallbackText =
-  "I am sorry, my instruments seem to be playing up. Flying may not be all plain sailing, but the fun of it is worth the price.";
+const fallbackText ="I am sorry, my instruments seem to be playing up. Flying may not be all plain sailing, but the fun of it is worth the price.";
 
 // Define the flight search function declaration for Gemini
 const searchFlightsFunctionDeclaration = {
@@ -111,8 +110,6 @@ async function searchFlights(departure, destination, departDate, returnDate) {
   return JSON.parse(data); // temp bypass to avoid API calls during dev
 }
 
-// quick health + debug endpoints (do not expose in production)
-app.get('/', (req, res) => res.send('OK'));
 app.get('/debug/headers', (req, res) => res.json({ headers: req.headers }));
 
 // request logger
