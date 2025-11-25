@@ -70,7 +70,7 @@
 }
 
 .empty-message {
-  color: #6b7280;
+  color: #73503F;
   padding: 6px 0;
 }
 
@@ -89,7 +89,7 @@
 }
 
 .message-line.user .message-bubble {
-  background: #2166f3;
+  background: #BE8435;
   color: #ffffff;
 }
 
@@ -98,7 +98,7 @@
 }
 
 .message-line.bot .message-bubble {
-  background: #12263a;
+  background: #3B221D;
   color: #f5f7ff;
 }
 
@@ -136,12 +136,14 @@
   flex: 1;
   padding: 8px;
   font-size: 1rem;
+  background-color: #3B221D;
 }
 
 .send-button {
   padding: 8px 12px;
   font-size: 1rem;
   cursor: pointer;
+  background-color: #3B221D;
 }
 
 

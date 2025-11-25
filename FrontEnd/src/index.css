@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #C3B495;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -159,7 +159,7 @@ nav {
 .nav-toggle {
   border: none;
   background: transparent;
-  color: #f5f7ff;
+  color: #73503F;
   font-size: 22px;
   cursor: pointer;
 }
@@ -194,7 +194,7 @@ nav {
 }
 
 .settings-modal {
-  background: #36383d;
+  background: #73503F;
   color: #f5f7ff;
   border-radius: 10px;
   padding: 2.5rem;
@@ -284,12 +284,12 @@ justify-content: center;
 }
 
 .theme-button--active {
-  background: #2563eb;
+  background: #3B221D;
   color: #ffffff
 }
 
 :root[data-theme="light"] .theme-button--active {
-  background: #2563eb;
+  background: #3B221D;
   color: #f9fafb;
 }
 
