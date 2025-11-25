@@ -12,8 +12,8 @@ import * as fs from 'fs'; // temp file writing
 dotenv.config();
 
 const app = express();
-const port = Number(process.env.PORT || 3000);
-const SERPAPI_KEY = process.env.SERPAPI_API_KEY;
+const port = Number(globalThis.process.env.PORT || 3000);
+const SERPAPI_KEY = globalThis.process.env.SERPAPI_API_KEY;
 
 // parse JSON and enable CORS once
 app.use(express.json());
@@ -85,7 +85,7 @@ const config = {
 };
 
 // Configure the Gemini client
-const ai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const ai = new GoogleGenerativeAI(globalThis.process.env.GEMINI_API_KEY);
 
 // Get the model with the specified model and configuration
 const model = ai.getGenerativeModel({
@@ -208,9 +208,10 @@ const TokenVerificationSecret = (req, res, next) => {
   const token = raw.replace(/^Bearer\s+/i, '') || null;
   if (!token) return res.status(401).send({ message: 'Access Denied. No token provided.' });
   try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret');
+    req.user = jwt.verify(token, globalThis.process.env.JWT_SECRET || 'dev_secret');
     next();
   } catch (err) {
+    console.error(`An error occured: ${err}`)
     return res.status(401).send({ message: 'Invalid Token' });
   }
 };
@@ -256,7 +257,7 @@ app.post('/api/login', async (req, res) => {
     if (!user) return res.status(401).send({ message: 'Invalid email or password' });
     const isMatch = await bcrypt.compare(password, user.passwordHash);
     if (!isMatch) return res.status(401).send({ message: 'Invalid email or password' });
-    const token = jwt.sign({ _id: user._id, email: user.email }, process.env.JWT_SECRET || 'dev_secret', {
+    const token = jwt.sign({ _id: user._id, email: user.email }, globalThis.process.env.JWT_SECRET || 'dev_secret', {
       expiresIn: '1h',
     });
     res.send({ token });
