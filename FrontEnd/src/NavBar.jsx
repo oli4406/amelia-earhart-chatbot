@@ -1,5 +1,10 @@
 import {Link, useNavigate} from 'react-router-dom';
 import {useState, useEffect} from 'react'
+import homeIcon from './assets/home.png';
+import chatIcon from './assets/chat.png';
+import settingsIcon from './assets/settings.png';
+import accountIcon from './assets/account.png';
+import historyIcon from './assets/history.png';
 
 
 export default function NavBar() {
@@ -125,19 +130,34 @@ export default function NavBar() {
         {/* displays first and last name when logged in */}
         <div className="page-user-name">{user ? `Welcome, ${user.firstName} ${user.lastName}` : ''}</div>
         <nav className={`nav ${collapsed ? 'nav--collapsed' : ''}`}>
-          <button className="nav-toggle" onClick={toggleNav}>
+          <button className="nav-toggle" onClick={toggleNav} title={collapsed ? 'Expand menu' : 'Collapse menu'}>
             {collapsed ? '☰' : '☰'}
           </button>
           <div className="nav-inner">
-            <Link style={{display:'block',margin: '10px auto'}} to="/">Hangar</Link>
-            <Link style={{display:'block',margin: '10px auto'}} to="/chat">Communications</Link>
-            {loggedIn && (<Link style={{display:'block',margin: '10px auto'}} to="/history">Flight Log</Link>)}
+            <Link className="nav-link" title="Home" to="/">
+              <span className="nav-icon"><img src={homeIcon} alt="Home"/></span>
+              <span className="nav-text">Hanger</span>
+            </Link>
+            <Link className="nav-link" title="Chat" to="/chat">
+              <span className="nav-icon"><img src={chatIcon} alt="Chat"/></span>
+              <span className="nav-text">Communications</span>
+            </Link>
+            {loggedIn && (
+              <Link className="nav-link" title="History" to="/history">
+                <span className="nav-icon"><img src={historyIcon} alt="History"/></span>
+                <span className="nav-text">Flight Log</span>
+              </Link>
+            )}
 
             <div className='navButtons'>
-              <button onClick={loggedIn ? handleLogoutClick : handleLoginClick}>
-                   {loggedIn ? 'Disembark' : 'Pilot Login/Register'}
+              <button className="nav-btn" onClick={loggedIn ? handleLogoutClick : handleLoginClick} title={loggedIn ? 'Log out' : 'Login/Signup'}>
+                <span className="nav-icon"><img src={accountIcon} alt="Account"/></span>
+                <span className="nav-text">{loggedIn ? 'Disembark' : 'Pilot Login/Register'}</span>
               </button>
-              <button onClick={handleSettingsClick}>Flight Systems</button>
+              <button className="nav-btn" onClick={handleSettingsClick} title="Settings">
+                <span className="nav-icon"><img src={settingsIcon} alt="Settings"/></span>
+                <span className="nav-text">Flight Systems</span>
+              </button>
             </div>
           </div>
         </nav>

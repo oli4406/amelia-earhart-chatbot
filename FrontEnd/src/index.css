@@ -163,6 +163,44 @@ nav {
   background: var(--sidebar-color);
   color: var(--text-color);
   font-size: 16px;
+  transition: width 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-inner {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  transition: opacity 0.3s ease;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  margin: 5px auto;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-icon {
+  font-size: 20px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.nav-text {
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity 0.3s ease;
 }
 
 .navButtons {
@@ -170,11 +208,30 @@ nav {
   width: 100%;
   bottom: 0;
   padding-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 .navButtons > button {
-  display: block;
-  margin: 10px auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  padding: 10px 8px;
+  width: calc(100% - 16px);
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.nav-btn {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 8px !important;
+  margin: 0 !important;
 }
 
 .nav-toggle {
@@ -183,15 +240,38 @@ nav {
   color: #73503F;
   font-size: 22px;
   cursor: pointer;
+  align-self: center;
+  margin-bottom: 10px;
+  padding: 8px;
 }
 
 .nav--collapsed {
-  width: 42px;
+  width: 70px;
   background-color: #242424;
 }
 
-.nav--collapsed .nav-inner {
+.nav--collapsed .nav-text {
   display: none;
+}
+
+.nav--collapsed .nav-link {
+  padding: 12px 8px;
+  justify-content: center;
+  gap: 0;
+}
+
+.nav--collapsed .nav-btn {
+  justify-content: center !important;
+  padding: 10px 4px !important;
+}
+
+.nav--collapsed .navButtons {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.nav--collapsed .navButtons > button {
+  width: calc(100% - 8px);
 }
 
 .page-user-name {
