@@ -74,6 +74,27 @@ textarea {
   color: inherit;
 }
 
+/* Login-specific input/button styles */
+.login-form input {
+  background-color: #3B221D;
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.login-form input::placeholder {
+  color: rgba(255,255,255,0.7);
+}
+.login-button {
+  background-color: #3B221D;
+  color: #ffffff;
+  border: 1px solid rgba(0,0,0,0.15);
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.login-button:hover {
+  filter: brightness(1.08);
+}
+
 .settings-overlay {
   position: fixed;
   inset: 0;
