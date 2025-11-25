@@ -152,7 +152,7 @@ export default function NavBar() {
             <div className='navButtons'>
               <button className="nav-btn" onClick={loggedIn ? handleLogoutClick : handleLoginClick} title={loggedIn ? 'Log out' : 'Login/Signup'}>
                 <span className="nav-icon"><img src={accountIcon} alt="Account"/></span>
-                <span className="nav-text">{loggedIn ? 'Disembark' : 'Pilot Login/Register'}</span>
+                <span className="nav-text">{loggedIn ? 'Disembark' : 'Pilot Login'}</span>
               </button>
               <button className="nav-btn" onClick={handleSettingsClick} title="Settings">
                 <span className="nav-icon"><img src={settingsIcon} alt="Settings"/></span>
