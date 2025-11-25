@@ -101,15 +101,6 @@ const chat = model.startChat({
 
 async function searchFlights(origin, destination, departure_date, flight_type, return_date, exclude_airlines, include_airlines, max_price, sort_by) {
   console.log(`Searching flights from ${origin} to ${destination} departing on ${departure_date} returning on ${return_date || 'N/A'}`);
-  // let data;
-  // try {
-  //   data = fs.readFileSync('BackEnd/data.json', 'utf8');
-  // } catch (error) {
-  //   console.error(error);
-  //   throw error;
-  // }
-
-  // return JSON.parse(data); // temp bypass to avoid API calls during dev
 
   try {
     const request_data = {
