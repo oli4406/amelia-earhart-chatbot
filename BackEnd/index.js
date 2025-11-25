@@ -12,8 +12,8 @@ import * as fs from 'fs'; // temp file writing
 dotenv.config();
 
 const app = express();
-const port = Number(process.env.PORT || 3000);
-const SERPAPI_KEY = process.env.SERPAPI_API_KEY;
+const port = Number(globalThis.process.env.PORT || 3000);
+const SERPAPI_KEY = globalThis.process.env.SERPAPI_API_KEY;
 
 // parse JSON and enable CORS once
 app.use(express.json());
@@ -38,9 +38,14 @@ const searchFlightsFunctionDeclaration = {
       origin: { type: SchemaType.STRING, description: 'IATA code of the departure airport' },
       destination: { type: SchemaType.STRING, description: 'IATA code of the arrival airport' },
       departure_date: { type: SchemaType.STRING, description: 'YYYY-MM-DD departure date' },
-      return_date: { type: SchemaType.STRING, nullable: true, description: 'YYYY-MM-DD return date or null if not specified by user' },
+      flight_type: { type: SchemaType.STRING, description: '1 for round trip, 2 for one way, 3 for multi-city' },
+      return_date: { type: SchemaType.STRING, nullable: true, description: 'YYYY-MM-DD return date or null if not specified by user. Required if type is set to 1' },
+      exclude_airlines: { type: SchemaType.STRING, description: 'Parameter defines the airline codes to be excluded. Split multiple airlines with comma. It can\'t be used together with include_airlines. Each airline code should be a 2-character IATA code consisting of either two uppercase letters or one uppercase letter and one digit.' },
+      include_airlines: { type: SchemaType.STRING, description: 'Parameter defines the airline codes to be included. Split multiple airlines with comma. It can\'t be used together with exclude_airlines. Each airline code should be a 2-character IATA code consisting of either two uppercase letters or one uppercase letter and one digit.' },
+      max_price: { type: SchemaType.STRING, description: 'Parameter defines the maximum ticket price. Default to unlimited.' },
+      sort_by: { type: SchemaType.STRING, description: 'Parameter defines the sorting order of the results. Available options: 1 - Top flights (default), 2 - Price, 3 - Departure timem, 4 - Arrival time, 5 - Duration, 6 - Emissions' },
     },
-    required: ['origin', 'destination', 'departure_date'],
+    required: ['origin', 'destination', 'departure_date', 'flight_type'],
   },
 };
 
@@ -80,7 +85,7 @@ const config = {
 };
 
 // Configure the Gemini client
-const ai = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const ai = new GoogleGenerativeAI(globalThis.process.env.GEMINI_API_KEY);
 
 // Get the model with the specified model and configuration
 const model = ai.getGenerativeModel({
@@ -94,20 +99,64 @@ const chat = model.startChat({
   history: [],
 });
 
-async function searchFlights(departure, destination, departDate, returnDate) {
-  console.log(`Searching flights from ${departure} to ${destination} departing on ${departDate} returning on ${returnDate || 'N/A'}`);
-  let data;
+async function searchFlights(origin, destination, departure_date, flight_type, return_date, exclude_airlines, include_airlines, max_price, sort_by) {
+  console.log(`Searching flights from ${origin} to ${destination} departing on ${departure_date} returning on ${return_date || 'N/A'}`);
+  // let data;
+  // try {
+  //   data = fs.readFileSync('BackEnd/data.json', 'utf8');
+  // } catch (error) {
+  //   console.error(error);
+  //   throw error;
+  // }
+
+  // return JSON.parse(data); // temp bypass to avoid API calls during dev
+
   try {
-    data = fs.readFileSync('BackEnd/data.json', 'utf8');
+    const request_data = {
+      engine: "google_flights",
+      api_key: SERPAPI_KEY,
+      departure_id: origin,
+      arrival_id: destination,
+      type: flight_type,
+      outbound_date: departure_date,
+
+      return_date: return_date,
+      exclude_airlines: exclude_airlines,
+      include_airlines: include_airlines,
+      max_price: max_price,
+      sort_by: sort_by,
+      currency: "GBP",
+    }
+
+    if (return_date) { request_data['return_date'] = return_date};
+    if (exclude_airlines) { request_data['exclude_airlines'] = exclude_airlines
+    } else if (include_airlines) { request_data['include_airlines'] = include_airlines};
+    if (max_price) { request_data['max_price'] = max_price};
+    if (sort_by) { request_data['sort_by'] = sort_by};
+
+    console.log(`API Request data: \n${JSON.stringify(request_data)}\n\n`)
+
+    const json = await getJson(request_data);
+
+    console.log(json.best_flights || json.flights);
+    const data = JSON.stringify(json.best_flights);
+    fs.writeFile("data.json", data, (error) => {
+      // throwing the error
+      // in case of a writing problem
+      if (error) {
+        // logging the error
+        console.error(error);
+
+        throw error;
+      }
+
+      console.log("data.json written correctly");
+    });
+    return json.best_flights || json.flights || [];
   } catch (error) {
-    console.error(error);
-    throw error;
+    console.error(`Error searching flights: ${error}`);
+    return [];
   }
-
-  // set type to 1 for round trip, 2 for one way, 3 for multi-city
-  const flightType = returnDate ? 1 : 2;
-
-  return JSON.parse(data); // temp bypass to avoid API calls during dev
 }
 
 app.get('/debug/headers', (req, res) => res.json({ headers: req.headers }));
@@ -159,9 +208,10 @@ const TokenVerificationSecret = (req, res, next) => {
   const token = raw.replace(/^Bearer\s+/i, '') || null;
   if (!token) return res.status(401).send({ message: 'Access Denied. No token provided.' });
   try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret');
+    req.user = jwt.verify(token, globalThis.process.env.JWT_SECRET || 'dev_secret');
     next();
   } catch (err) {
+    console.error(`An error occured: ${err}`)
     return res.status(401).send({ message: 'Invalid Token' });
   }
 };
@@ -207,7 +257,7 @@ app.post('/api/login', async (req, res) => {
     if (!user) return res.status(401).send({ message: 'Invalid email or password' });
     const isMatch = await bcrypt.compare(password, user.passwordHash);
     if (!isMatch) return res.status(401).send({ message: 'Invalid email or password' });
-    const token = jwt.sign({ _id: user._id, email: user.email }, process.env.JWT_SECRET || 'dev_secret', {
+    const token = jwt.sign({ _id: user._id, email: user.email }, globalThis.process.env.JWT_SECRET || 'dev_secret', {
       expiresIn: '1h',
     });
     res.send({ token });
@@ -254,8 +304,9 @@ app.post('/api/chat/message', async (req, res) => {
 
     let result;
     if (tool_call.name === 'searchFlights') {
-      console.log(`Invoking searchFlights with arguments: ${JSON.stringify(tool_call.args)}`);
-      result = await searchFlights(tool_call.args.origin, tool_call.args.destination, tool_call.args.departure_date, tool_call.args.return_date);
+      const args = tool_call.args;
+      console.log(`Invoking searchFlights with arguments: ${JSON.stringify(args)}`);
+      result = await searchFlights(args.origin, args.destination, args.departure_date, args.flight_type, args.return_date || '', args.exclude_airlines || '', args.include_airlines || '', args.max_price || '', args.sort_by || '');
     }
 
     console.log(`tool_call result (stringified):\n${JSON.stringify(result)}\n`);
