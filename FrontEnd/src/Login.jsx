@@ -84,7 +84,7 @@ export default function Login() {
                     {error && <p className="error">{error}</p>}
                 </div>
                 <button className="login-button" type="submit" disabled={loading}>
-                    {loading ? 'Signing in…' : 'Login'}
+                    {loading ? 'Performing Pre-Flight Checks…' : 'Embark'}
                 </button>
             </form>
             <p className="forgotpassword-link">

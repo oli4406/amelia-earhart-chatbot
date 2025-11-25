@@ -129,15 +129,15 @@ export default function NavBar() {
             {collapsed ? '☰' : '☰'}
           </button>
           <div className="nav-inner">
-            <Link style={{display:'block',margin: '10px auto'}} to="/">Home</Link>
-            <Link style={{display:'block',margin: '10px auto'}} to="/chat">Chat</Link>
-            {loggedIn && (<Link style={{display:'block',margin: '10px auto'}} to="/history">History</Link>)}
+            <Link style={{display:'block',margin: '10px auto'}} to="/">Hangar</Link>
+            <Link style={{display:'block',margin: '10px auto'}} to="/chat">Communications</Link>
+            {loggedIn && (<Link style={{display:'block',margin: '10px auto'}} to="/history">Flight Log</Link>)}
 
             <div className='navButtons'>
               <button onClick={loggedIn ? handleLogoutClick : handleLoginClick}>
-                   {loggedIn ? 'Log out' : 'Login/Signup'}
+                   {loggedIn ? 'Disembark' : 'Pilot Login/Register'}
               </button>
-              <button onClick={handleSettingsClick}>Settings</button>
+              <button onClick={handleSettingsClick}>Flight Systems</button>
             </div>
           </div>
         </nav>
