@@ -346,7 +346,7 @@ justify-content: center;
 
 :root[data-theme="dark"] {
   --panel-color: #36383d;
-  --sidebar-color: #111;
+  --sidebar-color: #513629;
 }
 
 :root[data-theme="light"] {
