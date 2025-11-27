@@ -20,7 +20,7 @@ import accountIconContrast from './assets/high_contrast/account.png';
 export default function NavBar() {
 
   const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem('authToken')));
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(true)
   const toggleNav = () => {setCollapsed((prev) => !prev);};
   const [showSettings, setShowSettings] = useState(false);
   const [fontSize, setFontSize] = useState('100%');
