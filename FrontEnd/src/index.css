@@ -244,6 +244,12 @@ nav {
   align-self: center;
   margin-bottom: 10px;
   padding: 8px;
+  /* size and background config so we can swap images via CSS */
+  width: 24px;
+  height: 24px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .nav--collapsed {
@@ -274,6 +280,20 @@ nav {
 
 .nav--collapsed .navButtons > button {
   width: calc(100% - 8px);
+}
+
+.SidebarBtn-Expanded {
+  background-image: url('./assets/left_panel.png');
+}
+.SidebarBtn-Expanded:hover {
+  background-image: url('./assets/left_panel_close.png');
+}
+
+.SidebarBtn-Collapsed {
+  background-image: url('./assets/left_panel.png');
+}
+.SidebarBtn-Collapsed:hover {
+  background-image: url('./assets/left_panel_open.png');
 }
 
 .page-user-name {
@@ -409,4 +429,17 @@ body {
 .text-sizing {
   display: flex;
   gap: 1rem;
+}
+
+/* visually hidden helper for accessible labels */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }

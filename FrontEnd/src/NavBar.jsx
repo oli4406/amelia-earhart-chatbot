@@ -130,8 +130,13 @@ export default function NavBar() {
         {/* displays first and last name when logged in */}
         <div className="page-user-name">{user ? `Welcome, ${user.firstName} ${user.lastName}` : ''}</div>
         <nav className={`nav ${collapsed ? 'nav--collapsed' : ''}`}>
-          <button className="nav-toggle" onClick={toggleNav} title={collapsed ? 'Expand menu' : 'Collapse menu'}>
-            {collapsed ? '☰' : '☰'}
+          <button
+            className={`nav-toggle ${collapsed ? 'SidebarBtn-Collapsed' : 'SidebarBtn-Expanded'}`}
+            onClick={toggleNav}
+            title={collapsed ? 'Expand menu' : 'Collapse menu'}
+            aria-label={collapsed ? 'Expand menu' : 'Collapse menu'}
+          >
+            <span className="visually-hidden">{collapsed ? 'Expand' : 'Collapse'}</span>
           </button>
           <div className="nav-inner">
             <Link className="nav-link" title="Home" to="/">
