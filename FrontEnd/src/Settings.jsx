@@ -1,0 +1,120 @@
+import {useState, useEffect} from 'react'
+
+export default function Settings({ visible = true, onClose }) {
+    const [showSettings, setShowSettings] = useState(visible);
+    const [fontSize, setFontSize] = useState('100%');
+    const [theme, setTheme] = useState('dark');
+    const [showKeyboardTips, setShowKeyboardTips] = useState(false);
+    const [messageDensity, setMessageDensity] = useState('default');
+
+    useEffect(() => setShowSettings(visible), [visible]);
+
+    useEffect(() => {
+        try {
+            const raw = localStorage.getItem('userAccessibilitySettings');
+            if (!raw) return;
+            const saved = JSON.parse(raw);
+            if (saved.fontSize) setFontSize(saved.fontSize);
+            if (saved.theme) setTheme(saved.theme);
+            if (typeof saved.showKeyboardTips === 'boolean') setShowKeyboardTips(saved.showKeyboardTips);
+            if (saved.messageDensity) setMessageDensity(saved.messageDensity);
+        } catch (e) {
+            console.warn('Failed to load accessibility settings', e);
+        }
+    }, []);
+
+    useEffect(() => {
+        const root = document.documentElement;
+        root.dataset.fontSize = fontSize;
+        root.dataset.theme = theme;
+        root.dataset.showKeyboardTips = showKeyboardTips ? 'true' : 'false';
+        root.dataset.messageDensity = messageDensity;
+        try {
+                localStorage.setItem('userAccessibilitySettings', JSON.stringify({ fontSize, theme, showKeyboardTips, messageDensity }));
+                // notify other components in same window that settings have changed
+                window.dispatchEvent(new Event('accessibilitySettingsChanged'));
+            } catch (e) {
+                console.warn('Failed to save accessibility settings', e);
+            }
+    }, [fontSize, theme, showKeyboardTips, messageDensity]);
+
+    const close = () => {
+        setShowSettings(false);
+        if (onClose) onClose();
+    };
+
+    if (!showSettings) return null;
+
+    return (
+        <div
+            className="settings-overlay"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="settings-title"
+            data-theme={theme}
+            data-font-size={fontSize}
+            data-show-keyboard-tips={showKeyboardTips ? 'true' : 'false'}
+            data-message-density={messageDensity}
+          >
+            <div
+              className="settings-modal"
+              data-theme={theme}
+              data-font-size={fontSize}
+              data-show-keyboard-tips={showKeyboardTips ? 'true' : 'false'}
+              data-message-density={messageDensity}
+            >
+                <button className="settings-close" onClick={close}> x </button>
+                <div className="settings-body">
+                    <h2 id="settings-title">Settings</h2>
+                    <section className="settings-section">
+                        <h3>Text Size</h3>
+                        <div className="text-sizing">
+                            <label>
+                                <input type="radio" name="text-size" value="75%" checked={fontSize === '75%'} onChange={(e) => setFontSize(e.target.value)}/>
+                                75%
+                            </label>
+                            <label>
+                                <input type="radio" name="text-size" value="100%" checked={fontSize === '100%'} onChange={(e) => setFontSize(e.target.value)}/>
+                                100%
+                            </label>
+                            <label>
+                                <input type="radio" name="text-size" value="125%" checked={fontSize === '125%'} onChange={(e) => setFontSize(e.target.value)}/>
+                                125%
+                            </label>
+                            <label>
+                                <input type="radio" name="text-size" value="150%" checked={fontSize === '150%'} onChange={(e) => setFontSize(e.target.value)}/>
+                                150%
+                            </label>
+                            <label>
+                                <input type="radio" name="text-size" value="200%" checked={fontSize === '200%'} onChange={(e) => setFontSize(e.target.value)}/>
+                                200%
+                            </label>
+                        </div>
+                    </section>
+                    <section className="accessibility-section">
+                        <h3>Theme</h3>
+                        <div className="theme-buttons">
+                            <button type="button" className={`theme-button ${theme === 'dark' ? 'theme-button--active' : ''}`} onClick={() => setTheme('dark')}>Dark Mode</button>
+                            <button type="button" className={`theme-button ${theme === 'light' ? 'theme-button--active' : ''}`} onClick={() => setTheme('light')}>Light Mode</button>
+                            <button type="button" className={`theme-button ${theme === 'contrast' ? 'theme-button--active' : ''}`} onClick={() => setTheme('contrast')}>High Contrast</button>
+                        </div>
+                    </section>
+                    <section className="accessibility-section">
+                        <h3>Keyboard Tips</h3>
+                        <label>
+                            <input type="checkbox" checked={showKeyboardTips} onChange={(e) => setShowKeyboardTips(e.target.checked)}/>
+                            Show Keyboard Tips
+                        </label>
+                    </section>
+                    <section className="accessibility-section">
+                        <h3>Message Spacing</h3>
+                        <div className="theme-buttons">
+                                <button type="button" className={`theme-button ${messageDensity === 'default' ? 'theme-button--active' : ''}`} onClick={() => setMessageDensity('default')}>Default</button>
+                                <button type="button" className={`theme-button ${messageDensity === 'comfortable' ? 'theme-button--active' : ''}`} onClick={() => setMessageDensity('comfortable')}>Comfortable</button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    );
+}
