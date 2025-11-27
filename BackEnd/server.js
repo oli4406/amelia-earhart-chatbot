@@ -7,8 +7,6 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-import * as fs from 'fs'; // temp file writing
-
 dotenv.config();
 
 const app = express();
@@ -35,17 +33,17 @@ const searchFlightsFunctionDeclaration = {
   parameters: {
     type: SchemaType.OBJECT,
     properties: {
-      origin: { type: SchemaType.STRING, description: 'IATA code of the departure airport' },
-      destination: { type: SchemaType.STRING, description: 'IATA code of the arrival airport' },
-      departure_date: { type: SchemaType.STRING, description: 'YYYY-MM-DD departure date' },
+      origin: { type: SchemaType.STRING, description: 'IATA code of the departure airport. You can specify multiple departure airports by separating them with a comma. For example, CDG,ORY,/m/04jpl. For searching multiple airports in one region (such as London), you MUST specify multiple airports, instead of using the region identify (WRONG: LON - CORRECT: LGW,LHR,STN,LCY,SEN).' },
+      destination: { type: SchemaType.STRING, description: 'IATA code of the arrival airport. You can specify multiple departure airports by separating them with a comma. For example, CDG,ORY,/m/04jpl' },
+      departure_date: { type: SchemaType.STRING, description: 'Optional YYYY-MM-DD departure date, if not specified the first available flight will be returned' },
       flight_type: { type: SchemaType.STRING, description: '1 for round trip, 2 for one way, 3 for multi-city' },
-      return_date: { type: SchemaType.STRING, nullable: true, description: 'YYYY-MM-DD return date or null if not specified by user. Required if type is set to 1' },
+      return_date: { type: SchemaType.STRING, description: 'YYYY-MM-DD return date. Required if type is set to 1' },
       exclude_airlines: { type: SchemaType.STRING, description: 'Parameter defines the airline codes to be excluded. Split multiple airlines with comma. It can\'t be used together with include_airlines. Each airline code should be a 2-character IATA code consisting of either two uppercase letters or one uppercase letter and one digit.' },
       include_airlines: { type: SchemaType.STRING, description: 'Parameter defines the airline codes to be included. Split multiple airlines with comma. It can\'t be used together with exclude_airlines. Each airline code should be a 2-character IATA code consisting of either two uppercase letters or one uppercase letter and one digit.' },
       max_price: { type: SchemaType.STRING, description: 'Parameter defines the maximum ticket price. Default to unlimited.' },
       sort_by: { type: SchemaType.STRING, description: 'Parameter defines the sorting order of the results. Available options: 1 - Top flights (default), 2 - Price, 3 - Departure timem, 4 - Arrival time, 5 - Duration, 6 - Emissions' },
     },
-    required: ['origin', 'destination', 'departure_date', 'flight_type'],
+    required: ['flight_type'],
   },
 };
 
@@ -57,7 +55,7 @@ const config = {
   CRITICAL PERSONA AND FORMATTING RULES:
   1. Style: Your tone must be warm, enthusiastic, and highly conversational, reflecting a pioneering spirit and love of adventure.
   2. Diction: Use vocabulary and phrasing common to a mid-20th-century American aviator. Examples include: "Splendid," "Grand," "A fine journey," "A clear path," "The skies await," "Plain sailing," "By Jove," or "That's the ticket."
-  2. No Markdown Lists: Do NOT use asterisks (*), bullet points, or numbering to present flight details. Integrate the information smoothly into your sentences.
+  2. No Markdown Lists: Do NOT use asterisks (*), bullet points, or numbering to present flight details. Integrate the information smoothly into your sentences. Create a new paragraph using '/n' where appropriate to paragraphs greater than 600 characters long. If you are telling the user about multiple flights, make a new paragraph for each flight.
   3. Conciseness: Only provide departure/arrival times/dates, airlines, and final price unless the user explicitly asks for more detail. You may include layover info if relevant, but do not mention flight duration.
   4. Currency: All prices MUST be prefixed with the British Pound sign (£). The currency for all flight data is GBP.
   5. Format: For round trips, clearly state the outbound and return flight details in simple sentences.
@@ -72,9 +70,8 @@ const config = {
   2. If the user gives a day + month without a year, always assume the next occurence of that date in the future.
   3. If the user give only a day number (e.g., "6th"), infer the nearest upcoming matching date.
   4. If the user gives a month but no year (e.g., "December 6"), assume the next upcoming.
-  5. If the user gives no date at all, assume the soonest reasonable date for flight availability.
-  6. Assume all flights are one-way unless the user explicitly states they want a return flight. If the user wants a return flight but does not specify a return date or trip duration, assume a return flight one week after the departure date.
-  7. Never ask the user for a year unless completely unavoidable.
+  5. Assume all flights are one-way unless the user explicitly states they want a return flight. If the user wants a return flight but does not specify a return date or trip duration, assume a return flight one week after the departure date.
+  6. Never ask the user for a year unless completely unavoidable.
 
   You must infer missing details and make reasonable assumptions instead of asking clarifying questions.`,
   tools: [
@@ -106,19 +103,13 @@ async function searchFlights(origin, destination, departure_date, flight_type, r
     const request_data = {
       engine: "google_flights",
       api_key: SERPAPI_KEY,
-      departure_id: origin,
-      arrival_id: destination,
       type: flight_type,
-      outbound_date: departure_date,
-
-      return_date: return_date,
-      exclude_airlines: exclude_airlines,
-      include_airlines: include_airlines,
-      max_price: max_price,
-      sort_by: sort_by,
       currency: "GBP",
-    }
+    };
 
+    if (origin) { request_data['departure_id'] = origin};
+    if (destination) { request_data['arrival_id'] = destination};
+    if (departure_date) { request_data['outbound_date'] = departure_date};
     if (return_date) { request_data['return_date'] = return_date};
     if (exclude_airlines) { request_data['exclude_airlines'] = exclude_airlines
     } else if (include_airlines) { request_data['include_airlines'] = include_airlines};
@@ -127,23 +118,32 @@ async function searchFlights(origin, destination, departure_date, flight_type, r
 
     console.log(`API Request data: \n${JSON.stringify(request_data)}\n\n`)
 
-    const json = await getJson(request_data);
-
-    console.log(json.best_flights || json.flights);
-    const data = JSON.stringify(json.best_flights);
-    fs.writeFile("data.json", data, (error) => {
-      // throwing the error
-      // in case of a writing problem
-      if (error) {
-        // logging the error
-        console.error(error);
-
-        throw error;
+    // If departure_date is not specified, try up to 5 times, incrementing the date each time
+    let attempts = 0;
+    let flights = [];
+    if (!departure_date) {
+      let date = new Date();
+      while (attempts < 5 && (!flights || flights.length === 0)) {
+        // Format date as YYYY-MM-DD
+        const formattedDate = date.toISOString().split('T')[0];
+        request_data['outbound_date'] = formattedDate;
+        console.log(`Attempt ${attempts + 1}: Trying departure_date ${formattedDate}`);
+        const json = await getJson(request_data);
+        flights = json.best_flights || json.flights || [];
+        if (flights && flights.length > 0) {
+          console.log(`Flights found on attempt ${attempts + 1}`);
+          break;
+        }
+        // Increment date by one day
+        date.setDate(date.getDate() + 1);
+        attempts++;
       }
-
-      console.log("data.json written correctly");
-    });
-    return json.best_flights || json.flights || [];
+      return flights;
+    } else {
+      const json = await getJson(request_data);
+      console.log(json.best_flights || json.flights);
+      return json.best_flights || json.flights || [];
+    }
   } catch (error) {
     console.error(`Error searching flights: ${error}`);
     return [];
