@@ -195,13 +195,13 @@ export default function NavBar() {
             )}
 
             <div className='navButtons'>
-              <button className="nav-btn" onClick={loggedIn ? handleLogoutClick : handleLoginClick} title={loggedIn ? 'Log out' : 'Login/Signup'}>
-                <span className="nav-icon"><img className="icon" src={theme === 'contrast' ? accountIconContrast : accountIcon} alt="Account"/></span>
-                <span className="nav-text">{loggedIn ? 'Disembark' : 'Pilot Login'}</span>
-              </button>
               <button className="nav-btn" onClick={handleSettingsClick} title="Settings">
                 <span className="nav-icon"><img className="icon" src={theme === 'contrast' ? settingsIconContrast : settingsIcon} alt="Settings"/></span>
                 <span className="nav-text">Flight Systems</span>
+              </button>
+              <button className="nav-btn" onClick={loggedIn ? handleLogoutClick : handleLoginClick} title={loggedIn ? 'Log out' : 'Login/Signup'}>
+                <span className="nav-icon"><img className="icon" src={theme === 'contrast' ? accountIconContrast : accountIcon} alt="Account"/></span>
+                <span className="nav-text">{loggedIn ? 'Disembark' : 'Pilot Login'}</span>
               </button>
             </div>
           </div>
