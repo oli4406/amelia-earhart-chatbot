@@ -12,20 +12,12 @@ export default function ForgotPassword(){
   }, []);
 
     //handle password reset functionality
+    // NOTE: this is out of scope of the project for now
     const handlePasswordReset = (s) => {
         s.preventDefault()
-        if(!email || !password){
-            setError("Please enter both email and password to continue")
-            return
-        }
-        if(email.indexOf('@') === -1){
-            setError("Please enter a valid email address")
-            return
-        }
-        //reset password logic here
+        setError("Please contact your administrator to reset your password.")
     }
-
-
+    
     return(
         <div className="forgotpassword-container">
             <h2>Forgot Password</h2>
