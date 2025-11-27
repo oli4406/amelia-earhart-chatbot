@@ -329,6 +329,19 @@ nav {
   background-image: url('./assets/light_mode/left_panel_open.png');
 }
 
+/* High-contrast-mode variants */
+:root[data-theme="contrast"] .SidebarBtn-Expanded {
+  background-image: url('./assets/high_contrast/left_panel.png');
+}
+:root[data-theme="contrast"] .SidebarBtn-Expanded:hover {
+  background-image: url('./assets/high_contrast/left_panel_close.png');
+}
+:root[data-theme="contrast"] .SidebarBtn-Collapsed {
+  background-image: url('./assets/high_contrast/left_panel.png');
+}
+:root[data-theme="contrast"] .SidebarBtn-Collapsed:hover {
+  background-image: url('./assets/high_contrast/left_panel_open.png');
+}
 .page-user-name {
   position: fixed;
   right: 20px;
@@ -475,10 +488,6 @@ justify-content: center;
   background: #ffff00;
   
 }
-
-
-
-
 
 body {
   background-color: var(--bg-color);
