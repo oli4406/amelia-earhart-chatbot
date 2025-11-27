@@ -1,5 +1,7 @@
 import {Link, useNavigate} from 'react-router-dom';
 import {useState, useEffect} from 'react'
+import Settings from './Settings.jsx';
+
 import homeIcon from './assets/dark_mode/home.png';
 import chatIcon from './assets/dark_mode/chat.png';
 import settingsIcon from './assets/dark_mode/settings.png';
@@ -76,6 +78,36 @@ export default function NavBar() {
     } catch (e) {
         console.warn('Failed to load accesibility settings', e);
     }
+  }, []);
+
+  // helper to read accessibility settings and apply to state
+  const applyAccessibilitySettings = () => {
+    try {
+      const raw = localStorage.getItem('userAccessibilitySettings');
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      if (saved.fontSize) setFontSize(saved.fontSize);
+      if (saved.theme) setTheme(saved.theme);
+      if (typeof saved.showKeyboardTips === 'boolean') setShowKeyboardTips(saved.showKeyboardTips);
+      if (saved.messageDensity) setMessageDensity(saved.messageDensity);
+    } catch (e) {
+      console.warn('Failed to apply accessibility settings from storage', e);
+    }
+  };
+
+  useEffect(() => {
+    // listen for Settings component save events inside same window
+    const onAccessibilityChanged = () => applyAccessibilitySettings();
+    window.addEventListener('accessibilitySettingsChanged', onAccessibilityChanged);
+    // also listen for cross-window localStorage changes
+    const onStorage = (e) => {
+      if (e.key === 'userAccessibilitySettings') applyAccessibilitySettings();
+    };
+    window.addEventListener('storage', onStorage);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('accessibilitySettingsChanged', onAccessibilityChanged);
+    };
   }, []);
 
   useEffect(() => {
@@ -172,78 +204,7 @@ export default function NavBar() {
           </div>
         </nav>
   
-        {showSettings && (
-          <div
-            className="settings-overlay"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="settings-title"
-            data-theme={theme}
-            data-font-size={fontSize}
-            data-show-keyboard-tips={showKeyboardTips ? 'true' : 'false'}
-            data-message-density={messageDensity}
-          >
-            <div
-              className="settings-modal"
-              data-theme={theme}
-              data-font-size={fontSize}
-              data-show-keyboard-tips={showKeyboardTips ? 'true' : 'false'}
-              data-message-density={messageDensity}
-            >
-                <button className="settings-close" onClick={() => setShowSettings(false)}> x </button>
-                <div className="settings-body">
-                    <h2 id="settings-title">Settings</h2>
-                    <section className="settings-section">
-                        <h3>Text Size</h3>
-                        <div className="text-sizing">
-                            <label>
-                                <input type="radio" name="text-size" value="75%" checked={fontSize === '75%'} onChange={(e) => setFontSize(e.target.value)}/>
-                                75%
-                            </label>
-                            <label>
-                                <input type="radio" name="text-size" value="100%" checked={fontSize === '100%'} onChange={(e) => setFontSize(e.target.value)}/>
-                                100%
-                            </label>
-                            <label>
-                                <input type="radio" name="text-size" value="125%" checked={fontSize === '125%'} onChange={(e) => setFontSize(e.target.value)}/>
-                                125%
-                            </label>
-                            <label>
-                                <input type="radio" name="text-size" value="150%" checked={fontSize === '150%'} onChange={(e) => setFontSize(e.target.value)}/>
-                                150%
-                            </label>
-                            <label>
-                                <input type="radio" name="text-size" value="200%" checked={fontSize === '200%'} onChange={(e) => setFontSize(e.target.value)}/>
-                                200%
-                            </label>
-                        </div>
-                    </section>
-                    <section className="accessibility-section">
-                        <h3>Theme</h3>
-                        <div className="theme-buttons">
-                            <button type="button" className={`theme-button ${theme === 'dark' ? 'theme-button--active' : ''}`} onClick={() => setTheme('dark')}>Dark Mode</button>
-                            <button type="button" className={`theme-button ${theme === 'light' ? 'theme-button--active' : ''}`} onClick={() => setTheme('light')}>Light Mode</button>
-                            <button type="button" className={`theme-button ${theme === 'contrast' ? 'theme-button--active' : ''}`} onClick={() => setTheme('contrast')}>High Contrast</button>
-                        </div>
-                    </section>
-                    <section className="accessibility-section">
-                        <h3>Keyboard Tips</h3>
-                        <label>
-                            <input type="checkbox" checked={showKeyboardTips} onChange={(e) => setShowKeyboardTips(e.target.checked)}/>
-                            Show Keyboard Tips
-                        </label>
-                    </section>
-                    <section className="accessibility-section">
-                        <h3>Message Spacing</h3>
-                        <div className="theme-buttons">
-                                <button type="button" className={`theme-button ${messageDensity === 'default' ? 'theme-button--active' : ''}`} onClick={() => setMessageDensity('default')}>Default</button>
-                                <button type="button" className={`theme-button ${messageDensity === 'comfortable' ? 'theme-button--active' : ''}`} onClick={() => setMessageDensity('comfortable')}>Comfortable</button>
-                        </div>
-                    </section>
-                </div>
-            </div>
-          </div>
-        )}
+        {showSettings && <Settings visible={showSettings} onClose={() => setShowSettings(false)} />}
       </>
     );
 }
