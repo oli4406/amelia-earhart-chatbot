@@ -462,7 +462,7 @@ justify-content: center;
   color: #8b8b8b
 }
 
-:root[data-theme="light"] .theme-button--active {
+:root[data-theme="light"] .theme-button--active .input- {
   background: #C3B495;
   
 }

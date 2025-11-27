@@ -237,3 +237,37 @@ html[data-show-keyboard-tips="true"] .keyboard-tips {
   letter-spacing: 0.06em;
   line-height: 1.5;
 }
+
+/* Light mode overrides: make input row, send button and bot response bubble use the khaki background */
+:root[data-theme="light"] .input-field,
+:root[data-theme="light"] .send-button {
+  background-color: #C3B495;
+  color: #111827;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+:root[data-theme="light"] .message-line.bot .message-bubble {
+  background: #C3B495;
+  color: #111827;
+}
+
+/* High-contrast theme overrides: use bright green for inputs and bot bubble */
+:root[data-theme="contrast"] .input-field,
+:root[data-theme="contrast"] .send-button {
+  background-color: #87E911;
+  color: #000000;
+  border: 2px solid #000000;
+}
+
+:root[data-theme="contrast"] .message-line.bot .message-bubble {
+  background: #87E911;
+  color: #000000;
+  border: 2px solid #000000;
+}
+
+:root[data-theme="contrast"] .message-line.user .message-bubble {
+  /* high-contrast user bubble color requested */
+  background: #FF00BD;
+  color: #000000;
+  border: 2px solid #000000;
+}
