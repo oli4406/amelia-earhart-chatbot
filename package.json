@@ -5,12 +5,12 @@
   "type": "module",
   "scripts": {
     "client": "cd FrontEnd && vite --host 0.0.0.0",
-    "server": "node BackEnd/index.js",
+    "server": "node BackEnd/server.js",
     "dev": "concurrently \"npm run client\" \"npm run server\"",
     "build": "cd FrontEnd && vite build",
     "lint": "eslint .",
     "preview": "cd FrontEnd && vite preview",
-    "start": "node BackEnd/index.js"
+    "start": "node BackEnd/server.js"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
