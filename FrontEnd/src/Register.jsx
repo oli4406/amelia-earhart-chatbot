@@ -13,10 +13,10 @@ export default function Register() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    // remove legacy local-only flag that caused the UI to show "Already registered"
     try {
       localStorage.removeItem('hasUser')
     } catch (e) {
+      console.error(`Error removing 'hasUser': \n${e}`)
       /* ignore storage errors */
     }
 
