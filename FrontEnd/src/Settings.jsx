@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useRef, useCallback} from 'react'
 
 export default function Settings({ visible = true, onClose }) {
     const [showSettings, setShowSettings] = useState(visible);
@@ -38,15 +38,46 @@ export default function Settings({ visible = true, onClose }) {
             }
     }, [fontSize, theme, showKeyboardTips, messageDensity]);
 
-    const close = () => {
+    const overlayRef = useRef();
+    const modalRef = useRef();
+
+    const close = useCallback(() => {
         setShowSettings(false);
         if (onClose) onClose();
-    };
+    }, [onClose]);
+
+    // Close when clicking outside the modal box
+    const onOverlayClick = useCallback((e) => {
+        if (e.target === overlayRef.current) close();
+    }, [close]);
+
+    // Focus the modal when it becomes visible so keyboard events are predictable
+    useEffect(() => {
+        if (showSettings && modalRef.current && typeof modalRef.current.focus === 'function') {
+            modalRef.current.focus();
+        }
+    }, [showSettings]);
+
+    // Close on Escape or Backspace (but avoid closing while typing in inputs)
+    useEffect(() => {
+        const onKeyDown = (e) => {
+            const key = e.key || e.code;
+            if (key !== 'Escape' && key !== 'Backspace') return;
+            const active = document.activeElement;
+            const tag = active?.tagName?.toLowerCase();
+            const isEditable = active?.isContentEditable;
+            const isInput = tag === 'input' || tag === 'textarea' || tag === 'select' || isEditable;
+            if (key === 'Backspace' && isInput) return; // avoid interfering with typing
+            close();
+        };
+        window.addEventListener('keydown', onKeyDown);
+        return () => window.removeEventListener('keydown', onKeyDown);
+    }, [close]);
 
     if (!showSettings) return null;
 
-    return (
-        <div
+        return (
+                <div
             className="settings-overlay"
             role="dialog"
             aria-modal="true"
@@ -55,13 +86,18 @@ export default function Settings({ visible = true, onClose }) {
             data-font-size={fontSize}
             data-show-keyboard-tips={showKeyboardTips ? 'true' : 'false'}
             data-message-density={messageDensity}
-          >
+          
+                    ref={overlayRef}
+                    onMouseDown={onOverlayClick}
+                    >
             <div
               className="settings-modal"
               data-theme={theme}
               data-font-size={fontSize}
               data-show-keyboard-tips={showKeyboardTips ? 'true' : 'false'}
               data-message-density={messageDensity}
+                                ref={modalRef}
+                                tabIndex={-1}
             >
                 <button className="settings-close" onClick={close}> x </button>
                 <div className="settings-body">

@@ -124,7 +124,7 @@ function ChatPage() {
                 <div className="message-bubble">
                   {m.text}
                 </div>
-                {/* Added alternating messages (later change to Amelia vs user) and bubbled messages */}
+                {/* Added alternating messages and bubbled messages */}
               </div>
             ))
           )}
@@ -132,6 +132,7 @@ function ChatPage() {
       </div>
 
       <ChatField value={value} onChange={setValue} onSubmit={handleSubmit} />
+      {saveNotice && <p className="save-notice">Chat history not saved (you are not logged in)</p>}
       <p className="keyboard-tips">
         <strong>Keyboard tips:</strong> Press Enter to send, Shift+Enter for a new
         line. Press Esc to close the Settings panel.
