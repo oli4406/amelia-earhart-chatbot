@@ -18,8 +18,8 @@ function ChatPage() {
     // persist user input to localStorage history only if user is logged in
     const isLoggedIn = () => {
       try {
-        // accept either 'currentUser' or legacy 'hasUser' flag
-        return !!localStorage.getItem('currentUser') || !!localStorage.getItem('hasUser')
+        // accept either 'authToken' or legacy 'hasUser' flag
+        return !!localStorage.getItem('authToken') || !!localStorage.getItem('hasUser')
       } catch (e) {
         console.warn('Failed to access localStorage', e)
         return false
