@@ -476,8 +476,13 @@ justify-content: center;
   
 }
 
+:root[data-theme="contrast"] .settings-close {
+  color: #ffff00;
+}
 
-
+:root[data-theme="light"] .settings-close {
+  color: #000000;
+}
 
 
 body {
