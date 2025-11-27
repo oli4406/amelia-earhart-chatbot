@@ -414,7 +414,7 @@ justify-content: center;
   --panel-color: #73503F;
   --sidebar-color: #513629;
   --text-color: #f5f7ff;
-  --accent-color: #513629; /
+  --accent-color: #513629; 
 }
 
 :root[data-theme="light"] {
