@@ -124,7 +124,7 @@ function ChatPage() {
                 <div className="message-bubble">
                   {m.text}
                 </div>
-                {/* Added alternating messages (later change to Amelia vs user) and bubbled messages */}
+                {/* Added alternating messages and bubbled messages */}
               </div>
             ))
           )}
