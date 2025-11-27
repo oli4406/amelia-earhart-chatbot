@@ -1,10 +1,15 @@
 import {Link, useNavigate} from 'react-router-dom';
 import {useState, useEffect} from 'react'
-import homeIcon from './assets/home.png';
-import chatIcon from './assets/chat.png';
-import settingsIcon from './assets/settings.png';
-import accountIcon from './assets/account.png';
-import historyIcon from './assets/history.png';
+import homeIcon from './assets/dark_mode/home.png';
+import chatIcon from './assets/dark_mode/chat.png';
+import settingsIcon from './assets/dark_mode/settings.png';
+import accountIcon from './assets/dark_mode/account.png';
+import historyIcon from './assets/dark_mode/history.png';
+import homeIconLight from './assets/light_mode/home.png';
+import chatIconLight from './assets/light_mode/chat.png';
+//import settingsIconLight from './assets/light_mode/settings.png';
+//import accountIconLight from './assets/light_mode/account.png';
+import historyIconLight from './assets/light_mode/history.png';
 
 
 export default function NavBar() {
@@ -140,27 +145,27 @@ export default function NavBar() {
           </button>
           <div className="nav-inner">
             <Link className="nav-link" title="Home" to="/">
-              <span className="nav-icon"><img src={homeIcon} alt="Home"/></span>
+              <span className="nav-icon"><img className="icon" src={theme === 'light' ? homeIconLight : homeIcon} alt="Home"/></span>
               <span className="nav-text">Hanger</span>
             </Link>
             <Link className="nav-link" title="Chat" to="/chat">
-              <span className="nav-icon"><img src={chatIcon} alt="Chat"/></span>
+              <span className="nav-icon"><img className="icon" src={theme === 'light' ? chatIconLight : chatIcon} alt="Chat"/></span>
               <span className="nav-text">Communications</span>
             </Link>
             {loggedIn && (
               <Link className="nav-link" title="History" to="/history">
-                <span className="nav-icon"><img src={historyIcon} alt="History"/></span>
+                <span className="nav-icon"><img className="icon" src={theme === 'light' ? historyIconLight : historyIcon} alt="History"/></span>
                 <span className="nav-text">Flight Log</span>
               </Link>
             )}
 
             <div className='navButtons'>
               <button className="nav-btn" onClick={loggedIn ? handleLogoutClick : handleLoginClick} title={loggedIn ? 'Log out' : 'Login/Signup'}>
-                <span className="nav-icon"><img src={accountIcon} alt="Account"/></span>
+                <span className="nav-icon"><img className="icon" src={/*theme === 'light' ? accountIconLight : */accountIcon} alt="Account"/></span>
                 <span className="nav-text">{loggedIn ? 'Disembark' : 'Pilot Login'}</span>
               </button>
               <button className="nav-btn" onClick={handleSettingsClick} title="Settings">
-                <span className="nav-icon"><img src={settingsIcon} alt="Settings"/></span>
+                <span className="nav-icon"><img className="icon" src={/*theme === 'light' ? settingsIconLight : */settingsIcon} alt="Settings"/></span>
                 <span className="nav-text">Flight Systems</span>
               </button>
             </div>

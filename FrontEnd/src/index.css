@@ -193,9 +193,25 @@ nav {
 }
 
 .nav-icon {
-  font-size: 20px;
-  min-width: 20px;
+  font-size: 24px;
+  min-width: 24px;
   text-align: center;
+}
+
+/* Size image icons used inside nav to 24px */
+.nav-icon img {
+  width: 24px;
+  height: 24px;
+  display: block;
+  object-fit: contain;
+}
+
+/* Helper class for icon sizing across the application */
+.icon {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  object-fit: contain;
 }
 
 .nav-text {
@@ -247,14 +263,13 @@ nav {
   /* size and background config so we can swap images via CSS */
   width: 24px;
   height: 24px;
-  background-size: contain;
+  background-size: 24px 24px;
   background-repeat: no-repeat;
   background-position: center;
 }
 
 .nav--collapsed {
   width: 70px;
-  background-color: #242424;
   box-shadow: 0 18px 45px rgba(0,0,0,0);
 }
 
@@ -283,17 +298,31 @@ nav {
 }
 
 .SidebarBtn-Expanded {
-  background-image: url('./assets/left_panel.png');
+  background-image: url('./assets/dark_mode/left_panel.png');
 }
 .SidebarBtn-Expanded:hover {
-  background-image: url('./assets/left_panel_close.png');
+  background-image: url('./assets/dark_mode/left_panel_close.png');
 }
 
 .SidebarBtn-Collapsed {
-  background-image: url('./assets/left_panel.png');
+  background-image: url('./assets/dark_mode/left_panel.png');
 }
 .SidebarBtn-Collapsed:hover {
-  background-image: url('./assets/left_panel_open.png');
+  background-image: url('./assets/dark_mode/left_panel_open.png');
+}
+
+/* Light-mode variants */
+:root[data-theme="light"] .SidebarBtn-Expanded {
+  background-image: url('./assets/light_mode/left_panel.png');
+}
+:root[data-theme="light"] .SidebarBtn-Expanded:hover {
+  background-image: url('./assets/light_mode/left_panel_close.png');
+}
+:root[data-theme="light"] .SidebarBtn-Collapsed {
+  background-image: url('./assets/light_mode/left_panel.png');
+}
+:root[data-theme="light"] .SidebarBtn-Collapsed:hover {
+  background-image: url('./assets/light_mode/left_panel_open.png');
 }
 
 .page-user-name {
