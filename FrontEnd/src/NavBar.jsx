@@ -163,8 +163,23 @@ export default function NavBar() {
         </nav>
   
         {showSettings && (
-          <div className="settings-overlay">
-            <div className="settings-modal">
+          <div
+            className="settings-overlay"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="settings-title"
+            data-theme={theme}
+            data-font-size={fontSize}
+            data-show-keyboard-tips={showKeyboardTips ? 'true' : 'false'}
+            data-message-density={messageDensity}
+          >
+            <div
+              className="settings-modal"
+              data-theme={theme}
+              data-font-size={fontSize}
+              data-show-keyboard-tips={showKeyboardTips ? 'true' : 'false'}
+              data-message-density={messageDensity}
+            >
                 <button className="settings-close" onClick={() => setShowSettings(false)}> x </button>
                 <div className="settings-body">
                     <h2 id="settings-title">Settings</h2>

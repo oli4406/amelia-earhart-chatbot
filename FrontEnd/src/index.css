@@ -11,6 +11,8 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* default accent for form controls (radio/checkbox) */
+  --accent-color: #646cff;
 }
 
 a {
@@ -101,11 +103,13 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
+  /* default overlay dim that works for dark theme */
   background: rgba(0,0,0,0.45);
   z-index: 9999;
 }
 
 .settings-modal {
+  /* use themed panel color/text so modal matches the current theme */
   background: var(--panel-color);
   color: var(--text-color);
   border-radius: 10px;
@@ -290,6 +294,7 @@ nav {
   position: fixed;
   inset: 0;
   display: flex;
+  /* base overlay color; per-theme overrides follow */
   background: rgba(0, 0, 0, 0.4);
   align-items: center;
   justify-content: center;
@@ -297,14 +302,26 @@ nav {
 }
 
 .settings-modal {
-  background: #73503F;
-  color: #f5f7ff;
+  background: var(--panel-color);
+  color: var(--text-color);
   border-radius: 10px;
   padding: 2.5rem;
   min-width: 320px;
   box-shadow: 0 18px 45px rgba(0, 0, 0, 0.6);
   position: relative;
 }
+
+/* Theme-aware overlay tweaks */
+:root[data-theme="light"] .settings-overlay {
+  /* lighter dim for light theme */
+  background: rgba(0, 0, 0, 0.12);
+}
+
+:root[data-theme="contrast"] .settings-overlay {
+  /* yellow-tinted dim for high-contrast mode */
+  background: rgba(255, 255, 0, 0.06);
+}
+
 
 .settings-close {
   position: absolute;
@@ -345,8 +362,10 @@ justify-content: center;
 }
 
 :root[data-theme="dark"] {
-  --panel-color: #36383d;
+  --panel-color: #73503F;
   --sidebar-color: #513629;
+  --text-color: #f5f7ff;
+  --accent-color: #513629; /
 }
 
 :root[data-theme="light"] {
@@ -354,6 +373,7 @@ justify-content: center;
   --text-color: #111827;
   --panel-color: #e5e7eb;
   --sidebar-color: #d1d5db;
+  --accent-color: #C3B495; 
 }
 
 :root[data-theme="light"] .nav-toggle {
@@ -365,6 +385,7 @@ justify-content: center;
   --text-color: #ffff00;
   --panel-color: #000000;
   --sidebar-color: #000000;
+  --accent-color: #ffff00; 
 }
 
 :root[data-theme="contrast"] .nav-toggle {
@@ -384,21 +405,46 @@ justify-content: center;
   border: 1px solid #9ca3af;
   background: transparent;
   font-size: 0.95rem;
+  color: #8b8b8b;
 }
 
 .theme-button--active {
   background: #3B221D;
-  color: #ffffff
+  color: #8b8b8b
 }
 
 :root[data-theme="light"] .theme-button--active {
-  background: #3B221D;
-  color: #f9fafb;
+  background: #C3B495;
+  
 }
+
+:root[data-theme="dark"] .theme-button--active {
+  background: #513629;
+}
+
+:root[data-theme="contrast"] .theme-button--active {
+  background: #ffff00;
+  
+}
+
+
+
+
 
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
+}
+
+/* Use the accent-color CSS property where supported so native radios/checkboxes show the theme accent */
+input[type="radio"],
+input[type="checkbox"] {
+  accent-color: var(--accent-color);
+}
+
+/* For the text-sizing controls specifically ensure the radio dot uses the accent */
+.text-sizing input[type="radio"] {
+  accent-color: var(--accent-color);
 }
 
 .nav.nav--collapsed {
