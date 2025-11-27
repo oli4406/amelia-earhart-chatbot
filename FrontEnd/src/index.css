@@ -197,9 +197,25 @@ nav {
 }
 
 .nav-icon {
-  font-size: 20px;
-  min-width: 20px;
+  font-size: 24px;
+  min-width: 24px;
   text-align: center;
+}
+
+/* Size image icons used inside nav to 24px */
+.nav-icon img {
+  width: 24px;
+  height: 24px;
+  display: block;
+  object-fit: contain;
+}
+
+/* Helper class for icon sizing across the application */
+.icon {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  object-fit: contain;
 }
 
 .nav-text {
@@ -248,11 +264,16 @@ nav {
   align-self: center;
   margin-bottom: 10px;
   padding: 8px;
+  /* size and background config so we can swap images via CSS */
+  width: 24px;
+  height: 24px;
+  background-size: 24px 24px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .nav--collapsed {
   width: 70px;
-  background-color: #242424;
   box-shadow: 0 18px 45px rgba(0,0,0,0);
 }
 
@@ -278,6 +299,34 @@ nav {
 
 .nav--collapsed .navButtons > button {
   width: calc(100% - 8px);
+}
+
+.SidebarBtn-Expanded {
+  background-image: url('./assets/dark_mode/left_panel.png');
+}
+.SidebarBtn-Expanded:hover {
+  background-image: url('./assets/dark_mode/left_panel_close.png');
+}
+
+.SidebarBtn-Collapsed {
+  background-image: url('./assets/dark_mode/left_panel.png');
+}
+.SidebarBtn-Collapsed:hover {
+  background-image: url('./assets/dark_mode/left_panel_open.png');
+}
+
+/* Light-mode variants */
+:root[data-theme="light"] .SidebarBtn-Expanded {
+  background-image: url('./assets/light_mode/left_panel.png');
+}
+:root[data-theme="light"] .SidebarBtn-Expanded:hover {
+  background-image: url('./assets/light_mode/left_panel_close.png');
+}
+:root[data-theme="light"] .SidebarBtn-Collapsed {
+  background-image: url('./assets/light_mode/left_panel.png');
+}
+:root[data-theme="light"] .SidebarBtn-Collapsed:hover {
+  background-image: url('./assets/light_mode/left_panel_open.png');
 }
 
 .page-user-name {
@@ -455,4 +504,17 @@ input[type="checkbox"] {
 .text-sizing {
   display: flex;
   gap: 1rem;
+}
+
+/* visually hidden helper for accessible labels */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }

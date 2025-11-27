@@ -6,26 +6,23 @@ export default function History() {
     const [history, setHistory] = useState([])
     const [loggedIn, setLoggedIn] = useState(true)
 
-    useEffect(() => {
-        document.title = 'Chat History | Amelia Earhart Chatbot'
-                try {
-                    // Accept either currentUser or legacy hasUser flag
-                    const hasUser = !!localStorage.getItem('currentUser') || !!localStorage.getItem('hasUser')
-                    setLoggedIn(hasUser)
-                    if (hasUser) {
-                        const raw = localStorage.getItem('chat_history')
-                        setHistory(raw ? JSON.parse(raw) : [])
-                    } else {
-                        setHistory([])
-                    }
-                } catch (e) {
-                    setLoggedIn(false)
-                    setHistory([])
-                }
-        }, [])
+  useEffect(() => {
+    document.title = 'Chat History | Amelia Earhart Chatbot'
+    try {
+      const token = localStorage.getItem('authToken')
+      const hasUser = !!token
+      setLoggedIn(hasUser)
+
+      const raw = localStorage.getItem('chat_history')
+      setHistory(raw ? JSON.parse(raw) : [])
+    } catch (e) {
+      console.warn('Failed to initialize history/auth state', e)
+      setLoggedIn(false)
+      setHistory([])
+    }
+  }, [])
 
     
-
     const clearHistory = () => {
         localStorage.removeItem('chat_history')
         setHistory([])
