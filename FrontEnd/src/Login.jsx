@@ -31,7 +31,7 @@ export default function Login() {
         setLoading(true)
         try {
             // use Vite env var if provided, fallback to localhost:3000
-            const res = await fetch('http://localhost:3000/api/login', {
+            const res = await fetch('http://localhost:3000/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
