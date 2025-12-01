@@ -1,5 +1,5 @@
 import React from "react";
-import "./Typingindicator.css";
+import "./TypingIndicator.css";
 
 const TypingIndicator = () => {
   return (
@@ -11,5 +11,5 @@ const TypingIndicator = () => {
   );
 };
 
-export default Typingindicator;
+export default TypingIndicator;
 
