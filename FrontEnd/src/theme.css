@@ -1,6 +1,4 @@
 
-*/
-
 /* styling in dark mode, light mode, and contrast overrides for forms */
 :root[data-theme="dark"] .register-form input {
   background-color: #73503F;
@@ -53,7 +51,11 @@
 :root[data-theme="dark"] .forgotpassword-button:hover {
   filter: brightness(0.98);
 }
-
+:root[data-theme="dark"] .message-line.user .message-bubble {
+  background: #73503F;
+  color: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+}
 /* Light-mode specific overrides for login/register/forgot inputs */
 :root[data-theme="light"] .login-form input,
 :root[data-theme="light"] .register-form input,
@@ -82,7 +84,7 @@
   filter: brightness(0.98);
 }
 
-/* Light mode overrides for input row, send button and bot response bubble */
+/* Light mode overrides for input row, send button, user message and bot response bubble */
 :root[data-theme="light"] .input-field,
 :root[data-theme="light"] .send-button {
   background-color: #C3B495;
@@ -94,7 +96,14 @@
   background: #C3B495;
   color: #111827;
 }
-
+:root[data-theme="light"] .message-line.user .message-bubble {
+  background: #bfa269;
+  color: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+:root[data-theme="light"] .theme-button {
+    color: #ffffff;
+}
 /* High-contrast theme overrides */
 :root[data-theme="contrast"] .register-form input,
 :root[data-theme="contrast"] .login-form input,
@@ -144,6 +153,7 @@
 
 /* Theme variables and small per-theme tweaks */
 :root[data-theme="dark"] {
+    --bg-color: #543C1C;
   --panel-color: #73503F;
   --sidebar-color: #513629;
   --text-color: #f5f7ff;
@@ -151,9 +161,9 @@
 }
 
 :root[data-theme="light"] {
-  --bg-color: #e5e7eb;
+  --bg-color: #ad8c6b;
   --text-color: #111827;
-  --panel-color: #e5e7eb;
+  --panel-color: #a08761;
   --sidebar-color: #d1d5db;
   --accent-color: #C3B495; 
 }
@@ -224,4 +234,32 @@ input[type="checkbox"] {
 
 :root[data-theme="contrast"] .settings-close {
   color: #ffff00;
+}
+
+/* Light-mode variants */
+:root[data-theme="light"] .SidebarBtn-Expanded {
+  background-image: url('./assets/light_mode/left_panel.png');
+}
+:root[data-theme="light"] .SidebarBtn-Expanded:hover {
+  background-image: url('./assets/light_mode/left_panel_close.png');
+}
+:root[data-theme="light"] .SidebarBtn-Collapsed {
+  background-image: url('./assets/light_mode/left_panel.png');
+}
+:root[data-theme="light"] .SidebarBtn-Collapsed:hover {
+  background-image: url('./assets/light_mode/left_panel_open.png');
+}
+
+/* High-contrast-mode variants */
+:root[data-theme="contrast"] .SidebarBtn-Expanded {
+  background-image: url('./assets/high_contrast/left_panel.png');
+}
+:root[data-theme="contrast"] .SidebarBtn-Expanded:hover {
+  background-image: url('./assets/high_contrast/left_panel_close.png');
+}
+:root[data-theme="contrast"] .SidebarBtn-Collapsed {
+  background-image: url('./assets/high_contrast/left_panel.png');
+}
+:root[data-theme="contrast"] .SidebarBtn-Collapsed:hover {
+  background-image: url('./assets/high_contrast/left_panel_open.png');
 }
