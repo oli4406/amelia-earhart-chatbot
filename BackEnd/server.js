@@ -7,6 +7,8 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
+import fs from 'node:fs';
+
 dotenv.config();
 
 const app = express();
@@ -23,8 +25,6 @@ app.use(
     credentials: true,
   })
 );
-
-const fallbackText ="I am sorry, my instruments seem to be playing up. Flying may not be all plain sailing, but the fun of it is worth the price.";
 
 // Define the flight search function declaration for Gemini
 const searchFlightsFunctionDeclaration = {
@@ -150,6 +150,27 @@ async function searchFlights(origin, destination, departure_date, flight_type, r
   }
 }
 
+let randomResponses = [];
+
+fs.readFile('./BackEnd/predefinedResponses.json', (err, data) => {
+  if (err) {
+    console.error(err);
+    return;
+  }
+  randomResponses = JSON.parse(data)[0];
+});
+
+function getRandomResponse(category = 'genericError') {
+  let response = "Blast! We've run into some unexpected atmospheric interference - the air is too thick with static! I couldn't get the flight information to come through. Let's give it a minute for the fog to lift before attempting that approach again.";
+
+  if (randomResponses[category]) {
+    const rand = Math.floor(Math.random() * randomResponses[category].length)
+    response = randomResponses[category][rand];
+  }
+
+  return response;
+}
+
 app.get('/debug/headers', (req, res) => res.json({ headers: req.headers }));
 
 // request logger
@@ -260,11 +281,12 @@ app.post('/api/login', async (req, res) => {
 
 app.post('/api/chat/message', async (req, res) => {
   if (!req.body || typeof req.body.message !== 'string') {
-    return res.status(400).send({ reply: fallbackText })
+    return res.status(400).send({ reply: getRandomResponse() })
   }
 
   if (req.body.message.substring(0,5) != "[DEV]") { // TEMP bypass to reduce usage during testing
-    return res.send({ reply: "Better do a good deed near at home than go far away to burn incense.\n\nPrefix your message with [DEV] to access the gemini (to reduce the usage during testing)" });
+    return res.send({ reply: getRandomResponse() });
+    //return res.send({ reply: "Better do a good deed near at home than go far away to burn incense.\n\nPrefix your message with [DEV] to access the gemini (to reduce the usage during testing)" });
   }
 
   console.log(`Message from client: ${req.body.message}`);
@@ -274,6 +296,9 @@ app.post('/api/chat/message', async (req, res) => {
   const userMessage = req.body.message;
   const messageWithDate = `[Current Date: ${today}]
   User: ${userMessage}`;
+
+  // Get current time to calculate response time
+  const startTime = Date.now()
 
   try {
     const initialResponse = await chat.sendMessage(messageWithDate);
@@ -286,9 +311,14 @@ app.post('/api/chat/message', async (req, res) => {
     if (!functionCallPart) {
       // No function call detected, return the text response
       console.log("Model returned text, no function call detected.");
-      const responseText = structuredResponse.candidates?.[0]?.content?.parts?.[0]?.text || fallbackText;
+      const responseText = structuredResponse.candidates?.[0]?.content?.parts?.[0]?.text || getRandomResponse();
       return res.send({ reply: responseText });
     }
+
+    // Send an initial chunk so the client can show a "searching" message while work continues.
+    // `res.write` requires a string or Buffer; write a JSON string and set the content type.
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.write(JSON.stringify({ status: 'searching', reply: getRandomResponse('searchingFlights') }));
 
     const tool_call = functionCallPart.functionCall;
     console.log(`Tool call detected: ${JSON.stringify(tool_call)}`);
@@ -311,15 +341,18 @@ app.post('/api/chat/message', async (req, res) => {
       },
     ]);
 
-    const responseText = finalResponse.response.candidates?.[0]?.content?.parts?.[0]?.text || fallbackText;
+    const endTime = Date.now()
+    const responseTime = endTime - startTime
 
-    console.log(`Final chat response: \n${responseText}\n`);
-    
-    return res.send({ reply: responseText });
+    const responseText = finalResponse.response.candidates?.[0]?.content?.parts?.[0]?.text || getRandomResponse();
+
+    console.log(`Final chat response: \n${responseText}\nTotal response time: ${responseTime}ms`);
+
+    return res.send({ status: 'done', reply: responseText });
 
   } catch (error) {
     console.error(`Error handling chat message: ${error}`);
-    return res.status(500).send({ reply: fallbackText });
+    return res.status(500).send({ reply: getRandomResponse() });
   }
 });
 

@@ -53,6 +53,13 @@ function ChatPage() {
       if (contentType.includes('application/json')) {
         const data = await res.json()
 
+        if (data.status) {
+          if (data.status == 'searching') {
+            // TODO: server has sent message to say it is searching flight information
+            // Add followup typing bubble
+          }
+        }
+
         serverText = data.reply ?? data.message ?? JSON.stringify(data)
       } else {
         serverText = await res.text()
