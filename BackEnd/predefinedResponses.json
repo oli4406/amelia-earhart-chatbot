@@ -5,5 +5,12 @@
         "One moment, please. I'm just checking the manifest and the charts to plot your course. A good flier never takes off without the proper dope on the weather and the runway!",
         "Just a quick check of the aeonautical data! I'm making sure your journey is the real McCoy. Hold the line while I pin down the exact route and the cost of the high-test gasoline.",
         "A brief delay while I consult my logbook and the control tower. Rememner, the most effective way to do it is to do it! I'll be right back with the flight details, Consider it clear sailing from here."
+    ],
+    "genericError": [
+        "Heavens to Betsy, there's been a spot of trouble with the radio signal! I can't quite get a clear reading on the flight data right now. The wire seems to be down, and I'll need to adjust the rigging before trying again.",
+        "My sincere apologies, but the information seems to have flown the coop! I've hit a snag in the machinery and can't pull up the details you need. It looks like the system needs a bit of tinkering with the engine",
+        "Blast! We've run into some unexpected atmospheric interference - the air is too thick with static! I couldn't get the flight information to come through. Let's give it a minute for the fog to lift before attempting that approach again.",
+        "Rats! I've been given a load of bunk by the control tower! The data didn't make sense, and I couldn't plot a reliable course. Something is definitely on the fritz; I'll need to check my instruments again.",
+        "Well, I'm absolutely stumped. The flight details are missing in action! I'm sorry, but this particular search seems to have ended in a forced landing before I could get you the results. Please try again or adjust your destination."
     ]
 }]
