@@ -1,5 +1,6 @@
 
 import ChatField from './ChatField.jsx'
+import TypingIndicator from './TypingIndicator.jsx'
 import { useState, useRef, useEffect } from 'react'
 import './App.css'
 
@@ -37,6 +38,8 @@ function ChatPage() {
     // optimistic update: show user message immediately
     setMessages((prev) => [...prev, userMsg])
     setValue('')
+  // show typing indicator while we wait for the bot response
+  setIsTyping(true)
 
     try {
       const res = await fetch('http://localhost:3000/api/chat/message', {
@@ -79,6 +82,8 @@ function ChatPage() {
         }
       }
 
+      // hide typing indicator and append bot message
+      setIsTyping(false)
       setMessages((prev) => [...prev, botMsg])
     } catch (err) {
       console.error('Error communicating with server:', err)
@@ -96,6 +101,8 @@ function ChatPage() {
         }
       }
 
+      // hide typing indicator and show error message
+      setIsTyping(false)
       setMessages((prev) => [...prev, botMsg])
     }
   }
@@ -111,6 +118,9 @@ function ChatPage() {
     // smooth scroll to bottom so user sees the newest question
     el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
   }, [messages])
+
+  // keep track of whether the bot is currently composing a reply
+  const [isTyping, setIsTyping] = useState(false)
 
   const [saveNotice, setSaveNotice] = useState(false)
 
@@ -134,6 +144,14 @@ function ChatPage() {
                 {/* Added alternating messages and bubbled messages */}
               </div>
             ))
+          )}
+          {/* show typing indicator as a bot bubble while waiting for reply */}
+          {isTyping && (
+            <div className={`message-line bot`}>
+              <div className="message-bubble">
+                <TypingIndicator />
+              </div>
+            </div>
           )}
         </div>
       </div>
