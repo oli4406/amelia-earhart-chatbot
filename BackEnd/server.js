@@ -314,11 +314,9 @@ app.post('/api/chat/message', async (req, res) => {
       const responseText = structuredResponse.candidates?.[0]?.content?.parts?.[0]?.text || getRandomResponse();
       return res.send({ reply: responseText });
     }
-
-    // Send an initial chunk so the client can show a "searching" message while work continues.
-    // `res.write` requires a string or Buffer; write a JSON string and set the content type.
-    res.setHeader('Content-Type', 'application/json; charset=utf-8');
-    res.write(JSON.stringify({ status: 'searching', reply: getRandomResponse('searchingFlights') }));
+    
+    /*res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.write(JSON.stringify({ status: 'searching', reply: getRandomResponse('searchingFlights') }));*/ // TODO: find a way to send a searching message to the client without using res.write
 
     const tool_call = functionCallPart.functionCall;
     console.log(`Tool call detected: ${JSON.stringify(tool_call)}`);
