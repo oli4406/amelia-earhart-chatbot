@@ -1,7 +1,7 @@
 .typing-indicator {
   width: 50px;
   height: 20px;
-  background: #e6e6e6;
+  background: #ffffff00; /* Transparent background */
   border-radius: 25px;
   padding: 6px 10px;
   display: flex;
