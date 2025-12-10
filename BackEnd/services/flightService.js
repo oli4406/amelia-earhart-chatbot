@@ -46,7 +46,7 @@ export async function searchFlights(origin, destination, departure_date, flight_
       return flights;
     } else {
       const json = await getJson(request_data);
-      console.log(json.best_flights || json.flights);
+      console.log(`Best flight: ${JSON.stringify(json.best_flights) || JSON.stringify(json.flights) || 'N/A'}`);
       return json.best_flights || json.flights || [];
     }
   } catch (error) {
