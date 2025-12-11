@@ -18,6 +18,9 @@ router.post('/message', async (req, res) => {
     if (!req.body || typeof req.body.message !== 'string') {
       return res.status(400).send({ reply: getRandomResponse() });
     }
+    if (req.body.message.length > 2000) {
+      return res.status(413).send({ reply: "Message too long." })
+    }
 
     const result = await handleChatMessage(req.body.message);
     return res.send(result);
