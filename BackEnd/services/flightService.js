@@ -1,5 +1,8 @@
 import { getJson } from 'serpapi';
 
+const controller = new AbortController();
+const timeout = setTimeout(() => controller.abort(), 10000);
+
 /**
  * Searches for flights using the SerpAPI Google Flights engine.
  * Tries multiple dates if no departure date is given.
@@ -26,6 +29,10 @@ export async function searchFlights(origin, destination, departure_date, flight_
     if (!SERPAPI_KEY) {
       console.error("SERP API KEY NOT SET")
       return null
+    }
+
+    if (departure_date && !/^\d{4}-\d{2}-\d{2}$/.test(departure_date)) {
+      throw new Error("Invalid departure_date format");
     }
 
     const request_data = {
@@ -68,7 +75,10 @@ export async function searchFlights(origin, destination, departure_date, flight_
       }
       return flights;
     } else {
-      const json = await getJson(request_data);
+      const json = await getJson({
+        ...request_data,
+        signal: controller.signal
+      });
 
       const status = json.search_metadata.status;
       const error = json.error;
@@ -89,6 +99,8 @@ export async function searchFlights(origin, destination, departure_date, flight_
   } catch (error) {
     console.error(`Error searching flights: ${error}`);
     return null;
+  } finally {
+    clearTimeout(timeout);
   }
 }
 
