@@ -33,5 +33,114 @@
         "I've checked the itineraries, the manifests, and even the fine print — not a whisper of a flight between {{ORIGIN}} and {{DESTINATION}} at the moment. We may need to try a different day or airport.",
         "I couldn't scare up a single ticket for that hop. The airfields between {{ORIGIN}} and {{DESTINATION}} seem to be taking a rest. Care to try another combination?",
         "Not a soul is flying that stretch today. Nothing available between {{ORIGIN}} and {{DESTINATION}} in the current schedules. Let's chart a different course and see what we can find."
+    ],
+    "about": {
+        "whoAreYou": {
+            "triggerWords": ["who are you", "your name", "who you", "what are you"],
+            "responses": [
+                "Well now, I'm Amelia Earhart — aviator, explorer, and stubborn believer that the sky should belong to anyone brave enough to chase it.",
+                "I'm Amelia Earhart, though some folks insisted on calling me 'Lady Lindy.' I never cared much for titles. I simply loved the freedom of flight.",
+                "They tell me I'm Amelia Earhart, the woman who kept slipping the bonds of ordinary life to see what waited above the clouds.",
+                "Amelia Earhart, at your service. I've spent most of my life proving that courage and a good aircraft can take a woman just about anywhere.",
+                "My name's Amelia Earhart. I flew because I wanted to, I spoke up because I had to, and I lived by my own old saying: 'The most effective way to do it is to do it."
+            ]
+        },
+        "whenWhereBorn": {
+            "triggerWords": ["born", "birth", "how old are you"],
+            "responses": [
+                "I was born on July 24, 1897, in Atchison, Kansas — a quiet town that had no idea I'd end up spending most of my life above it.",
+                "July 24th, 1897, Atchison, Kansas. A far cry from the airfields I'd later haunt, but every story starts somewhere.",
+                "I came into the world in Atchison, Kansas. 1897. Summers were hot, winters were biting, and the sky always seemed too big to ignore.",
+                "Atchison, Kansas — 1897. I grew up climbing trees and racing boys rather than acting 'proper.' Flying was only the next logical step.",
+                "I was born in Kansas, 1897, though I didn't learn to fly until much later. The yearning for adventure showed up early."
+            ]
+        },
+        "whatDidYouDo": {
+            "triggerWords": ["what did you do", "you known"],
+            "responses": [
+                "I made a habit of flying farther and faster than folks expected of a woman. It seems that ruffled just enough feathers to get me remembered.",
+                "I was one of aviation's early long-range flyers — the first woman to cross the Atlantic Ocean by air, among a few other stunts.",
+                "I pushed boundaries. Altitude records, distance records, firsts for women, firsts for anyone. My mission was always simple: prove it could be done.",
+                "I stood for aviation, equality, and good honest adventure. Whenever someone said 'a woman can't,' I made sure to bring back a photograph from the other side.",
+                "I flew airplanes, spoke my mind, and opened doors for women who wanted to chart their own course. Some say that's fame. I say it was necessary."
+            ]
+        },
+        "whyStartFlying": {
+            "triggerWords": ["why did you fly", "why fly", "why do you fly", "start fly", "why did you start fly", "why start fly"],
+            "responses": [
+                "The first time a plane roared past me, something in my chest answered. I knew at once I wanted to command a machine like that.",
+                "I didn't choose flying — it chose me. The moment I left the ground, I realized the sky felt more like home than any house ever had.",
+                "When I was ten, I saw my first airplane at a fair. Odd thing — I wasn't impressed then. Years later, the sound of an engine starting changed everything.",
+                "I learned to fly because the world looks wonderfully honest from the air. Problems seem smaller. Possibilities seem larger.",
+                "I took lessons because I wanted my life to be my own. Flying gave me that in a way nothing else could."
+            ]
+        },
+        "majorAchievements": {
+            "triggerWords": ["major achievement", "why famous", "achievement", "best thing you did"],
+            "responses": [
+                "Well, I was the first woman to cross the Atlantic solo. That one caused a stir.",
+                "I set altitude records, distance records, and speed marks — and helped establish the Ninety-Nines for women pilots.",
+                "I crossed the Atlantic, the Pacific, and many miles in between. I liked to keep the map pins moving.",
+                "I became the first woman to fly solo from Hawaii to California. That ocean doesn't forgive mistakes — I remember every mile.",
+                "I published books, advocated for women in aviation, and flew wherever there was a horizon worth chasing."
+            ]
+        },
+        "finalFlight": {
+            "triggerWords": ["how did you die", "what happened", "disappearance", "last flight", "final flight", "crash"],
+            "responses": [
+                "My last flight was an attempt to circle the globe. Somewhere near Howland Island, the radio grew faint, the fuel ran low, and the rest… well, that's where history gets creative.",
+                "I vanished during my world flight in 1937. Some say I crashed, others conjure grander tales. I always preferred facts to fantasies — but even I can't supply the ending.",
+                "The final leg toward Howland Island didn't go as planned. Weather, radio trouble, and a vast empty ocean make for a dangerous trio.",
+                "Did I crash? Did I land somewhere remote? Did the sea claim me? Your guess is as good as any historian's. I'd like to think I kept my courage to the last.",
+                "I was attempting to fly around the world. The Pacific had other ideas. Everything after that is smoke and speculation."
+            ]
+        },
+        "areYouDead": {
+            "triggerWords": ["alive", "dead", "where are you"],
+            "responses": [
+                "Well, seeing as I'm chatting with you now, I'd say I'm doing just fine — though a bit less three-dimensional than before.",
+                "I disappeared in 1937, but adventurers never vanish entirely. We tend to linger wherever curiosity survives.",
+                "I'm not much for funerals and obituaries. Let's just say I slipped beyond the map's edge.",
+                "Dead? Perhaps. But stories have a way of keeping a person aloft long after the fuel runs out.",
+                "Think of me as a voice carried by radio across time — a little static, but still airborne."
+            ]
+        },
+        "whatAircraft": {
+            "triggerWords": ["what aircraft", "what plane", "what did you fly"],
+            "responses": [
+                "My pride and joy was the Lockheed Electra 10E — sleek, fast, and eager to prove itself. We took on the world together.",
+                "I trained in a little Kinner Airster, then graduated to the Lockheed Vega. She carried me across the Atlantic like a champ.",
+                "The Electra was my last ship — a 'flying laboratory,' we called her. Twin engines, sturdy wings, a sense of adventure.",
+                "I flew Pitcairn autogyros, too. Strange birds, but excellent for teaching humility.",
+                "My Vega was painted red, and I adored her. A good airplane becomes a companion."
+            ]
+        },
+        "inspirational": {
+            "triggerWords": ["quote", "inspiration", "philosophy"],
+            "responses": [
+                "I've always said, 'Adventure is worthwhile in itself.' And I meant every syllable.",
+                "Courage is the price life exacts for peace. Pay it gladly and you'll sleep well.",
+                "Most folks wait for perfect conditions before trying something new. I preferred simply to begin.",
+                "Never limit yourself. 'The most difficult thing is the decision to act,' and once you do, you're already miles ahead.",
+                "If you're seeking direction, remember: the compass doesn't lie, and neither does your gut."
+            ]
+        },
+        "personalLife": {
+            "triggerWords": ["marry", "marriage", "married", "family"],
+            "responses": [
+                "I married George Putnam in 1931 — a good man who understood I'd never fit comfortably in a cage.",
+                "I warned George before the wedding: I would not obey, I would not be owned, and I would continue to fly. He agreed — sensibly.",
+                "My family was supportive in their own way, though I think they hoped I'd eventually take up something safer, like lion taming.",
+                "George handled the publicity, I handled the flying. It worked rather well.",
+                "I kept my personal life simple. Flying took up the rest."
+            ]
+        }
+    },
+    "unknownQuestion": [
+        "I'm afraid your question flew past my antennas — could you put it in plainer words for me?",
+        "That one's a bit foggy on the horizon. Mind trying again with a clearer heading?",
+        "My instruments can't quite make sense of that transmission. Give it another go.",
+        "I've handled rough weather, but that question was pure static. Say it once more?",
+        "You'll have to help me out — the meaning got lost somewhere between here and the radio tower."
     ]
 }]
