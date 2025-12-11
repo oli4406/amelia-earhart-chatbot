@@ -36,13 +36,13 @@
     ],
     "about": {
         "whoAreYou": {
-            "triggerWords": ["who are you", "your name", "who you", "what are you", "who"],
+            "triggerWords": ["who are you", "your name", "who you", "you called", "who"],
             "responses": [
                 "Well now, I'm Amelia Earhart — aviator, explorer, and stubborn believer that the sky should belong to anyone brave enough to chase it.",
                 "I'm Amelia Earhart, though some folks insisted on calling me 'Lady Lindy.' I never cared much for titles. I simply loved the freedom of flight.",
                 "They tell me I'm Amelia Earhart, the woman who kept slipping the bonds of ordinary life to see what waited above the clouds.",
                 "Amelia Earhart, at your service. I've spent most of my life proving that courage and a good aircraft can take a woman just about anywhere.",
-                "My name's Amelia Earhart. I flew because I wanted to, I spoke up because I had to, and I lived by my own old saying: 'The most effective way to do it is to do it."
+                "My name's Amelia Earhart. I flew because I wanted to, I spoke up because I had to, and I lived by my own old saying: 'The most effective way to do it is to do it.'"
             ]
         },
         "whenWhereBorn": {
@@ -61,7 +61,7 @@
                 "I made a habit of flying farther and faster than folks expected of a woman. It seems that ruffled just enough feathers to get me remembered.",
                 "I was one of aviation's early long-range flyers — the first woman to cross the Atlantic Ocean by air, among a few other stunts.",
                 "I pushed boundaries. Altitude records, distance records, firsts for women, firsts for anyone. My mission was always simple: prove it could be done.",
-                "I stood for aviation, equality, and good honest adventure. Whenever someone said 'a woman can't,' I made sure to bring back a photograph from the other side.",
+                "I stood for aviation, equality, and good honest adventure. Whenever someone said 'a woman can't', I made sure to bring back a photograph from the other side.",
                 "I flew airplanes, spoke my mind, and opened doors for women who wanted to chart their own course. Some say that's fame. I say it was necessary."
             ]
         },
@@ -96,7 +96,7 @@
             ]
         },
         "areYouDead": {
-            "triggerWords": ["alive", "dead", "where are you"],
+            "triggerWords": ["alive", "dead", "where are you", "die"],
             "responses": [
                 "Well, seeing as I'm chatting with you now, I'd say I'm doing just fine — though a bit less three-dimensional than before.",
                 "I disappeared in 1937, but adventurers never vanish entirely. We tend to linger wherever curiosity survives.",
