@@ -26,7 +26,6 @@ export function setGeminiClient(client) {
  */
 function isFlightQuery(text) {
   const triggers = ["flight", "flights", "fly", "plane", "ticket", "from", "go to", "fly to"];
-  console.log("isFlightQuery")
   return triggers.some(t => text.toLowerCase().includes(t));
 }
 
@@ -184,13 +183,9 @@ export async function handleChatMessage(messageText) {
 
   // Intent detection
   const isFlightRequest = isFlightQuery(messageText);
-  console.log(isFlightRequest)
 
   // Extract details if flight request
   const extractedParams = isFlightRequest ? extractFlightParams(messageText) : null;
-
-  console.log(`isFlightRequest ${isFlightRequest}`)
-  console.log(chat)
 
   if (isFlightRequest) {
     const destIata = extractDestination(messageText);
@@ -246,7 +241,6 @@ export async function handleChatMessage(messageText) {
     }
 
     const initialResponse = await chat.sendMessage(messageWithDate);
-    console.log(`Initial chat response: \n${JSON.stringify(initialResponse)}\n`);
 
     const structuredResponse = initialResponse.response || initialResponse;
     const functionCallPart = structuredResponse.candidates?.[0]?.content?.parts?.find(part => part.functionCall);
@@ -259,7 +253,6 @@ export async function handleChatMessage(messageText) {
     }
 
     const tool_call = functionCallPart.functionCall;
-    console.log(`Tool call detected: ${JSON.stringify(tool_call)}`);
 
     let result;
     if (tool_call.name === 'searchFlights') {
@@ -268,7 +261,6 @@ export async function handleChatMessage(messageText) {
         console.error("Invalid arguments supplied by Gemini")
         return { reply: getRandomResponse() };
       }
-      console.log(`Invoking searchFlights with arguments: ${JSON.stringify(validArgs)}`);
       result = await searchFlights(
         validArgs.origin,
         validArgs.destination,
@@ -281,8 +273,6 @@ export async function handleChatMessage(messageText) {
         validArgs.sort_by || ''
       );
     }
-
-    console.log(`tool_call result (stringified):\n${JSON.stringify(result)}\n`);
 
     const finalResponse = await chat.sendMessage([
       {

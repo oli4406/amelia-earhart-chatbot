@@ -51,8 +51,6 @@ export async function searchFlights(origin, destination, departure_date, flight_
     if (max_price) { request_data['max_price'] = max_price};
     if (sort_by) { request_data['sort_by'] = sort_by};
 
-    console.log(`API Request data: \n${JSON.stringify(request_data)}\n\n`)
-
     // If departure_date is not specified, try up to 5 times, incrementing the date each time
     let attempts = 0;
     let flights = [];
@@ -83,15 +81,11 @@ export async function searchFlights(origin, destination, departure_date, flight_
       const status = json.search_metadata.status;
       const error = json.error;
 
-      console.log(`SERPAPI Status: ${status}`)
-      console.log(`SERPAPI Error: ${status}`)
-
       if (status === "Success") {
         if (error === "Google Flights hasn't returned any results for this query.") {
-          console.log(error)
+          console.error(error)
           return []
         } else {
-          // console.log(`Best flight: ${JSON.stringify(json.best_flights) || JSON.stringify(json.flights) || 'N/A'}`);
           return json.best_flights || json.flights || [];
         }
       }
