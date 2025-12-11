@@ -1,21 +1,40 @@
+/**
+ * Chat orchestration layer.
+ * Handles intent detection, fallback responses, flight parameter extraction,
+ * Gemini client interaction, and flight-search tool execution.
+ * @module services/chatService
+ */
+
 import { searchFlights } from './flightService.js';
 import { getRandomResponse, getPredefinedResponse } from './responseService.js';
 import { extractDestination, findAirportByPhrase } from './airportService.js';
 
 let chat = null;
 
+/**
+ * Injects the Gemini chat client into the service.
+ * @param {Object} client - Gemini chat model instance.
+ */
 export function setGeminiClient(client) {
   chat = client;
 }
 
-// Check for flight search intent
+/**
+ * Checks whether a message appears to be a flight-related query.
+ * @param {string} text 
+ * @returns {boolean}
+ */
 function isFlightQuery(text) {
   const triggers = ["flight", "flights", "fly", "plane", "ticket", "from", "go to", "fly to"];
   console.log("isFlightQuery")
   return triggers.some(t => text.toLowerCase().includes(t));
 }
 
-// Try to extract flight search parameters from text
+/**
+ * Attempts to extract origin, destination, and date fields from natural language text.
+ * @param {string} text 
+ * @returns {Object|null} Parsed { origin, destination, departure_date, flight_type }
+ */
 function extractFlightParams(text) {
   if (!text || typeof text !== 'string') return null;
   const lower = text.toLowerCase();
@@ -72,6 +91,13 @@ function extractFlightParams(text) {
   };
 }
 
+/**
+ * Formats a fallback text response when Gemini is unavailable.
+ * Includes flight results when present.
+ * @param {Object[]} flights - Array of flight objects from SerpAPI.
+ * @param {Object} params - Extracted flight parameters.
+ * @returns {string}
+ */
 function formatFallbackFlightResponse(flights, params) {
   if (!flights || flights.length === 0) {
     let response = getRandomResponse('noFlightsFound');
@@ -131,6 +157,14 @@ function formatFallbackFlightResponse(flights, params) {
   return template;
 }
 
+/**
+ * Central handler for all user messages.
+ * Routes through predefined responses or Gemini, with flight intent handling.
+ * @async
+ * @function handleChatMessage
+ * @param {string} messageText - Raw user message.
+ * @returns {Promise<{reply: string, status?: string}>}
+ */
 export async function handleChatMessage(messageText) {
   if (!messageText || typeof messageText !== 'string') {
     return { reply: getRandomResponse() };

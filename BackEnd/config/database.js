@@ -1,5 +1,17 @@
+/**
+ * Handles MongoDB connection using Mongoose.
+ * Attempts connection and logs success/failure.
+ * @module config/database
+ */
 import mongoose from 'mongoose';
 
+/**
+ * Connects to the MongoDB instance for the application.
+ * @async
+ * @function connectDatabase
+ * @returns {Promise<boolean>} Resolves true on success, throws on failure.
+ * @throws {Error} When the connection fails.
+ */
 export async function connectDatabase() {
   try {
     console.log('Attempting to connect to MongoDB...');

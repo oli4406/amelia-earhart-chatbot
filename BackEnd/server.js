@@ -1,3 +1,10 @@
+/**
+ * Initializes and configures the Express application.
+ * Sets up middleware, routes, database connection, and Gemini client injection.
+ * Starts the backend server once the database is connected.
+ * @module server
+ */
+
 import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';

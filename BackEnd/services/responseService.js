@@ -1,3 +1,10 @@
+/**
+ * Loads predefined chatbot responses from predefinedResponses.json.
+ * Stores categories such as greetings, errors, unknown quieries, etc.
+ * Provides random and category-specific replies.
+ * @module services/responseService
+ */
+
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -23,6 +30,11 @@ fs.readFile(responsesPath, (err, data) => {
   }
 });
 
+/**
+ * Returns a predefined response based on trigger words contained in user text.
+ * @param {string} userText - Raw user message.
+ * @returns {[string|null, string|null]} Tuple of (response, fallback).
+ */
 export function getPredefinedResponse(userText) {
   const text = userText.toLowerCase();
 
@@ -48,6 +60,11 @@ export function getPredefinedResponse(userText) {
   return [null, getRandomResponse('genericError')]; // return null first so chatService knows the interaction failed
 }
 
+/**
+ * Returns a random response from a given category, or a generic error fallback.
+ * @param {string} [category='genericError'] - Response category
+ * @returns {string} A random response string.
+ */
 export function getRandomResponse(category = 'genericError') {
   let response = "Blast! We've run into some unexpected atmospheric interference - the air is too thick with static! I couldn't get the flight information to come through. Let's give it a minute for the fog to lift before attempting that approach again.";
 

@@ -1,3 +1,13 @@
+/**
+ * Mongoose Message model.
+ * Stores a user's question and the chatbot's generated answer.
+ * @module models/Message
+ * @typedef {Object} Message
+ * @property {string} userId - MongoDB ObjectId referencing the User.
+ * @property {string} question - The user's message.
+ * @property {string} answer - The chatbot's response.
+ * @property {Date} ts - Timestamp of message creation.
+ */
 import mongoose from 'mongoose';
 
 const messageSchema = new mongoose.Schema(

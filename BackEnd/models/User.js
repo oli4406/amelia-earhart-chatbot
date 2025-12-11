@@ -1,3 +1,13 @@
+/**
+ * Mongoose User model.
+ * Stores user credentials and profile information.
+ * @module models/user
+ * @typedef {Object} User
+ * @property {string} email
+ * @property {string} passwordHash
+ * @property {string} firstName
+ * @property {string} lastName
+ */
 import mongoose from 'mongoose';
 
 const UserSchema = new mongoose.Schema(

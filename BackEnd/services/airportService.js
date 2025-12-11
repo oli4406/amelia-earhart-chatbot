@@ -1,3 +1,8 @@
+/**
+ * Provides utilities for matching user text to airports.
+ * Uses airports.json for lookup by city, airport name, IATA, ICAO, or partial keywords.
+ * @module services/airportService
+ */
 import airportsJson from './airports.json' with { type: 'json' };
 
 const airportIndex = [];
@@ -24,6 +29,12 @@ function extractLocationWords(text) {
     .filter(w => w.length > 1 && !STOPWORDS.has(w));
 }
 
+/**
+ * Attempts to find an airport by a single word.
+ * @deprecated Use findAirportByPhrase(phrase).
+ * @param {string} phrase 
+ * @returns {Object|null} Airport record or null.
+ */
 function findAirport(matchWord) {
     matchWord = matchWord.toLowerCase();
 
@@ -53,6 +64,12 @@ function findAirport(matchWord) {
     return null;
 }
 
+/**
+ * Attempts to find an airport by a human-entered phrase.
+ * Handles full names, partial names, cities, IATA, ICAO.
+ * @param {string} phrase 
+ * @returns {Object|null} Airport record or null.
+ */
 export function findAirportByPhrase(phrase) {
     if (!phrase || typeof phrase !== 'string') return null;
     const p = phrase.toLowerCase().trim();
@@ -96,6 +113,11 @@ export function findAirportByPhrase(phrase) {
     return null;
 }
 
+/**
+ * Extracts the destination airport (IATA) from a user query.
+ * @param {string} text 
+ * @returns {string|null} IATA code
+ */
 export function extractDestination(text) {
     const words = extractLocationWords(text);
 

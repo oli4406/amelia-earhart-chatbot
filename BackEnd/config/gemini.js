@@ -1,3 +1,8 @@
+/**
+ * Gemini configuration and initialization module.
+ * Defines system instructions, function declarations, and creates a chat client.
+ * @module config/gemini
+ */
 import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
 
 const searchFlightsFunctionDeclaration = {
@@ -55,6 +60,13 @@ const config = {
   ],
 };
 
+/**
+ * Initializes the Gemini generative AI client with system instructions
+ * and the flight-search tool definition.
+ * @function initializeGemini
+ * @returns {{ model: Object, chat: Object }} The model instance and chat session.
+ * @throws {Error} If GEMINI_API_KEY is missing from environment variables.
+ */
 export function initializeGemini() {
   console.log('Initializing Gemini client...');
   if (!globalThis.process.env.GEMINI_API_KEY) {

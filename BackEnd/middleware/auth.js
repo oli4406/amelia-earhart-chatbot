@@ -1,3 +1,13 @@
+/**
+ * JWT authentication middleware.
+ * Validates Bearer tokens and attaches user payload to req.user.
+ * @middleware
+ * @function TokenVerificationSecret
+ * @param {import('express').Request} req 
+ * @param {import('express').Response} res 
+ * @param {Function} next 
+ * @returns {void}
+ */
 import jwt from 'jsonwebtoken';
 
 export const TokenVerificationSecret = (req, res, next) => {

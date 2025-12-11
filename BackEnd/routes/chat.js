@@ -1,9 +1,18 @@
+/**
+ * Chat route controller.
+ * Forwards incoming user messages to chatService for handling.
+ * @module routes/chat
+ */
 import express from 'express';
 import { handleChatMessage } from '../services/chatService.js';
 import { getRandomResponse } from '../services/responseService.js';
 
 const router = express.Router();
 
+/**
+ * POST /api/chat/message
+ * Validates input, runs chatService, returns structured response.
+ */
 router.post('/message', async (req, res) => {
   try {
     if (!req.body || typeof req.body.message !== 'string') {

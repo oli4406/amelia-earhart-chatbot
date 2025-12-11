@@ -1,10 +1,19 @@
+/**
+ * User route controller.
+ * Provides protected endpoints for retrieving user data.
+ * @module routes/user
+ */
 import express from 'express';
 import { TokenVerificationSecret } from '../middleware/auth.js';
 import User from '../models/User.js';
 
 const router = express.Router();
 
-// Get user (protected)
+/**
+ * GET /api/user
+ * Returns authenticated user's profile (excluding password hash).
+ * @middleware TokenVerificationSecret
+ */
 router.get('/', TokenVerificationSecret, async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select('-passwordHash');

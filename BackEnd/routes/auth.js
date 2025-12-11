@@ -1,3 +1,8 @@
+/**
+ * Authentication routes.
+ * Handles user registration, login, password hashing, and JWT issuance.
+ * @module routes/auth
+ */
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -5,14 +10,21 @@ import User from '../models/User.js';
 
 const router = express.Router();
 
-// Register
+/**
+ * POST /api/auth/register
+ * Registers a new user account.
+ * @param {string} email
+ * @param {string} password
+ * @param {string} firstName
+ * @param {string} lastName
+ */
 router.post('/register', async (req, res) => {
   try {
     const { email, password, firstName, lastName } = req.body;
     if (!email || !password || !firstName || !lastName) return res.status(400).send({ message: 'Please enter all fields to continue' });
     const existingUser = await User.findOne({ email });
 
-    if (existingUser) return res.status(409).send({ message: 'User already exists' });
+    if (existingUser) return res.status(409).send({ message: 'User with that email already exists' });
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
@@ -25,7 +37,12 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// Login
+/**
+ * POST /api/auth/login
+ * Logs user in and returns a JWT token.
+ * @param {string} email
+ * @param {string} password
+ */
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).send({ message: 'Email and password required' });

@@ -1,5 +1,22 @@
 import { getJson } from 'serpapi';
 
+/**
+ * Searches for flights using the SerpAPI Google Flights engine.
+ * Tries multiple dates if no departure date is given.
+ * Supports filtering, storting, price caps, and airline inclusion/exclusion.
+ * @async
+ * @function searchFlights
+ * @param {string} origin - IATA of departure airport(s), comma-separated.
+ * @param {string} destination - Destination IATA code.
+ * @param {string} departure_date - YYYY-MM-DD departure.
+ * @param {string} flight_type - 1=one-way, 2=round-trip.
+ * @param {string} [return_date] - YYYY-MM-DD return date.
+ * @param {string} [exclude_airlines] - Comma-separated airline codes to exclude.
+ * @param {string} [include_airlines] - Comma-separated airline codes to include.
+ * @param {string} [max_price] - Upper price limit.
+ * @param {string} [sort_by] - Defines the sorting order of the results. 1=top flights (default), 2=price, 3=departure time, 4=arrival time, 5=duration, 6=emissions
+ * @returns {Promise<Object[]|null>} List of flights or null on error.
+ */
 export async function searchFlights(origin, destination, departure_date, flight_type, return_date, exclude_airlines, include_airlines, max_price, sort_by) {
   console.log(`Searching flights from ${origin} to ${destination} departing on ${departure_date} returning on ${return_date || 'N/A'}`);
 
