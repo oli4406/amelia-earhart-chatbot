@@ -4,7 +4,13 @@ export async function searchFlights(origin, destination, departure_date, flight_
   console.log(`Searching flights from ${origin} to ${destination} departing on ${departure_date} returning on ${return_date || 'N/A'}`);
 
   try {
-    const SERPAPI_KEY = globalThis.process.env.SERPAPI_API_KEY || globalThis.process.env.SERPAPI_API_KEY;
+    const SERPAPI_KEY = globalThis.process.env.SERPAPI_API_KEY;
+
+    if (!SERPAPI_KEY) {
+      console.error("SERP API KEY NOT SET")
+      return null
+    }
+
     const request_data = {
       engine: "google_flights",
       api_key: SERPAPI_KEY,
@@ -46,12 +52,26 @@ export async function searchFlights(origin, destination, departure_date, flight_
       return flights;
     } else {
       const json = await getJson(request_data);
-      console.log(`Best flight: ${JSON.stringify(json.best_flights) || JSON.stringify(json.flights) || 'N/A'}`);
-      return json.best_flights || json.flights || [];
+
+      const status = json.search_metadata.status;
+      const error = json.error;
+
+      console.log(`SERPAPI Status: ${status}`)
+      console.log(`SERPAPI Error: ${status}`)
+
+      if (status === "Success") {
+        if (error === "Google Flights hasn't returned any results for this query.") {
+          console.log(error)
+          return []
+        } else {
+          // console.log(`Best flight: ${JSON.stringify(json.best_flights) || JSON.stringify(json.flights) || 'N/A'}`);
+          return json.best_flights || json.flights || [];
+        }
+      }
     }
   } catch (error) {
     console.error(`Error searching flights: ${error}`);
-    return [];
+    return null;
   }
 }
 
