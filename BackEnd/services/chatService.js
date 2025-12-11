@@ -1,5 +1,6 @@
 import { searchFlights } from './flightService.js';
 import { getRandomResponse } from './responseService.js';
+import { extractDestination, findAirportByPhrase } from './airportService.js';
 
 let chat = null;
 
@@ -7,16 +8,171 @@ export function setGeminiClient(client) {
   chat = client;
 }
 
+// Check for flight search intent
+function isFlightQuery(text) {
+  const triggers = ["flight", "flights", "fly", "plane", "ticket", "from", "to"];
+  return triggers.some(t => text.toLowerCase().includes(t));
+}
+
+// Try to extract flight search parameters from text
+function extractFlightParams(text) {
+  if (!text || typeof text !== 'string') return null;
+  const lower = text.toLowerCase();
+
+  // Extract everything after 'from' up to 'to'
+  // Allows multi-word origins e.g. new york
+  const fromMatch = lower.match(/from\s+([a-z0-9/\-\s\u00C0-\u017F]+?)(?:\s+to\b|$)/i);
+
+  let originIata = null;
+
+  if (fromMatch && fromMatch[1]) {
+    const originPhrase = fromMatch[1].trim();
+    const originRecord = findAirportByPhrase(originPhrase);
+
+    if (originRecord && originRecord.iata) {
+      originIata = originRecord.iata.toUpperCase();
+    } else {
+      originIata = null;
+    }
+  }
+
+  // If none specified, default to the two main London airports
+  if (!originIata) {
+    originIata = "LGW,LHR";
+  }
+
+  const textWithoutOrigin = text.replace(fromMatch[1], " ")
+  console.log(textWithoutOrigin)
+  const destination = extractDestination(textWithoutOrigin);
+  if (!destination) return null, console.log("No destination");
+
+  const originList = originIata.split(',').map(s => s.trim().toUpperCase()).filter(Boolean);
+  if (originList.includes(destination.toUpperCase())) {
+    console.log(originList)
+    console.log(destination)
+    console.log("Dest = origin")
+    return null;
+  }
+
+  const dateMatch = lower.match(/\b(\d{4}-\d{2}-\d{2})\b/);
+  const today = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
+  const departure_date = dateMatch ? dateMatch[1] : tomorrow.toISOString().split('T')[0];
+
+  return {
+    origin: originIata,
+    destination: destination.toUpperCase(),
+    departure_date,
+    flight_type: 2
+  };
+}
+
+function formatFallbackFlightResponse(flights, params) {
+  if (!flights || flights.length === 0) {
+    let response = getRandomResponse('noFlightsFound');
+
+    response = response
+      .replace(/{{ORIGIN}}/g, params.origin)
+      .replace(/{{DESTINATION}}/g, params.destination)
+
+    // if placeholders are still there, use generic fallback
+    if (response.includes("{")) return getRandomResponse();
+
+    return response;
+  }
+  
+  let template = getRandomResponse("flightResult");
+
+  const f1 = flights[0];
+  const f2 = flights[1]; // May be undefined
+
+  // {{ORIGIN}} {{DESTINATION}}
+  // {{AIRLINE_1}} {{DEPARTURE_TIME_1}} {{DEPARTURE_DATE_1}} {{ARRIVAL_AIRPORT_1}} {{ARRIVAL_TIME_1}} {{PRICE_1}}
+  // {{AIRLINE_2}} {{DEPARTURE_TIME_2}} {{DEPARTURE_DATE_2}} {{ARRIVAL_AIRPORT_2}} {{ARRIVAL_TIME_2}} {{PRICE_2}}
+
+  template = template
+    .replace(/{{ORIGIN}}/g, f1.flights[0]?.departure_airport.name)
+    .replace(/{{DESTINATION}}/g, f1.flights[0]?.arrival_airport.name)
+    .replace(/{{AIRLINE_1}}/g, f1.flights[0]?.airline)
+    .replace(/{{DEPARTURE_AIRPORT_1}}/g, f1.flights[0]?.departure_airport.name)
+    .replace(/{{DEPARTURE_TIME_1}}/g, f1.flights[0]?.departure_airport.time.split(" ")[1])
+    .replace(/{{DEPARTURE_DATE_1}}/g, f1.flights[0]?.departure_airport.time.split(" ")[0])
+    .replace(/{{ARRIVAL_AIRPORT_1}}/g, f1.flights[0]?.arrival_airport.name)
+    .replace(/{{ARRIVAL_TIME_1}}/g, f1.flights[0]?.arrival_airport.time.split(" ")[1])
+    .replace(/{{ARRIVAL_DATE_1}}/g, f1.flights[0]?.arrival_airport.time.split(" ")[0])
+    .replace(/{{PRICE_1}}/g, f1.price);
+
+  if (f2) {
+    template = template
+      .replace(/{{AIRLINE_2}}/g, f2.flights[0]?.airline)
+      .replace(/{{DEPARTURE_AIRPORT_2}}/g, f2.flights[0]?.departure_airport.name)
+      .replace(/{{DEPARTURE_TIME_2}}/g, f2.flights[0]?.departure_airport.time.split(" ")[1])
+      .replace(/{{DEPARTURE_DATE_2}}/g, f2.flights[0]?.departure_airport.time.split(" ")[0])
+      .replace(/{{ARRIVAL_AIRPORT_2}}/g, f2.flights[0]?.arrival_airport.name)
+      .replace(/{{ARRIVAL_TIME_2}}/g, f2.flights[0]?.arrival_airport.time.split(" ")[1])
+      .replace(/{{ARRIVAL_DATE_2}}/g, f2.flights[0]?.arrival_airport.time.split(" ")[0])
+      .replace(/{{PRICE_2}}/g, f2.price);
+
+  } else {
+    // No second flight
+    const lines = template.split("\n");
+    const trimmed = lines.filter(line => !line.includes("2}}"));
+    template = trimmed.join("\n");
+  }
+
+  // if placeholders are still there, use generic fallback
+  if (template.includes("{")) return getRandomResponse();
+
+  return template;
+}
+
 export async function handleChatMessage(messageText) {
   if (!messageText || typeof messageText !== 'string') {
     return { reply: getRandomResponse() };
   }
 
-  if (messageText.substring(0, 5) != "[DEV]") {
-    return { reply: getRandomResponse() };
+  console.log(`Message from client: ${messageText}`);
+
+  // Intent detection
+  const isFlightRequest = isFlightQuery(messageText);
+
+  // Extract details if flight request
+  const extractedParams = isFlightRequest ? extractFlightParams(messageText) : null;
+
+  console.log(`isFlightRequest: ${isFlightRequest}`)
+  console.log(`extractedParams: ${JSON.stringify(extractedParams)}`)
+
+  if (isFlightRequest) {
+    const destIata = extractDestination(messageText);
+    if (!destIata) {
+      return { reply: getRandomResponse("noDestIATA") }
+    }
+
+    if (!extractedParams) {
+      return { reply: getRandomResponse("noDestIATA") }
+    }
   }
 
-  console.log(`Message from client: ${messageText}`);
+  let fallbackFlightResults = null;
+
+  if (isFlightRequest /*&& !chat*/) {
+    console.log("Gemini unavailable, running fallback flight search...");
+    fallbackFlightResults = await searchFlights(
+      extractedParams.origin,
+      extractedParams.destination,
+      extractedParams.departure_date,
+      extractedParams.flight_type
+    );
+
+    return {
+      reply: formatFallbackFlightResponse(fallbackFlightResults, extractedParams)
+    };
+  }
+
+  if (messageText.substring(0, 5) !== "[DEV]") {
+    return { reply: getRandomResponse() };
+  }
 
   // Get current date for context
   const today = new Date().toISOString().split('T')[0];
@@ -86,6 +242,19 @@ export async function handleChatMessage(messageText) {
     return { status: 'done', reply: responseText };
   } catch (error) {
     console.error(`Error handling chat message: ${error}`);
+
+    if (isFlightRequest) {
+      const res = await searchFlights(
+        extractedParams.origin,
+        extractedParams.destination,
+        extractedParams.departure_date,
+        extractedParams.flight_type
+      );
+      return {
+        reply: formatFallbackFlightResponse(res, extractedParams)
+      };
+    }
+
     return { reply: getRandomResponse() };
   }
 }
