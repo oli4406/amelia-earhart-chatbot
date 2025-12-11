@@ -109,6 +109,14 @@
   border-radius: 12px;
 }
 
+.message-bubble p {
+  margin: 0;
+  padding: 1px;
+}
+
+.message-bubble p + p {
+  margin-top: 0.5em;
+}
 
 .messages-window::-webkit-scrollbar {
   width: 10px;

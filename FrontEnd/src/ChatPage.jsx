@@ -139,9 +139,10 @@ function ChatPage() {
             messages.map((m, i) => (
               <div key={i} className={`message-line ${m.role ?? (i % 2 === 0 ? 'bot' : 'user')}`}>  {/*alternating message styles for bot vs user*/}
                 <div className="message-bubble">
-                  {m.text}
+                  {m.text.split("\n").map((line, idx) => (
+                    <p key={idx}>{line}</p>
+                  ))}
                 </div>
-                {/* Added alternating messages and bubbled messages */}
               </div>
             ))
           )}
