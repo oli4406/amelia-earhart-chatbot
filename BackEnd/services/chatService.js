@@ -132,28 +132,35 @@ export async function handleChatMessage(messageText) {
     return { reply: getRandomResponse() };
   }
 
-  console.log(`Message from client: ${messageText}`);
-
   // Intent detection
   const isFlightRequest = isFlightQuery(messageText);
 
   // Extract details if flight request
   const extractedParams = isFlightRequest ? extractFlightParams(messageText) : null;
 
-  console.log(`isFlightRequest: ${isFlightRequest}`)
-  console.log(`extractedParams: ${JSON.stringify(extractedParams)}`)
-
   if (isFlightRequest) {
     const destIata = extractDestination(messageText);
     if (!destIata) {
-      return { reply: getRandomResponse("noDestIATA") }
+      return { reply: getRandomResponse("noDestIATA") };
     }
 
     if (!extractedParams) {
-      return { reply: getRandomResponse("noDestIATA") }
+      return { reply: getRandomResponse("noDestIATA") };
     }
   } else {
-    return { reply: getPredefinedResponse(messageText) }
+    const responsesArray = getPredefinedResponse(messageText);
+    let predefinedResponse = responsesArray[0]
+    const fallbackResponse = responsesArray[1]
+    console.log(predefinedResponse)
+    console.log(fallbackResponse)
+    if (!predefinedResponse) {
+      if (!chat) {
+        console.log("No gemini - using fallback response")
+        return { reply: fallbackResponse };
+      }
+    } else {
+      return { reply: predefinedResponse };
+    }
   }
 
   let fallbackFlightResults = null;
@@ -170,10 +177,6 @@ export async function handleChatMessage(messageText) {
     return {
       reply: formatFallbackFlightResponse(fallbackFlightResults, extractedParams)
     };
-  }
-
-  if (messageText.substring(0, 5) !== "[DEV]") {
-    return { reply: getRandomResponse() };
   }
 
   // Get current date for context

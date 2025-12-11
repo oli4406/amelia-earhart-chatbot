@@ -34,7 +34,7 @@ export function getPredefinedResponse(userText) {
       if (text.includes(trigger)) {
         // Found a match
         const responses = entry.responses
-        return responses[Math.floor(Math.random() * responses.length)];
+        return [responses[Math.floor(Math.random() * responses.length)], null]; // returns two values: response, fallback - allows handling of fallback in chatService
       }
     }
   }
@@ -42,10 +42,10 @@ export function getPredefinedResponse(userText) {
   // No matches
   if (predefinedResponses.unknownQuestion && predefinedResponses.unknownQuestion.length > 0) {
     const fallback = predefinedResponses.unknownQuestion
-    return fallback[Math.floor(Math.random() * fallback.length)];
+    return [null, fallback[Math.floor(Math.random() * fallback.length)]]; // return null first so chatService knows the interaction failed
   }
 
-  return getRandomResponse('genericError');
+  return [null, getRandomResponse('genericError')]; // return null first so chatService knows the interaction failed
 }
 
 export function getRandomResponse(category = 'genericError') {
