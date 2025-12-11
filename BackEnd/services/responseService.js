@@ -27,6 +27,11 @@ fs.readFile(responsesPath, (err, data) => {
     console.log('Predefined responses loaded successfully');
   } catch (parseError) {
     console.error('Error parsing predefined responses JSON:', parseError);
+    predefinedResponses = {
+      about: {},
+      unknownQuestion: ["That one's a bit foggy on the horizon. Mind trying again with a clearer heading?"],
+      genericError: ["Heavens to Betsy, there's been a spot of trouble with the radio signal! I can't quite get a clear reading on the flight data right now. The wire seems to be down, and I'll need to adjust the rigging before trying again."]
+    };
   }
 });
 
