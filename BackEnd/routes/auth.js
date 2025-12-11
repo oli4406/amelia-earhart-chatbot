@@ -7,8 +7,16 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import { body, validationResult } from 'express-validator';
+import rateLimit from 'express-rate-limit';
 
 const router = express.Router();
+
+const loginLimiter = rateLimit({
+  windowMs: 60_000,
+  max: 5,
+  message: "Too many login attempts, slow down."
+});
 
 /**
  * POST /api/auth/register
@@ -18,24 +26,36 @@ const router = express.Router();
  * @param {string} firstName
  * @param {string} lastName
  */
-router.post('/register', async (req, res) => {
-  try {
-    const { email, password, firstName, lastName } = req.body;
-    if (!email || !password || !firstName || !lastName) return res.status(400).send({ message: 'Please enter all fields to continue' });
-    const existingUser = await User.findOne({ email });
+router.post('/register',
+  [
+    body('email').isEmail(),
+    body('password').isLength({ min: 5 }),
+    body('firstName').isString(),
+    body('lastName').isString(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    try {
+      const { email, password, firstName, lastName } = req.body;
+      if (!email || !password || !firstName || !lastName) return res.status(400).send({ message: 'Please enter all fields to continue' });
+      const existingUser = await User.findOne({ email });
 
-    if (existingUser) return res.status(409).send({ message: 'User with that email already exists' });
-    const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(password, salt);
+      if (existingUser) return res.status(409).send({ message: 'User with that email already exists' });
+      const salt = await bcrypt.genSalt(10);
+      const passwordHash = await bcrypt.hash(password, salt);
 
-    const newUser = new User({ email, passwordHash, firstName, lastName });
-    await newUser.save();
-    res.status(201).send({ message: 'User registered successfully' });
-  } catch (error) {
-    console.error('Register error:', error);
-    res.status(500).send({ message: 'Error registering user' });
+      const newUser = new User({ email, passwordHash, firstName, lastName });
+      await newUser.save();
+      res.status(201).send({ message: 'User registered successfully' });
+    } catch (error) {
+      console.error('Register error:', error);
+      res.status(500).send({ message: 'Error registering user' });
+    }
   }
-});
+);
 
 /**
  * POST /api/auth/login
@@ -43,7 +63,7 @@ router.post('/register', async (req, res) => {
  * @param {string} email
  * @param {string} password
  */
-router.post('/login', async (req, res) => {
+router.post('/login', loginLimiter, async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) return res.status(400).send({ message: 'Email and password required' });
   try {
