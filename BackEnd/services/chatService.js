@@ -11,6 +11,7 @@ export function setGeminiClient(client) {
 // Check for flight search intent
 function isFlightQuery(text) {
   const triggers = ["flight", "flights", "fly", "plane", "ticket", "from", "go to", "fly to"];
+  console.log("isFlightQuery")
   return triggers.some(t => text.toLowerCase().includes(t));
 }
 
@@ -41,16 +42,19 @@ function extractFlightParams(text) {
     originIata = "LGW,LHR";
   }
 
-  const textWithoutOrigin = text.replace(fromMatch[1], " ")
-  console.log(textWithoutOrigin)
+  let textWithoutOrigin = text;
+  if (fromMatch) {
+    textWithoutOrigin = text.replace(fromMatch[1], " ");
+  }
   const destination = extractDestination(textWithoutOrigin);
-  if (!destination) return null, console.log("No destination");
+  if (!destination) {
+    console.log("No destination");
+    return null;
+  }
 
   const originList = originIata.split(',').map(s => s.trim().toUpperCase()).filter(Boolean);
   if (originList.includes(destination.toUpperCase())) {
-    console.log(originList)
-    console.log(destination)
-    console.log("Dest = origin")
+    console.log("Destination = origin");
     return null;
   }
 
@@ -134,9 +138,13 @@ export async function handleChatMessage(messageText) {
 
   // Intent detection
   const isFlightRequest = isFlightQuery(messageText);
+  console.log(isFlightRequest)
 
   // Extract details if flight request
   const extractedParams = isFlightRequest ? extractFlightParams(messageText) : null;
+
+  console.log(`isFlightRequest ${isFlightRequest}`)
+  console.log(chat)
 
   if (isFlightRequest) {
     const destIata = extractDestination(messageText);
@@ -151,8 +159,6 @@ export async function handleChatMessage(messageText) {
     const responsesArray = getPredefinedResponse(messageText);
     let predefinedResponse = responsesArray[0]
     const fallbackResponse = responsesArray[1]
-    console.log(predefinedResponse)
-    console.log(fallbackResponse)
     if (!predefinedResponse) {
       if (!chat) {
         console.log("No gemini - using fallback response")
