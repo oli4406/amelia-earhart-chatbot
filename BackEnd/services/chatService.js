@@ -157,6 +157,18 @@ function formatFallbackFlightResponse(flights, params) {
   return template;
 }
 
+function validateFlightCallArgs(args) {
+  if (!args || typeof args !== 'object') return null;
+
+  if (!args.origin || typeof args.origin !== 'string') return null;
+  if (!args.destination || typeof args.destination !== 'string') return null;
+  if (!args.flight_type || typeof args.flight_type !== 'string') return null;
+
+  if (args.departure_date && !/^\d{4}-\d{2}-\d{2}$/.test(args.departure_date)) return null;
+
+  return args;
+}
+
 /**
  * Central handler for all user messages.
  * Routes through predefined responses or Gemini, with flight intent handling.
@@ -251,18 +263,22 @@ export async function handleChatMessage(messageText) {
 
     let result;
     if (tool_call.name === 'searchFlights') {
-      const args = tool_call.args;
-      console.log(`Invoking searchFlights with arguments: ${JSON.stringify(args)}`);
+      const validArgs = validateFlightCallArgs(tool_call.args);
+      if (!validArgs) {
+        console.error("Invalid arguments supplied by Gemini")
+        return { reply: getRandomResponse() };
+      }
+      console.log(`Invoking searchFlights with arguments: ${JSON.stringify(validArgs)}`);
       result = await searchFlights(
-        args.origin,
-        args.destination,
-        args.departure_date,
-        args.flight_type,
-        args.return_date || '',
-        args.exclude_airlines || '',
-        args.include_airlines || '',
-        args.max_price || '',
-        args.sort_by || ''
+        validArgs.origin,
+        validArgs.destination,
+        validArgs.departure_date,
+        validArgs.flight_type,
+        validArgs.return_date || '',
+        validArgs.exclude_airlines || '',
+        validArgs.include_airlines || '',
+        validArgs.max_price || '',
+        validArgs.sort_by || ''
       );
     }
 
