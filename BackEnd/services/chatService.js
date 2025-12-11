@@ -165,7 +165,7 @@ export async function handleChatMessage(messageText) {
 
   let fallbackFlightResults = null;
 
-  if (isFlightRequest /*&& !chat*/) {
+  if (isFlightRequest && !chat) {
     console.log("Gemini unavailable, running fallback flight search...");
     fallbackFlightResults = await searchFlights(
       extractedParams.origin,
