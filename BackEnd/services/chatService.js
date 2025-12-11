@@ -1,5 +1,5 @@
 import { searchFlights } from './flightService.js';
-import { getRandomResponse } from './responseService.js';
+import { getRandomResponse, getPredefinedResponse } from './responseService.js';
 import { extractDestination, findAirportByPhrase } from './airportService.js';
 
 let chat = null;
@@ -10,7 +10,7 @@ export function setGeminiClient(client) {
 
 // Check for flight search intent
 function isFlightQuery(text) {
-  const triggers = ["flight", "flights", "fly", "plane", "ticket", "from", "to"];
+  const triggers = ["flight", "flights", "fly", "plane", "ticket", "from", "go to", "fly to"];
   return triggers.some(t => text.toLowerCase().includes(t));
 }
 
@@ -152,6 +152,8 @@ export async function handleChatMessage(messageText) {
     if (!extractedParams) {
       return { reply: getRandomResponse("noDestIATA") }
     }
+  } else {
+    return { reply: getPredefinedResponse(messageText) }
   }
 
   let fallbackFlightResults = null;

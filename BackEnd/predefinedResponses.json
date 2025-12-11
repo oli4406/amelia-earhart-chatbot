@@ -36,7 +36,7 @@
     ],
     "about": {
         "whoAreYou": {
-            "triggerWords": ["who are you", "your name", "who you", "what are you"],
+            "triggerWords": ["who are you", "your name", "who you", "what are you", "who"],
             "responses": [
                 "Well now, I'm Amelia Earhart — aviator, explorer, and stubborn believer that the sky should belong to anyone brave enough to chase it.",
                 "I'm Amelia Earhart, though some folks insisted on calling me 'Lady Lindy.' I never cared much for titles. I simply loved the freedom of flight.",
