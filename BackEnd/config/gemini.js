@@ -11,11 +11,11 @@ const searchFlightsFunctionDeclaration = {
   parameters: {
     type: SchemaType.OBJECT,
     properties: {
-      origin: { type: SchemaType.STRING, description: 'IATA code of the departure airport. You can specify multiple departure airports by separating them with a comma. For example, CDG,ORY,/m/04jpl. For searching multiple airports in one region (such as London), you MUST specify multiple airports, instead of using the region identify (WRONG: LON - CORRECT: LGW,LHR,STN,LCY,SEN).' },
-      destination: { type: SchemaType.STRING, description: 'IATA code of the arrival airport. You can specify multiple departure airports by separating them with a comma. For example, CDG,ORY,/m/04jpl' },
+      origin: { type: SchemaType.STRING, description: 'Optional IATA code of the departure airport. Defaults to "LGW,LHR" You can specify multiple departure airports by separating them with a comma. For example, CDG,ORY,/m/04jpl. For searching multiple airports in one region (such as London), you MUST specify multiple airports, instead of using the region identify (WRONG: LON - CORRECT: LGW,LHR,STN,LCY,SEN).' },
+      destination: { type: SchemaType.STRING, description: 'IATA code of the arrival airport. You can specify multiple departure airports by separating them with a comma. For example, CDG,ORY,/m/04jpl.' },
       departure_date: { type: SchemaType.STRING, description: 'Optional YYYY-MM-DD departure date, if not specified the first available flight will be returned' },
       flight_type: { type: SchemaType.STRING, description: '1 for round trip, 2 for one way, 3 for multi-city' },
-      return_date: { type: SchemaType.STRING, description: 'YYYY-MM-DD return date. Required if type is set to 1' },
+      return_date: { type: SchemaType.STRING, description: 'Optional YYYY-MM-DD return date. Required if type is set to 1' },
       exclude_airlines: { type: SchemaType.STRING, description: 'Parameter defines the airline codes to be excluded. Split multiple airlines with comma. It can\'t be used together with include_airlines. Each airline code should be a 2-character IATA code consisting of either two uppercase letters or one uppercase letter and one digit.' },
       include_airlines: { type: SchemaType.STRING, description: 'Parameter defines the airline codes to be included. Split multiple airlines with comma. It can\'t be used together with exclude_airlines. Each airline code should be a 2-character IATA code consisting of either two uppercase letters or one uppercase letter and one digit.' },
       max_price: { type: SchemaType.STRING, description: 'Parameter defines the maximum ticket price. Default to unlimited.' },
