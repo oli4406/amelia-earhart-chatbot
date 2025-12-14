@@ -40,6 +40,7 @@ export async function searchFlights(origin, destination, departure_date, flight_
       api_key: SERPAPI_KEY,
       type: flight_type,
       currency: "GBP",
+      departure_id: "LGW,LHR" // default to gatwick and heathrow if not given
     };
 
     if (origin) { request_data['departure_id'] = origin};
