@@ -157,13 +157,25 @@ function formatFallbackFlightResponse(flights, params) {
 }
 
 function validateFlightCallArgs(args) {
-  if (!args || typeof args !== 'object') return null;
+  if (!args || typeof args !== 'object') {
+    console.error("Args not type object");
+    return null;
+  }
 
-  if (!args.origin || typeof args.origin !== 'string') return null;
-  if (!args.destination || typeof args.destination !== 'string') return null;
-  if (!args.flight_type || typeof args.flight_type !== 'string') return null;
+  if (!args.destination || typeof args.destination !== 'string') {
+    console.error("Destination missing or not string");
+    return null;
+  }
 
-  if (args.departure_date && !/^\d{4}-\d{2}-\d{2}$/.test(args.departure_date)) return null;
+  if (!args.flight_type || typeof args.flight_type !== 'string') {
+    console.error("Flight type missing or not string");
+    return null;
+  }
+  
+  if (args.departure_date && !/^\d{4}-\d{2}-\d{2}$/.test(args.departure_date)) {
+    console.error("Date in wrong format")
+    return null;
+  }
 
   return args;
 }
@@ -183,6 +195,7 @@ export async function handleChatMessage(messageText) {
 
   // Intent detection
   const isFlightRequest = isFlightQuery(messageText);
+  isFlightRequest ? console.log("Flight Request detected") : null;
 
   // Extract details if flight request
   const extractedParams = isFlightRequest ? extractFlightParams(messageText) : null;
