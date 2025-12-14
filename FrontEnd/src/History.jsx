@@ -73,7 +73,7 @@ export default function History() {
                                 <div className="history-text">{h.text || JSON.stringify(h)}</div>
                             )}
                             <div className="history-actions">
-                                <button className="btn small" onClick={() => deleteEntry(h._id | h.id)}>
+                                <button className="btn small" onClick={() => deleteEntry(h._id || h.id)}>
                                     Delete
                                 </button>
                             </div>
