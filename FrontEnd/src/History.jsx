@@ -8,33 +8,78 @@ export default function History() {
 
     useEffect(() => {
         document.title = 'Chat History | Amelia Earhart Chatbot'
-        try {
-            const token = localStorage.getItem('authToken')
-            const hasUser = !!token
-            setLoggedIn(hasUser)
 
-            const raw = localStorage.getItem('chat_history')
-            setHistory(raw ? JSON.parse(raw) : [])
-        } catch (e) {
-            console.warn('Failed to initialize history/auth state', e)
+        const token = localStorage.getItem('authToken')
+        if (!token) {
             setLoggedIn(false)
             setHistory([])
+            return
         }
+
+        setLoggedIn(true)
+
+        fetch('http://localhost:3000/api/messages', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(res => {
+                if (!res.ok) throw new Error('Failed to fetch history')
+                return res.json()
+            })
+            .then(data => {
+                setHistory(data)
+            })
+            .catch(err => {
+                console.error('Failed to load history:', err)
+                setHistory([])
+            })
     }, [])
 
 
-    const clearHistory = () => {
-        localStorage.removeItem('chat_history')
-        setHistory([])
+    const clearHistory = async () => {
+        const token = localStorage.getItem('authToken')
+        if (!token) return
+
+        try {
+            const res = await fetch('http://localhost:3000/api/messages', {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+            })
+
+            if (!res.ok) {
+            throw new Error('Failed to clear history')
+            }
+
+            setHistory([])
+        } catch (err) {
+            console.error('Clear history failed:', err)
+        }
     }
 
-    const deleteEntry = (id) => {
-        const filtered = history.filter(
-            (h) => (h._id || h.id) !== id
-        )
 
-        setHistory(filtered)
-        localStorage.setItem('chat_history', JSON.stringify(filtered))
+    const deleteEntry = async (id) => {
+        const token = localStorage.getItem('authToken')
+        if (!token) return
+
+        try {
+            const res = await fetch(`http://localhost:3000/api/messages/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            if (!res.ok) {
+                throw new Error('Failed to delete message')
+            }
+
+            setHistory(prev => prev.filter(h => h._id !== id))
+        } catch (err) {
+            console.error('Delete failed:', err)
+        }
     }
 
     if (!loggedIn) {
@@ -73,7 +118,7 @@ export default function History() {
                                 <div className="history-text">{h.text || JSON.stringify(h)}</div>
                             )}
                             <div className="history-actions">
-                                <button className="btn small" onClick={() => deleteEntry(h._id || h.id)}>
+                                <button className="btn small" onClick={() => deleteEntry(h._id)}>
                                     Delete
                                 </button>
                             </div>

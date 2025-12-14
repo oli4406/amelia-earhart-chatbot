@@ -42,9 +42,13 @@ function ChatPage() {
   setIsTyping(true)
 
     try {
+      const token = localStorage.getItem('authToken')
+
       const res = await fetch('http://localhost:3000/api/chat/message', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json',
+          ...(token && { Authorization: `Bearer ${token}` })
+        },
         body: JSON.stringify({message: trimmed}),
       })
 
@@ -70,16 +74,20 @@ function ChatPage() {
 
       const botMsg = {id: nextId++, role: 'bot', text: serverText}
 
-      // persist the question/answer pair after receiving the server reply
-      if (isLoggedIn()) {
-        try {
-          const raw = localStorage.getItem('chat_history')
-          const arr = raw ? JSON.parse(raw) : []
-          arr.push({ id: userMsg.id, question: userMsg.text, answer: serverText, ts: Date.now() })
-          localStorage.setItem('chat_history', JSON.stringify(arr))
-        } catch (err) {
-          console.warn('Failed to save chat history', err)
-        }
+      if (token) {
+        fetch('http://localhost:3000/api/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            question: userMsg.text,
+            answer: serverText
+          })
+        }).catch(err => {
+          console.warn('Failed to persist chat history', err)
+        })
       }
 
       // hide typing indicator and append bot message

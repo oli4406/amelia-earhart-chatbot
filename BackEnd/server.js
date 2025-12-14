@@ -21,6 +21,7 @@ import { requestLogger } from './middleware/logger.js';
 import authRoutes from './routes/auth.js';
 import userRoutes from './routes/user.js';
 import chatRoutes from './routes/chat.js';
+import historyRoutes from './routes/history.js';
 
 const app = express();
 const port = Number(globalThis.process.env.PORT || 3000);
@@ -37,6 +38,7 @@ app.get('/debug/headers', (req, res) => res.json({ headers: req.headers }));
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/messages', historyRoutes)
 
 // Root endpoint
 app.get('/', (req, res) => {
