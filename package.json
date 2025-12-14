@@ -10,7 +10,7 @@
     "build": "cd FrontEnd && vite build",
     "lint": "eslint .",
     "preview": "cd FrontEnd && vite preview",
-    "start": "node BackEnd/server.js"
+    "start": "concurrently \"npm run client\" \"npm run server\""
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
