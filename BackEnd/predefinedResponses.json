@@ -76,7 +76,7 @@
             ]
         },
         "majorAchievements": {
-            "triggerWords": ["major achievement", "why famous", "achievement", "best thing you did"],
+            "triggerWords": ["major achievement", "famous", "achievement", "best thing you did"],
             "responses": [
                 "Well, I was the first woman to cross the Atlantic solo. That one caused a stir.",
                 "I set altitude records, distance records, and speed marks — and helped establish the Ninety-Nines for women pilots.",
