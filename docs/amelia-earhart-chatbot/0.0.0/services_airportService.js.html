@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: services/airportService.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: services/airportService.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Provides utilities for matching user text to airports.
+ * Uses airports.json for lookup by city, airport name, IATA, ICAO, or partial keywords.
+ * @module services/airportService
+ */
+import airportsJson from './airports.json' with { type: 'json' };
+
+const airportIndex = [];
+
+for (const icao in airportsJson) {
+    const a = airportsJson[icao];
+    airportIndex.push({
+        icao: a.icao.toLowerCase(),
+        iata: a.iata.toLowerCase(),
+        city: a.city.toLowerCase(),
+        name: a.name.toLowerCase(),
+        record: a
+    });
+}
+
+const STOPWORDS = new Set([
+  "to", "from", "the", "a", "an", "on", "at", "i", "help", "want", "would", "like", "you", "fly", "find", "flight", "flights", "go", "travel", "book", "me"
+]);
+
+function extractLocationWords(text) {
+  return text
+    .toLowerCase()
+    .split(/[^a-z0-9/]+/)
+    .filter(w => w.length > 1 &amp;&amp; !STOPWORDS.has(w));
+}
+
+/**
+ * Attempts to find an airport by a single word.
+ * @deprecated Use findAirportByPhrase(phrase).
+ * @param {string} phrase 
+ * @returns {Object|null} Airport record or null.
+ */
+function findAirport(matchWord) {
+    matchWord = matchWord.toLowerCase();
+
+    // IATA
+    let hit = airportIndex.find(a => a.iata.toLowerCase() === matchWord);
+    if (hit) return hit.record;
+
+    // ICAO
+    hit = airportIndex.find(a => a.icao.toLowerCase() === matchWord);
+    if (hit) return hit.record;
+
+    // KG-MID (if supplied by user)
+    if (matchWord.startsWith("/m/")) {
+        return { iata: matchWord };
+    }
+
+    // City match
+    hit = airportIndex.find(a => a.city.toLowerCase() === matchWord);
+    if (hit) return hit.record;
+
+    // Airport name
+    if ( !matchWord.includes("air") ) { // filter out words like airport
+        hit = airportIndex.find(a => a.name.toLowerCase().includes(matchWord));
+        if (hit) return hit.record;
+    }
+
+    return null;
+}
+
+/**
+ * Attempts to find an airport by a human-entered phrase.
+ * Handles full names, partial names, cities, IATA, ICAO.
+ * @param {string} phrase 
+ * @returns {Object|null} Airport record or null.
+ */
+export function findAirportByPhrase(phrase) {
+    if (!phrase || typeof phrase !== 'string') return null;
+    const p = phrase.toLowerCase().trim();
+
+    // IATA/ICAO
+    let hit = airportIndex.find(a => a.iata.toLowerCase() === p || a.icao.toLowerCase() === p);
+    if (hit) return hit.record;
+
+    // KG-MID (if supplied by user)
+    if (p.startsWith('/m/')) return { iata: p };
+
+    // City match
+    hit = airportIndex.find(a => a.city.toLowerCase() === p);
+    if (hit) return hit.record;
+
+    // partial name match
+    hit = airportIndex.find(a => a.name.toLowerCase().includes(p));
+    if (hit) return hit.record;
+
+    // try tokenized matching
+    const tokens = p.split(/\s+/).filter(Boolean);
+    // try longer token windows
+    for (let len = tokens.length; len > 0; len--) {
+        for (let start = 0; start + len &lt;= tokens.length; start++) {
+            const window = tokens.slice(start, start + len).join(' ');
+            // city
+            hit = airportIndex.find(a => a.city.toLowerCase() === window);
+            if (hit) return hit.record;
+            // name contains
+            hit = airportIndex.find(a => a.name.toLowerCase().includes(window));
+            if (hit) return hit.record;
+        }
+    }
+
+    // try single token matches
+    for (const t of tokens) {
+        hit = airportIndex.find(a => a.iata.toLowerCase() === t || a.icao.toLowerCase() === t || a.city.toLowerCase() === t || a.name.toLowerCase().includes(t));
+        if (hit) return hit.record;
+    }
+
+    return null;
+}
+
+/**
+ * Extracts the destination airport (IATA) from a user query.
+ * @param {string} text 
+ * @returns {string|null} IATA code
+ */
+export function extractDestination(text) {
+    const words = extractLocationWords(text);
+
+    for (const w of words) {
+        const airport = findAirport(w);
+        if (airport) {
+            return airport.iata
+        }
+    }
+
+    return null;
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-config_cors.html">config/cors</a></li><li><a href="module-config_database.html">config/database</a></li><li><a href="module-config_gemini.html">config/gemini</a></li><li><a href="module-routes_auth.html">routes/auth</a></li><li><a href="module-routes_chat.html">routes/chat</a></li><li><a href="module-routes_user.html">routes/user</a></li><li><a href="module-server.html">server</a></li><li><a href="module-services_airportService.html">services/airportService</a></li><li><a href="module-services_chatService.html">services/chatService</a></li><li><a href="module-services_responseService.html">services/responseService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#TokenVerificationSecret">TokenVerificationSecret</a></li><li><a href="global.html#requestLogger">requestLogger</a></li><li><a href="global.html#searchFlights">searchFlights</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Dec 14 2025 19:04:49 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
