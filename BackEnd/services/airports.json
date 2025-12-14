@@ -3618,13 +3618,6 @@
         "city": "Terrace",
         "country": "CA"
     },
-    "CYXU": {
-        "icao": "CYXU",
-        "iata": "YXU",
-        "name": "London Airport",
-        "city": "London",
-        "country": "CA"
-    },
     "CYXX": {
         "icao": "CYXX",
         "iata": "YXX",
@@ -6376,6 +6369,20 @@
         "city": "Liverpool",
         "country": "GB"
     },
+    "EGKK": {
+        "icao": "EGKK",
+        "iata": "LGW",
+        "name": "London Gatwick Airport",
+        "city": "London",
+        "country": "GB"
+    },
+    "EGLL": {
+        "icao": "EGLL",
+        "iata": "LHR",
+        "name": "London Heathrow Airport",
+        "city": "London",
+        "country": "GB"
+    },
     "EGGW": {
         "icao": "EGGW",
         "iata": "LTN",
@@ -6481,13 +6488,6 @@
         "city": "London",
         "country": "GB"
     },
-    "EGKK": {
-        "icao": "EGKK",
-        "iata": "LGW",
-        "name": "London Gatwick Airport",
-        "city": "London",
-        "country": "GB"
-    },
     "EGKR": {
         "icao": "EGKR",
         "iata": "KRH",
@@ -6514,13 +6514,6 @@
         "iata": "BBS",
         "name": "Blackbushe Airport",
         "city": "Yateley",
-        "country": "GB"
-    },
-    "EGLL": {
-        "icao": "EGLL",
-        "iata": "LHR",
-        "name": "London Heathrow Airport",
-        "city": "London",
         "country": "GB"
     },
     "EGMC": {
@@ -6795,6 +6788,13 @@
         "name": "London Stansted Airport",
         "city": "London",
         "country": "GB"
+    },
+    "CYXU": {
+        "icao": "CYXU",
+        "iata": "YXU",
+        "name": "London Airport",
+        "city": "London",
+        "country": "CA"
     },
     "EGSU": {
         "icao": "EGSU",
