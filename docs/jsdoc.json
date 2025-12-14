@@ -1,0 +1,4 @@
+{
+  "source": { "include": ["BackEnd/server.js","BackEnd/config","BackEnd/services","BackEnd/routes","BackEnd/models","BackEnd/middleware"], "includePattern": ".+\\.js(doc|x)?$" },
+  "opts": { "destination": "./docs", "recurse": true }
+}
