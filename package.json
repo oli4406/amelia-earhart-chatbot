@@ -11,8 +11,8 @@
     "lint": "eslint .",
     "preview": "cd FrontEnd && vite preview",
     "start": "concurrently \"npm run client\" \"npm run server\"",
-    "docs": "npx jsdoc -c docs/jsdoc.json",
-    "docs:serve": "npx http-server docs -o -p 8080"
+    "docs:generate": "npx jsdoc -c docs/jsdoc.json",
+    "docs:serve": "start http://localhost:8080 && npx http-server docs/amelia-earhart-chatbot/0.0.0 -p 8080"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
