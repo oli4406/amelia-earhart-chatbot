@@ -1,3 +1,6 @@
+/**
+ * @module components/TypingIndicator
+ */
 import React from "react";
 import "./TypingIndicator.css";
 

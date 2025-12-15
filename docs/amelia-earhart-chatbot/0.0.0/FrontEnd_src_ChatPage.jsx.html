@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: FrontEnd/src/ChatPage.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: FrontEnd/src/ChatPage.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module components/ChatPage
+ */
+import ChatField from './ChatField.jsx'
+import TypingIndicator from './TypingIndicator.jsx'
+import { useState, useRef, useEffect } from 'react'
+import './App.css'
+
+let nextId = 1
+
+/**
+ * ChatPage Component
+ * 
+ * A chat interface for interacting with an Amelia Earhart-themed chatbot.
+ * Manages conversation state, handles message submission, persists chat history
+ * for logged-in users, and provides real-time UI updates with typing indicators.
+ * 
+ * @component
+ * @returns {React.ReactElement} The chat page UI with messages window and input field
+ * 
+ * @description
+ * - Maintains a messages array storing user and bot messages with unique IDs
+ * - Handles async communication with backend API at /api/chat/message
+ * - Supports optional JWT authentication via localStorage authToken
+ * - Persists Q&amp;A pairs to server for logged-in users via /api/messages
+ * - Falls back to localStorage storage with a legacy hasUser flag for unlogged users
+ * - Shows transient save notices when history isn't persisted
+ * - Auto-scrolls to latest messages with smooth scrolling behavior
+ * - Displays typing indicator while awaiting bot response
+ * - Handles both JSON and plain text responses from server
+ * - Provides error recovery with user-friendly error messages
+ * - Sets browser document title to 'Chat | Amelia Earhart Chatbot'
+ * 
+ * @state {string} value - Current input field text
+ * @state {Array} messages - Array of message objects {id, role, text}
+ * @state {boolean} isTyping - Whether bot is currently composing a reply
+ * @state {boolean} saveNotice - Whether to show unsaved history notification
+ * 
+ * @throws {Error} Logs warnings for localStorage access failures and API errors
+ */
+function ChatPage() {
+  const [value, setValue] = useState('')
+  const [messages, setMessages] = useState([   /* messages are stored as an array*/
+    {id: nextId++, role: 'bot', text: "Hello, I'm Amelia Earhart. Want to talk about the skies?"}])
+  const containerRef = useRef(null)
+
+  const handleSubmit = async () => { // async function so we can await server response
+    const trimmed = value.trim()
+    if (!trimmed) return
+    const userMsg = {id: nextId++, role: 'user', text: trimmed}
+    // persist user input to localStorage history only if user is logged in
+    const isLoggedIn = () => {
+      try {
+        // accept either 'authToken' or legacy 'hasUser' flag
+        return !!localStorage.getItem('authToken') || !!localStorage.getItem('hasUser')
+      } catch (e) {
+        console.warn('Failed to access localStorage', e)
+        return false
+      }
+    }
+
+    // only show a transient notice if user is not logged in; actual save
+    // of the question+answer pair happens after we receive the bot reply
+    if (!isLoggedIn()) {
+      // show a transient notice to the user that history wasn't saved
+      setSaveNotice(true)
+      window.setTimeout(() => setSaveNotice(false), 3000)
+    }
+
+    // optimistic update: show user message immediately
+    setMessages((prev) => [...prev, userMsg])
+    setValue('')
+  // show typing indicator while we wait for the bot response
+  setIsTyping(true)
+
+    try {
+      const token = localStorage.getItem('authToken')
+
+      const res = await fetch('http://localhost:3000/api/chat/message', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json',
+          ...(token &amp;&amp; { Authorization: `Bearer ${token}` })
+        },
+        body: JSON.stringify({message: trimmed}),
+      })
+
+      // check for HTTP error
+
+      // try to parse JSON, fallback to plain text
+      let serverText
+      const contentType = res.headers.get('content-type') || ''
+      if (contentType.includes('application/json')) {
+        const data = await res.json()
+
+        if (data.status) {
+          if (data.status == 'searching') {
+            // TODO: server has sent message to say it is searching flight information
+            // Add followup typing bubble
+          }
+        }
+
+        serverText = data.reply ?? data.message ?? JSON.stringify(data)
+      } else {
+        serverText = await res.text()
+      }
+
+      const botMsg = {id: nextId++, role: 'bot', text: serverText}
+
+      if (token) {
+        fetch('http://localhost:3000/api/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            question: userMsg.text,
+            answer: serverText
+          })
+        }).catch(err => {
+          console.warn('Failed to persist chat history', err)
+        })
+      }
+
+      // hide typing indicator and append bot message
+      setIsTyping(false)
+      setMessages((prev) => [...prev, botMsg])
+    } catch (err) {
+      console.error('Error communicating with server:', err)
+      const botMsg = {id: nextId++, role: 'bot', text: 'Sorry, the response got lost somewhere over the Pacific Ocean.'}
+
+      // On error also save the Q/A pair (with the error text as answer) if logged in
+      if (isLoggedIn()) {
+        try {
+          const raw = localStorage.getItem('chat_history')
+          const arr = raw ? JSON.parse(raw) : []
+          arr.push({ id: userMsg.id, question: userMsg.text, answer: botMsg.text, ts: Date.now() })
+          localStorage.setItem('chat_history', JSON.stringify(arr))
+        } catch (err) {
+          console.warn('Failed to save chat history', err)
+        }
+      }
+
+      // hide typing indicator and show error message
+      setIsTyping(false)
+      setMessages((prev) => [...prev, botMsg])
+    }
+  }
+
+  useEffect(() => {
+    document.title = 'Chat | Amelia Earhart Chatbot';
+  }, []);
+
+  // auto-scroll to bottom when messages change
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    // smooth scroll to bottom so user sees the newest question
+    el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
+  }, [messages])
+
+  // keep track of whether the bot is currently composing a reply
+  const [isTyping, setIsTyping] = useState(false)
+
+  const [saveNotice, setSaveNotice] = useState(false)
+
+  return (
+    &lt;div className="App chat-container">
+      &lt;h1>Amelia Earhart Chatbot — Plan your flights!&lt;/h1>
+
+      {/* fixed-size messages window with horizontal (side) scrolling */}
+      &lt;div className="messages-wrapper">
+  &lt;div className="messages-window" ref={containerRef}>
+          {messages.length === 0 ? (
+            &lt;div className="empty-message">
+              &lt;em>No questions yet. Type something and press Send or Enter.&lt;/em>
+            &lt;/div>
+          ) : (
+            messages.map((m, i) => (
+              &lt;div key={i} className={`message-line ${m.role ?? (i % 2 === 0 ? 'bot' : 'user')}`}>  {/*alternating message styles for bot vs user*/}
+                &lt;div className="message-bubble">
+                  {m.text.split("\n").map((line, idx) => (
+                    &lt;p key={idx}>{line}&lt;/p>
+                  ))}
+                &lt;/div>
+              &lt;/div>
+            ))
+          )}
+          {/* show typing indicator as a bot bubble while waiting for reply */}
+          {isTyping &amp;&amp; (
+            &lt;div className={`message-line bot`}>
+              &lt;div className="message-bubble">
+                &lt;TypingIndicator />
+              &lt;/div>
+            &lt;/div>
+          )}
+        &lt;/div>
+      &lt;/div>
+
+      &lt;ChatField value={value} onChange={setValue} onSubmit={handleSubmit} />
+      {saveNotice &amp;&amp; &lt;p className="save-notice">Chat history not saved (you are not logged in)&lt;/p>}
+      &lt;p className="keyboard-tips">
+        &lt;strong>Keyboard tips:&lt;/strong> Press Enter to send, Shift+Enter for a new
+        line. Press Esc to close the Settings panel.
+      &lt;/p>
+    &lt;/div>
+  )
+}
+
+export default ChatPage</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_ChatField.html">components/ChatField</a></li><li><a href="module-components_ChatPage.html">components/ChatPage</a></li><li><a href="module-components_ForgotPassword.html">components/ForgotPassword</a></li><li><a href="module-components_History.html">components/History</a></li><li><a href="module-components_Home.html">components/Home</a></li><li><a href="module-components_Login.html">components/Login</a></li><li><a href="module-components_NavBar.html">components/NavBar</a></li><li><a href="module-components_Register.html">components/Register</a></li><li><a href="module-components_Settings.html">components/Settings</a></li><li><a href="module-components_TypingIndicator.html">components/TypingIndicator</a></li><li><a href="module-config_cors.html">config/cors</a></li><li><a href="module-config_database.html">config/database</a></li><li><a href="module-config_gemini.html">config/gemini</a></li><li><a href="module-main.html">main</a></li><li><a href="module-routes_auth.html">routes/auth</a></li><li><a href="module-routes_chat.html">routes/chat</a></li><li><a href="module-routes_history.html">routes/history</a></li><li><a href="module-routes_user.html">routes/user</a></li><li><a href="module-server.html">server</a></li><li><a href="module-services_airportService.html">services/airportService</a></li><li><a href="module-services_chatService.html">services/chatService</a></li><li><a href="module-services_responseService.html">services/responseService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#TokenVerificationSecret">TokenVerificationSecret</a></li><li><a href="global.html#requestLogger">requestLogger</a></li><li><a href="global.html#searchFlights">searchFlights</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Dec 15 2025 15:44:47 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

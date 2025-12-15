@@ -3,9 +3,9 @@
  * Validates Bearer tokens and attaches user payload to req.user.
  * @middleware
  * @function TokenVerificationSecret
- * @param {import('express').Request} req 
- * @param {import('express').Response} res 
- * @param {Function} next 
+ * @param {Object} req Express Request object
+ * @param {Object} res Express Response object
+ * @param {Function} next Express middleware next function
  * @returns {void}
  */
 import jwt from 'jsonwebtoken';

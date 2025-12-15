@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: BackEnd/services/responseService.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: BackEnd/services/responseService.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Loads predefined chatbot responses from predefinedResponses.json.
+ * Stores categories such as greetings, errors, unknown quieries, etc.
+ * Provides random and category-specific replies.
+ * @module services/responseService
+ */
+
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+let predefinedResponses = [];
+
+const responsesPath = path.join(__dirname, '..', 'predefinedResponses.json');
+console.log('Loading predefined responses from:', responsesPath);
+
+fs.readFile(responsesPath, (err, data) => {
+  if (err) {
+    console.error('Error loading predefined responses:', err);
+    return;
+  }
+  try {
+    predefinedResponses = JSON.parse(data)[0];
+    console.log('Predefined responses loaded successfully');
+  } catch (parseError) {
+    console.error('Error parsing predefined responses JSON:', parseError);
+    predefinedResponses = {
+      about: {},
+      unknownQuestion: ["That one's a bit foggy on the horizon. Mind trying again with a clearer heading?"],
+      genericError: ["Heavens to Betsy, there's been a spot of trouble with the radio signal! I can't quite get a clear reading on the flight data right now. The wire seems to be down, and I'll need to adjust the rigging before trying again."]
+    };
+  }
+});
+
+/**
+ * Returns a predefined response based on trigger words contained in user text.
+ * @param {string} userText - Raw user message.
+ * @returns {Array} Tuple of [response, fallback] where each is string or null
+ */
+export function getPredefinedResponse(userText) {
+  const text = userText.toLowerCase();
+
+  for (const category in predefinedResponses.about) {
+    const entry = predefinedResponses.about[category];
+
+    // Check each trigger phrase
+    for (const trigger of entry.triggerWords) {
+      if (text.includes(trigger)) {
+        // Found a match
+        const responses = entry.responses
+        return [responses[Math.floor(Math.random() * responses.length)], null]; // returns two values: response, fallback - allows handling of fallback in chatService
+      }
+    }
+  }
+
+  // No matches
+  if (predefinedResponses.unknownQuestion &amp;&amp; predefinedResponses.unknownQuestion.length > 0) {
+    const fallback = predefinedResponses.unknownQuestion
+    return [null, fallback[Math.floor(Math.random() * fallback.length)]]; // return null first so chatService knows the interaction failed
+  }
+
+  return [null, getRandomResponse('genericError')]; // return null first so chatService knows the interaction failed
+}
+
+/**
+ * Returns a random response from a given category, or a generic error fallback.
+ * @param {string} [category='genericError'] - Response category
+ * @returns {string} A random response string.
+ */
+export function getRandomResponse(category = 'genericError') {
+  let response = "Blast! We've run into some unexpected atmospheric interference - the air is too thick with static! I couldn't get the flight information to come through. Let's give it a minute for the fog to lift before attempting that approach again.";
+
+  if (predefinedResponses[category]) {
+    const rand = Math.floor(Math.random() * predefinedResponses[category].length)
+    response = predefinedResponses[category][rand];
+  }
+
+  return response;
+}
+
+export default getRandomResponse;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_ChatField.html">components/ChatField</a></li><li><a href="module-components_ChatPage.html">components/ChatPage</a></li><li><a href="module-components_ForgotPassword.html">components/ForgotPassword</a></li><li><a href="module-components_History.html">components/History</a></li><li><a href="module-components_Home.html">components/Home</a></li><li><a href="module-components_Login.html">components/Login</a></li><li><a href="module-components_NavBar.html">components/NavBar</a></li><li><a href="module-components_Register.html">components/Register</a></li><li><a href="module-components_Settings.html">components/Settings</a></li><li><a href="module-components_TypingIndicator.html">components/TypingIndicator</a></li><li><a href="module-config_cors.html">config/cors</a></li><li><a href="module-config_database.html">config/database</a></li><li><a href="module-config_gemini.html">config/gemini</a></li><li><a href="module-main.html">main</a></li><li><a href="module-routes_auth.html">routes/auth</a></li><li><a href="module-routes_chat.html">routes/chat</a></li><li><a href="module-routes_history.html">routes/history</a></li><li><a href="module-routes_user.html">routes/user</a></li><li><a href="module-server.html">server</a></li><li><a href="module-services_airportService.html">services/airportService</a></li><li><a href="module-services_chatService.html">services/chatService</a></li><li><a href="module-services_responseService.html">services/responseService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#TokenVerificationSecret">TokenVerificationSecret</a></li><li><a href="global.html#requestLogger">requestLogger</a></li><li><a href="global.html#searchFlights">searchFlights</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Dec 15 2025 15:44:47 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

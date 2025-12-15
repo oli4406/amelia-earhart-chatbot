@@ -38,7 +38,7 @@ fs.readFile(responsesPath, (err, data) => {
 /**
  * Returns a predefined response based on trigger words contained in user text.
  * @param {string} userText - Raw user message.
- * @returns {[string|null, string|null]} Tuple of (response, fallback).
+ * @returns {Array} Tuple of [response, fallback] where each is string or null
  */
 export function getPredefinedResponse(userText) {
   const text = userText.toLowerCase();

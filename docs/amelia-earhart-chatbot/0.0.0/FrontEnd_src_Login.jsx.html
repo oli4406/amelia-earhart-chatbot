@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: FrontEnd/src/Login.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: FrontEnd/src/Login.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module components/Login
+ */
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+
+/**
+ * Login component for user authentication
+ * 
+ * Handles user login with email and password validation.
+ * On successful login, stores authentication token in localStorage and navigates to chat page.
+ * 
+ * @component
+ * @returns {JSX.Element} Login form with email/password inputs and error handling
+ * 
+ * @example
+ * return &lt;Login />
+ * 
+ * @requires useState - React hook for state management
+ * @requires useEffect - React hook for side effects
+ * @requires useNavigate - React Router hook for navigation
+ * @requires Link - React Router component for navigation links
+ * 
+ * @state {string} email - User's email input
+ * @state {string} password - User's password input
+ * @state {string} error - Error message to display
+ * @state {boolean} loading - Loading state during login request
+ * 
+ * @function handleLogin - Validates input, sends login request to API, and handles response
+ * @param {Event} e - Form submit event
+ * @throws {Error} Catches and displays login errors to user
+ */
+export default function Login() {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        document.title = 'Login | Amelia Earhart Chatbot'
+    }, [])
+
+    // make handler async and only set loading once validation passes
+    const handleLogin = async (e) => {
+        e.preventDefault()
+        setError('')
+
+        if (!email || !password) {
+            setError('Please enter both email and password to continue')
+            return
+        }
+
+        if (email.indexOf('@') === -1) {
+            setError('Please enter a valid email address')
+            return
+        }
+
+        setLoading(true)
+        try {
+            // use Vite env var if provided, fallback to localhost:3000
+            const res = await fetch('http://localhost:3000/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            })
+
+            const data = await res.json().catch(() => ({}))
+
+            if (!res.ok) {
+                setError(data.message || 'Login failed. Please try again.')
+                return
+            }
+
+            if (data.token) {
+                localStorage.setItem('authToken', data.token)
+                window.dispatchEvent(new Event('authChanged'))
+                document.title = `Logged in — ${email}`
+                navigate('/chat')
+            } else {
+                setError('Login failed. Please try again.')
+            }
+        } catch (err) {
+            console.error('Login error:', err)
+            setError('An error occurred. Please try again later.')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    return (
+        &lt;div className="login-container">
+            &lt;h2>Login Here&lt;/h2>
+            &lt;form onSubmit={handleLogin} className="login-form">
+                &lt;div className="input-group">
+                    &lt;input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => { setEmail(e.target.value); if (error) setError('') }}
+                    />
+                &lt;/div>
+                &lt;div className="input-group">
+                    &lt;input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => { setPassword(e.target.value); if (error) setError('') }}
+                    />
+                &lt;/div>
+                &lt;div className="error-message">
+                    {error &amp;&amp; &lt;p className="error">{error}&lt;/p>}
+                &lt;/div>
+                &lt;button className="login-button" type="submit" disabled={loading}>
+                    {loading ? 'Performing Pre-Flight Checks…' : 'Embark'}
+                &lt;/button>
+            &lt;/form>
+            &lt;p className="forgotpassword-link">
+                &lt;Link to="/forgotpassword">Forgot Password&lt;/Link>
+            &lt;/p>
+            &lt;p className="register-link">
+                Don't have an account? &lt;Link to="/register">Register here&lt;/Link>
+            &lt;/p>
+        &lt;/div>
+    )
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_ChatField.html">components/ChatField</a></li><li><a href="module-components_ChatPage.html">components/ChatPage</a></li><li><a href="module-components_ForgotPassword.html">components/ForgotPassword</a></li><li><a href="module-components_History.html">components/History</a></li><li><a href="module-components_Home.html">components/Home</a></li><li><a href="module-components_Login.html">components/Login</a></li><li><a href="module-components_NavBar.html">components/NavBar</a></li><li><a href="module-components_Register.html">components/Register</a></li><li><a href="module-components_Settings.html">components/Settings</a></li><li><a href="module-components_TypingIndicator.html">components/TypingIndicator</a></li><li><a href="module-config_cors.html">config/cors</a></li><li><a href="module-config_database.html">config/database</a></li><li><a href="module-config_gemini.html">config/gemini</a></li><li><a href="module-main.html">main</a></li><li><a href="module-routes_auth.html">routes/auth</a></li><li><a href="module-routes_chat.html">routes/chat</a></li><li><a href="module-routes_history.html">routes/history</a></li><li><a href="module-routes_user.html">routes/user</a></li><li><a href="module-server.html">server</a></li><li><a href="module-services_airportService.html">services/airportService</a></li><li><a href="module-services_chatService.html">services/chatService</a></li><li><a href="module-services_responseService.html">services/responseService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#TokenVerificationSecret">TokenVerificationSecret</a></li><li><a href="global.html#requestLogger">requestLogger</a></li><li><a href="global.html#searchFlights">searchFlights</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Dec 15 2025 15:44:47 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

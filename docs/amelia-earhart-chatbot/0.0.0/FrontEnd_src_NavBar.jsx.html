@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: FrontEnd/src/NavBar.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: FrontEnd/src/NavBar.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module components/NavBar
+ */
+
+import {Link, useNavigate} from 'react-router-dom';
+import {useState, useEffect} from 'react'
+import Settings from './Settings.jsx';
+
+import homeIcon from './assets/dark_mode/home.png';
+import chatIcon from './assets/dark_mode/chat.png';
+import settingsIcon from './assets/dark_mode/settings.png';
+import accountIcon from './assets/dark_mode/account.png';
+import historyIcon from './assets/dark_mode/history.png';
+import homeIconLight from './assets/light_mode/home.png';
+import chatIconLight from './assets/light_mode/chat.png';
+import historyIconLight from './assets/light_mode/history.png';
+import homeIconContrast from './assets/high_contrast/home.png';
+import chatIconContrast from './assets/high_contrast/chat.png';
+import historyIconContrast from './assets/high_contrast/history.png';
+import settingsIconContrast from './assets/high_contrast/settings.png';
+import accountIconContrast from './assets/high_contrast/account.png';
+
+
+/**
+ * NavBar component - Main navigation bar for the Amelia Earhart chatbot application.
+ * 
+ * Manages:
+ * - Authentication state (login/logout)
+ * - Navigation menu collapse/expand
+ * - User accessibility settings (font size, theme, keyboard tips, message density)
+ * - Current user information display
+ * - Settings modal visibility
+ * 
+ * Features:
+ * - Responsive collapsible navigation menu
+ * - Cross-window localStorage synchronization for accessibility settings
+ * - Theme-aware icon selection (light, dark, high contrast)
+ * - Conditional navigation links based on authentication status
+ * - Persistent accessibility preferences
+ * 
+ * @component
+ * @returns {JSX.Element} Navigation bar with theme support and accessibility settings
+ * 
+ * @example
+ * return &lt;NavBar />
+ */
+export default function NavBar() {
+
+  const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem('authToken')));
+  const [collapsed, setCollapsed] = useState(true)
+  const toggleNav = () => {setCollapsed((prev) => !prev);};
+  const [showSettings, setShowSettings] = useState(false);
+  const [fontSize, setFontSize] = useState('100%');
+  const [theme, setTheme] = useState('dark');
+  const [showKeyboardTips, setShowKeyboardTips] = useState(false);
+  const [messageDensity, setMessageDensity] = useState('default');
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const onStorage = (e) => {
+      if (e.key === 'authToken') setLoggedIn(Boolean(e.newValue));
+    };
+        const onAuthChanged = () => {
+      setLoggedIn(Boolean(localStorage.getItem('authToken')));
+    };
+    window.addEventListener('storage', onStorage);
+    window.addEventListener('authChanged', onAuthChanged);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('authChanged', onAuthChanged);
+    };
+  }, []);
+
+  //handle logout button click
+  const handleLogoutClick = () => {
+    localStorage.removeItem('authToken');
+    setLoggedIn(false);
+    window.dispatchEvent(new Event('authChanged'));
+    navigate('/');
+  };
+
+  //handle login button click
+    const handleLoginClick = () => {
+    if (loggedIn) {
+      handleLogoutClick();
+      return;
+    }
+    navigate('/login');
+  };
+
+  //handle settings button click
+  const handleSettingsClick = () => {
+    setShowSettings(true);
+    };
+    useEffect(() => {
+    try {
+        const raw = localStorage.getItem('userAccessibilitySettings');
+        if (!raw) return;
+
+        const saved = JSON.parse(raw);
+        if (saved.fontSize) setFontSize(saved.fontSize);
+        if (saved.theme) setTheme(saved.theme);
+        if (typeof saved.showKeyboardTips === 'boolean') {
+            setShowKeyboardTips(saved.showKeyboardTips);
+        }
+        if (saved.messageDensity) setMessageDensity(saved.messageDensity);
+    } catch (e) {
+        console.warn('Failed to load accesibility settings', e);
+    }
+  }, []);
+
+  // helper to read accessibility settings and apply to state
+  const applyAccessibilitySettings = () => {
+    try {
+      const raw = localStorage.getItem('userAccessibilitySettings');
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      if (saved.fontSize) setFontSize(saved.fontSize);
+      if (saved.theme) setTheme(saved.theme);
+      if (typeof saved.showKeyboardTips === 'boolean') setShowKeyboardTips(saved.showKeyboardTips);
+      if (saved.messageDensity) setMessageDensity(saved.messageDensity);
+    } catch (e) {
+      console.warn('Failed to apply accessibility settings from storage', e);
+    }
+  };
+
+  useEffect(() => {
+    // listen for Settings component save events inside same window
+    const onAccessibilityChanged = () => applyAccessibilitySettings();
+    window.addEventListener('accessibilitySettingsChanged', onAccessibilityChanged);
+    // also listen for cross-window localStorage changes
+    const onStorage = (e) => {
+      if (e.key === 'userAccessibilitySettings') applyAccessibilitySettings();
+    };
+    window.addEventListener('storage', onStorage);
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      window.removeEventListener('accessibilitySettingsChanged', onAccessibilityChanged);
+    };
+  }, []);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.fontSize = fontSize;
+    root.dataset.theme = theme;
+    root.dataset.showKeyboardTips = showKeyboardTips ? 'true' : 'false';
+    root.dataset.messageDensity = messageDensity;
+  }, [fontSize, theme, showKeyboardTips, messageDensity]);
+
+  useEffect(() => {
+    if (!loggedIn) {
+      setUser(null);
+      return;
+    }
+
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+          setUser(null);
+          return;
+        }
+        const res = await fetch('http://localhost:3000/api/user',{
+          method: 'GET',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) {
+          setUser(null);
+          return;
+        }
+        const data = await res.json();
+        setUser({ firstName: data.firstName, lastName: data.lastName, email: data.email });
+      } catch (e) {
+        console.error('Failed to fetch user data', e);
+        setUser(null);
+      }
+    };
+
+    fetchUser();
+  }, [loggedIn]);
+
+  useEffect(() => {
+    if (!loggedIn) return;
+
+    const settings = { fontSize, theme, showKeyboardTips, messageDensity};
+
+    try {
+        localStorage.setItem('userAccessibilitySettings', JSON.stringify(settings));
+    } catch (e) {
+        console.warn('Failed to save accessibility settings', e);
+    }
+  }, [loggedIn, fontSize, theme, showKeyboardTips, messageDensity]);
+
+    return (
+      &lt;>
+        {/* displays first and last name when logged in */}
+        &lt;div className="page-user-name">{user ? `Welcome, ${user.firstName} ${user.lastName}` : ''}&lt;/div>
+        &lt;nav className={`nav ${collapsed ? 'nav--collapsed' : ''}`}>
+          &lt;button
+            className={`nav-toggle ${collapsed ? 'SidebarBtn-Collapsed' : 'SidebarBtn-Expanded'}`}
+            onClick={toggleNav}
+            title={collapsed ? 'Expand menu' : 'Collapse menu'}
+            aria-label={collapsed ? 'Expand menu' : 'Collapse menu'}
+          >
+            &lt;span className="visually-hidden">{collapsed ? 'Expand' : 'Collapse'}&lt;/span>
+          &lt;/button>
+          &lt;div className="nav-inner">
+            &lt;Link className="nav-link" title="Home" to="/">
+              &lt;span className="nav-icon">&lt;img className="icon" src={theme === 'light' ? homeIconLight : theme === 'contrast' ? homeIconContrast : homeIcon} alt="Home"/>&lt;/span>
+              &lt;span className="nav-text">Hanger&lt;/span>
+            &lt;/Link>
+            &lt;Link className="nav-link" title="Chat" to="/chat">
+              &lt;span className="nav-icon">&lt;img className="icon" src={theme === 'light' ? chatIconLight : theme === 'contrast' ? chatIconContrast : chatIcon} alt="Chat"/>&lt;/span>
+              &lt;span className="nav-text">Communications&lt;/span>
+            &lt;/Link>
+            {loggedIn &amp;&amp; (
+              &lt;Link className="nav-link" title="History" to="/history">
+                &lt;span className="nav-icon">&lt;img className="icon" src={theme === 'light' ? historyIconLight : theme === 'contrast' ? historyIconContrast : historyIcon} alt="History"/>&lt;/span>
+                &lt;span className="nav-text">Flight Log&lt;/span>
+              &lt;/Link>
+            )}
+
+            &lt;div className='navButtons'>
+              &lt;button className="nav-btn" onClick={handleSettingsClick} title="Settings">
+                &lt;span className="nav-icon">&lt;img className="icon" src={theme === 'contrast' ? settingsIconContrast : settingsIcon} alt="Settings"/>&lt;/span>
+                &lt;span className="nav-text">Flight Systems&lt;/span>
+              &lt;/button>
+              &lt;button className="nav-btn" onClick={loggedIn ? handleLogoutClick : handleLoginClick} title={loggedIn ? 'Log out' : 'Login/Signup'}>
+                &lt;span className="nav-icon">&lt;img className="icon" src={theme === 'contrast' ? accountIconContrast : accountIcon} alt="Account"/>&lt;/span>
+                &lt;span className="nav-text">{loggedIn ? 'Disembark' : 'Pilot Login'}&lt;/span>
+              &lt;/button>
+            &lt;/div>
+          &lt;/div>
+        &lt;/nav>
+  
+        {showSettings &amp;&amp; &lt;Settings visible={showSettings} onClose={() => setShowSettings(false)} />}
+      &lt;/>
+    );
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_ChatField.html">components/ChatField</a></li><li><a href="module-components_ChatPage.html">components/ChatPage</a></li><li><a href="module-components_ForgotPassword.html">components/ForgotPassword</a></li><li><a href="module-components_History.html">components/History</a></li><li><a href="module-components_Home.html">components/Home</a></li><li><a href="module-components_Login.html">components/Login</a></li><li><a href="module-components_NavBar.html">components/NavBar</a></li><li><a href="module-components_Register.html">components/Register</a></li><li><a href="module-components_Settings.html">components/Settings</a></li><li><a href="module-components_TypingIndicator.html">components/TypingIndicator</a></li><li><a href="module-config_cors.html">config/cors</a></li><li><a href="module-config_database.html">config/database</a></li><li><a href="module-config_gemini.html">config/gemini</a></li><li><a href="module-main.html">main</a></li><li><a href="module-routes_auth.html">routes/auth</a></li><li><a href="module-routes_chat.html">routes/chat</a></li><li><a href="module-routes_history.html">routes/history</a></li><li><a href="module-routes_user.html">routes/user</a></li><li><a href="module-server.html">server</a></li><li><a href="module-services_airportService.html">services/airportService</a></li><li><a href="module-services_chatService.html">services/chatService</a></li><li><a href="module-services_responseService.html">services/responseService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#TokenVerificationSecret">TokenVerificationSecret</a></li><li><a href="global.html#requestLogger">requestLogger</a></li><li><a href="global.html#searchFlights">searchFlights</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Dec 15 2025 15:44:47 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -186,7 +186,7 @@ function validateFlightCallArgs(args) {
  * @async
  * @function handleChatMessage
  * @param {string} messageText - Raw user message.
- * @returns {Promise<{reply: string, status?: string}>}
+ * @returns {Promise<Object>} Promise resolving to {reply: string, status: string}
  */
 export async function handleChatMessage(messageText) {
   if (!messageText || typeof messageText !== 'string') {

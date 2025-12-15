@@ -1,8 +1,9 @@
 /**
  * Logs incoming HTTP requests
- * @param {import('express').Request} req 
- * @param {import('express').Response} res 
- * @param {Function} next 
+ * @function requestLogger
+ * @param {Object} req Express Request object
+ * @param {Object} res Express Response object
+ * @param {Function} next Express middleware next function
  */
 export const requestLogger = (req, res, next) => {
   console.log(new Date().toISOString(), req.method, req.url);

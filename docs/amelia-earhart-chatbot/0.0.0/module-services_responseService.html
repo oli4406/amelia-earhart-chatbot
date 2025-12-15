@@ -38,7 +38,9 @@
     <div class="container-overview">
     
         
-            <div class="description">Loads predefined chatbot responses from predefinedResponses.json.Stores categories such as greetings, errors, unknown quieries, etc.Provides random and category-specific replies.</div>
+            <div class="description"><p>Loads predefined chatbot responses from predefinedResponses.json.
+Stores categories such as greetings, errors, unknown quieries, etc.
+Provides random and category-specific replies.</p></div>
         
 
         
@@ -87,7 +89,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_responseService.js.html">services/responseService.js</a>, <a href="services_responseService.js.html#line1">line 1</a>
+        <a href="BackEnd_services_responseService.js.html">BackEnd/services/responseService.js</a>, <a href="BackEnd_services_responseService.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -144,7 +146,7 @@
     
 
     
-    <h4 class="name" id=".getPredefinedResponse"><span class="type-signature">(static) </span>getPredefinedResponse<span class="signature">(userText)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".getPredefinedResponse"><span class="type-signature">(static) </span>getPredefinedResponse<span class="signature">(userText)</span><span class="type-signature"> &rarr; {Array}</span></h4>
     
 
     
@@ -152,7 +154,7 @@
 
 
 <div class="description">
-    Returns a predefined response based on trigger words contained in user text.
+    <p>Returns a predefined response based on trigger words contained in user text.</p>
 </div>
 
 
@@ -204,7 +206,7 @@
 
             
 
-            <td class="description last">Raw user message.</td>
+            <td class="description last"><p>Raw user message.</p></td>
         </tr>
 
     
@@ -245,7 +247,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_responseService.js.html">services/responseService.js</a>, <a href="services_responseService.js.html#line43">line 43</a>
+        <a href="BackEnd_services_responseService.js.html">BackEnd/services/responseService.js</a>, <a href="BackEnd_services_responseService.js.html#line43">line 43</a>
     </li></ul></dd>
     
 
@@ -273,7 +275,23 @@
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    <p>Tuple of [response, fallback] where each is string or null</p>
+</div>
 
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+
+
+    </dd>
+</dl>
 
     
 
@@ -295,7 +313,7 @@
 
 
 <div class="description">
-    Returns a random response from a given category, or a generic error fallback.
+    <p>Returns a random response from a given category, or a generic error fallback.</p>
 </div>
 
 
@@ -367,7 +385,7 @@
                 </td>
             
 
-            <td class="description last">Response category</td>
+            <td class="description last"><p>Response category</p></td>
         </tr>
 
     
@@ -408,7 +426,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_responseService.js.html">services/responseService.js</a>, <a href="services_responseService.js.html#line73">line 73</a>
+        <a href="BackEnd_services_responseService.js.html">BackEnd/services/responseService.js</a>, <a href="BackEnd_services_responseService.js.html#line73">line 73</a>
     </li></ul></dd>
     
 
@@ -437,7 +455,7 @@
 
         
 <div class="param-desc">
-    A random response string.
+    <p>A random response string.</p>
 </div>
 
 
@@ -476,13 +494,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-config_cors.html">config/cors</a></li><li><a href="module-config_database.html">config/database</a></li><li><a href="module-config_gemini.html">config/gemini</a></li><li><a href="module-routes_auth.html">routes/auth</a></li><li><a href="module-routes_chat.html">routes/chat</a></li><li><a href="module-routes_history.html">routes/history</a></li><li><a href="module-routes_user.html">routes/user</a></li><li><a href="module-server.html">server</a></li><li><a href="module-services_airportService.html">services/airportService</a></li><li><a href="module-services_chatService.html">services/chatService</a></li><li><a href="module-services_responseService.html">services/responseService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#TokenVerificationSecret">TokenVerificationSecret</a></li><li><a href="global.html#requestLogger">requestLogger</a></li><li><a href="global.html#searchFlights">searchFlights</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_ChatField.html">components/ChatField</a></li><li><a href="module-components_ChatPage.html">components/ChatPage</a></li><li><a href="module-components_ForgotPassword.html">components/ForgotPassword</a></li><li><a href="module-components_History.html">components/History</a></li><li><a href="module-components_Home.html">components/Home</a></li><li><a href="module-components_Login.html">components/Login</a></li><li><a href="module-components_NavBar.html">components/NavBar</a></li><li><a href="module-components_Register.html">components/Register</a></li><li><a href="module-components_Settings.html">components/Settings</a></li><li><a href="module-components_TypingIndicator.html">components/TypingIndicator</a></li><li><a href="module-config_cors.html">config/cors</a></li><li><a href="module-config_database.html">config/database</a></li><li><a href="module-config_gemini.html">config/gemini</a></li><li><a href="module-main.html">main</a></li><li><a href="module-routes_auth.html">routes/auth</a></li><li><a href="module-routes_chat.html">routes/chat</a></li><li><a href="module-routes_history.html">routes/history</a></li><li><a href="module-routes_user.html">routes/user</a></li><li><a href="module-server.html">server</a></li><li><a href="module-services_airportService.html">services/airportService</a></li><li><a href="module-services_chatService.html">services/chatService</a></li><li><a href="module-services_responseService.html">services/responseService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#TokenVerificationSecret">TokenVerificationSecret</a></li><li><a href="global.html#requestLogger">requestLogger</a></li><li><a href="global.html#searchFlights">searchFlights</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Dec 14 2025 20:45:29 GMT+0000 (Greenwich Mean Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Dec 15 2025 15:44:47 GMT+0000 (Greenwich Mean Time)
 </footer>
 
 <script> prettyPrint(); </script>

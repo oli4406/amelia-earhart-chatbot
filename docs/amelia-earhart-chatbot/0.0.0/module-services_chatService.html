@@ -38,7 +38,9 @@
     <div class="container-overview">
     
         
-            <div class="description">Chat orchestration layer.Handles intent detection, fallback responses, flight parameter extraction,Gemini client interaction, and flight-search tool execution.</div>
+            <div class="description"><p>Chat orchestration layer.
+Handles intent detection, fallback responses, flight parameter extraction,
+Gemini client interaction, and flight-search tool execution.</p></div>
         
 
         
@@ -87,7 +89,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_chatService.js.html">services/chatService.js</a>, <a href="services_chatService.js.html#line1">line 1</a>
+        <a href="BackEnd_services_chatService.js.html">BackEnd/services/chatService.js</a>, <a href="BackEnd_services_chatService.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -152,7 +154,7 @@
 
 
 <div class="description">
-    Injects the Gemini chat client into the service.
+    <p>Injects the Gemini chat client into the service.</p>
 </div>
 
 
@@ -204,7 +206,7 @@
 
             
 
-            <td class="description last">Gemini chat model instance.</td>
+            <td class="description last"><p>Gemini chat model instance.</p></td>
         </tr>
 
     
@@ -245,7 +247,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_chatService.js.html">services/chatService.js</a>, <a href="services_chatService.js.html#line18">line 18</a>
+        <a href="BackEnd_services_chatService.js.html">BackEnd/services/chatService.js</a>, <a href="BackEnd_services_chatService.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -289,7 +291,7 @@
 
 
 <div class="description">
-    Attempts to extract origin, destination, and date fields from natural language text.
+    <p>Attempts to extract origin, destination, and date fields from natural language text.</p>
 </div>
 
 
@@ -382,7 +384,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_chatService.js.html">services/chatService.js</a>, <a href="services_chatService.js.html#line37">line 37</a>
+        <a href="BackEnd_services_chatService.js.html">BackEnd/services/chatService.js</a>, <a href="BackEnd_services_chatService.js.html#line37">line 37</a>
     </li></ul></dd>
     
 
@@ -411,7 +413,7 @@
 
         
 <div class="param-desc">
-    Parsed { origin, destination, departure_date, flight_type }
+    <p>Parsed { origin, destination, departure_date, flight_type }</p>
 </div>
 
 
@@ -451,7 +453,8 @@
 
 
 <div class="description">
-    Formats a fallback text response when Gemini is unavailable.Includes flight results when present.
+    <p>Formats a fallback text response when Gemini is unavailable.
+Includes flight results when present.</p>
 </div>
 
 
@@ -503,7 +506,7 @@
 
             
 
-            <td class="description last">Array of flight objects from SerpAPI.</td>
+            <td class="description last"><p>Array of flight objects from SerpAPI.</p></td>
         </tr>
 
     
@@ -526,7 +529,7 @@
 
             
 
-            <td class="description last">Extracted flight parameters.</td>
+            <td class="description last"><p>Extracted flight parameters.</p></td>
         </tr>
 
     
@@ -567,7 +570,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_chatService.js.html">services/chatService.js</a>, <a href="services_chatService.js.html#line100">line 100</a>
+        <a href="BackEnd_services_chatService.js.html">BackEnd/services/chatService.js</a>, <a href="BackEnd_services_chatService.js.html#line100">line 100</a>
     </li></ul></dd>
     
 
@@ -621,7 +624,7 @@
     
 
     
-    <h4 class="name" id="~handleChatMessage"><span class="type-signature">(async, inner) </span>handleChatMessage<span class="signature">(messageText)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~handleChatMessage"><span class="type-signature">(async, inner) </span>handleChatMessage<span class="signature">(messageText)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
     
 
     
@@ -629,7 +632,8 @@
 
 
 <div class="description">
-    Central handler for all user messages.Routes through predefined responses or Gemini, with flight intent handling.
+    <p>Central handler for all user messages.
+Routes through predefined responses or Gemini, with flight intent handling.</p>
 </div>
 
 
@@ -681,7 +685,7 @@
 
             
 
-            <td class="description last">Raw user message.</td>
+            <td class="description last"><p>Raw user message.</p></td>
         </tr>
 
     
@@ -722,7 +726,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_chatService.js.html">services/chatService.js</a>, <a href="services_chatService.js.html#line183">line 183</a>
+        <a href="BackEnd_services_chatService.js.html">BackEnd/services/chatService.js</a>, <a href="BackEnd_services_chatService.js.html#line183">line 183</a>
     </li></ul></dd>
     
 
@@ -750,7 +754,23 @@
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    <p>Promise resolving to {reply: string, status: string}</p>
+</div>
 
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;Object></span>
+
+
+    </dd>
+</dl>
 
     
 
@@ -772,7 +792,7 @@
 
 
 <div class="description">
-    Checks whether a message appears to be a flight-related query.
+    <p>Checks whether a message appears to be a flight-related query.</p>
 </div>
 
 
@@ -865,7 +885,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="services_chatService.js.html">services/chatService.js</a>, <a href="services_chatService.js.html#line27">line 27</a>
+        <a href="BackEnd_services_chatService.js.html">BackEnd/services/chatService.js</a>, <a href="BackEnd_services_chatService.js.html#line27">line 27</a>
     </li></ul></dd>
     
 
@@ -929,13 +949,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-config_cors.html">config/cors</a></li><li><a href="module-config_database.html">config/database</a></li><li><a href="module-config_gemini.html">config/gemini</a></li><li><a href="module-routes_auth.html">routes/auth</a></li><li><a href="module-routes_chat.html">routes/chat</a></li><li><a href="module-routes_history.html">routes/history</a></li><li><a href="module-routes_user.html">routes/user</a></li><li><a href="module-server.html">server</a></li><li><a href="module-services_airportService.html">services/airportService</a></li><li><a href="module-services_chatService.html">services/chatService</a></li><li><a href="module-services_responseService.html">services/responseService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#TokenVerificationSecret">TokenVerificationSecret</a></li><li><a href="global.html#requestLogger">requestLogger</a></li><li><a href="global.html#searchFlights">searchFlights</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_ChatField.html">components/ChatField</a></li><li><a href="module-components_ChatPage.html">components/ChatPage</a></li><li><a href="module-components_ForgotPassword.html">components/ForgotPassword</a></li><li><a href="module-components_History.html">components/History</a></li><li><a href="module-components_Home.html">components/Home</a></li><li><a href="module-components_Login.html">components/Login</a></li><li><a href="module-components_NavBar.html">components/NavBar</a></li><li><a href="module-components_Register.html">components/Register</a></li><li><a href="module-components_Settings.html">components/Settings</a></li><li><a href="module-components_TypingIndicator.html">components/TypingIndicator</a></li><li><a href="module-config_cors.html">config/cors</a></li><li><a href="module-config_database.html">config/database</a></li><li><a href="module-config_gemini.html">config/gemini</a></li><li><a href="module-main.html">main</a></li><li><a href="module-routes_auth.html">routes/auth</a></li><li><a href="module-routes_chat.html">routes/chat</a></li><li><a href="module-routes_history.html">routes/history</a></li><li><a href="module-routes_user.html">routes/user</a></li><li><a href="module-server.html">server</a></li><li><a href="module-services_airportService.html">services/airportService</a></li><li><a href="module-services_chatService.html">services/chatService</a></li><li><a href="module-services_responseService.html">services/responseService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#TokenVerificationSecret">TokenVerificationSecret</a></li><li><a href="global.html#requestLogger">requestLogger</a></li><li><a href="global.html#searchFlights">searchFlights</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Dec 14 2025 20:45:29 GMT+0000 (Greenwich Mean Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Dec 15 2025 15:44:47 GMT+0000 (Greenwich Mean Time)
 </footer>
 
 <script> prettyPrint(); </script>

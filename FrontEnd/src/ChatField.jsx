@@ -1,4 +1,8 @@
 /**
+ * @module components/ChatField
+ */
+
+/**
  * ChatField component for user input in the chat interface
  * @component
  * @param {Object} props - Component props

@@ -23,7 +23,7 @@ import TokenVerificationSecret from '../middleware/auth.js';
 /**
  * Express router instance for chat history endpoints.
  *
- * @type {import('express').Router}
+ * @type {Object} Express Router
  */
 const router = express.Router();
 

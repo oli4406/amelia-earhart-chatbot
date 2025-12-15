@@ -1,4 +1,6 @@
-
+/**
+ * @module components/ChatPage
+ */
 import ChatField from './ChatField.jsx'
 import TypingIndicator from './TypingIndicator.jsx'
 import { useState, useRef, useEffect } from 'react'

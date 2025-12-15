@@ -1,3 +1,7 @@
+/**
+ * @module components/NavBar
+ */
+
 import {Link, useNavigate} from 'react-router-dom';
 import {useState, useEffect} from 'react'
 import Settings from './Settings.jsx';

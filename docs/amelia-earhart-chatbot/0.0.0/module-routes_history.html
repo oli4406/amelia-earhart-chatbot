@@ -38,7 +38,18 @@
     <div class="container-overview">
     
         
-            <div class="description">Chat history routes.Provides authenticated REST endpoints for creating, retrieving,and deleting chat message history belonging to the currentlyauthenticated user.All routes in this module:- Require a valid JWT Bearer token- Scope database operations to `req.user.id`- Never allow cross-user accessMounted at:  /api/messages</div>
+            <div class="description"><p>Chat history routes.</p>
+<p>Provides authenticated REST endpoints for creating, retrieving,
+and deleting chat message history belonging to the currently
+authenticated user.</p>
+<p>All routes in this module:</p>
+<ul>
+<li>Require a valid JWT Bearer token</li>
+<li>Scope database operations to <code>req.user.id</code></li>
+<li>Never allow cross-user access</li>
+</ul>
+<p>Mounted at:
+/api/messages</p></div>
         
 
         
@@ -87,7 +98,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_history.js.html">routes/history.js</a>, <a href="routes_history.js.html#line1">line 1</a>
+        <a href="BackEnd_routes_history.js.html">BackEnd/routes/history.js</a>, <a href="BackEnd_routes_history.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
@@ -138,16 +149,26 @@
 
         
             
-<h4 class="name" id="~router"><span class="type-signature">(inner, constant) </span>router<span class="type-signature"></span></h4>
+<h4 class="name" id="~router"><span class="type-signature">(inner, constant) </span>router<span class="type-signature"> :Object</span></h4>
 
 
 
 
 <div class="description">
-    Express router instance for chat history endpoints.
+    <p>Express router instance for chat history endpoints.</p>
 </div>
 
 
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
 
 
 
@@ -182,7 +203,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="routes_history.js.html">routes/history.js</a>, <a href="routes_history.js.html#line28">line 28</a>
+        <a href="BackEnd_routes_history.js.html">BackEnd/routes/history.js</a>, <a href="BackEnd_routes_history.js.html#line28">line 28</a>
     </li></ul></dd>
     
 
@@ -216,13 +237,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-config_cors.html">config/cors</a></li><li><a href="module-config_database.html">config/database</a></li><li><a href="module-config_gemini.html">config/gemini</a></li><li><a href="module-routes_auth.html">routes/auth</a></li><li><a href="module-routes_chat.html">routes/chat</a></li><li><a href="module-routes_history.html">routes/history</a></li><li><a href="module-routes_user.html">routes/user</a></li><li><a href="module-server.html">server</a></li><li><a href="module-services_airportService.html">services/airportService</a></li><li><a href="module-services_chatService.html">services/chatService</a></li><li><a href="module-services_responseService.html">services/responseService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#TokenVerificationSecret">TokenVerificationSecret</a></li><li><a href="global.html#requestLogger">requestLogger</a></li><li><a href="global.html#searchFlights">searchFlights</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_ChatField.html">components/ChatField</a></li><li><a href="module-components_ChatPage.html">components/ChatPage</a></li><li><a href="module-components_ForgotPassword.html">components/ForgotPassword</a></li><li><a href="module-components_History.html">components/History</a></li><li><a href="module-components_Home.html">components/Home</a></li><li><a href="module-components_Login.html">components/Login</a></li><li><a href="module-components_NavBar.html">components/NavBar</a></li><li><a href="module-components_Register.html">components/Register</a></li><li><a href="module-components_Settings.html">components/Settings</a></li><li><a href="module-components_TypingIndicator.html">components/TypingIndicator</a></li><li><a href="module-config_cors.html">config/cors</a></li><li><a href="module-config_database.html">config/database</a></li><li><a href="module-config_gemini.html">config/gemini</a></li><li><a href="module-main.html">main</a></li><li><a href="module-routes_auth.html">routes/auth</a></li><li><a href="module-routes_chat.html">routes/chat</a></li><li><a href="module-routes_history.html">routes/history</a></li><li><a href="module-routes_user.html">routes/user</a></li><li><a href="module-server.html">server</a></li><li><a href="module-services_airportService.html">services/airportService</a></li><li><a href="module-services_chatService.html">services/chatService</a></li><li><a href="module-services_responseService.html">services/responseService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#TokenVerificationSecret">TokenVerificationSecret</a></li><li><a href="global.html#requestLogger">requestLogger</a></li><li><a href="global.html#searchFlights">searchFlights</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Dec 14 2025 20:45:29 GMT+0000 (Greenwich Mean Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Dec 15 2025 15:44:47 GMT+0000 (Greenwich Mean Time)
 </footer>
 
 <script> prettyPrint(); </script>

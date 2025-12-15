@@ -1,3 +1,6 @@
+/**
+ * @module components/Register
+ */
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -69,7 +72,7 @@ export default function Register() {
     setLoading(true)
     try {
       const payload = { firstName, lastName, email, password }
-      console.log('Register payload:', payload) // <-- add this
+      console.log('Register payload:', payload)
       const res = await fetch('http://localhost:3000/api/auth/register',  {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

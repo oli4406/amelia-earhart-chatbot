@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: FrontEnd/src/History.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: FrontEnd/src/History.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module components/History
+ */
+import { useEffect, useState } from 'react'
+import './App.css'
+
+/**
+ * History component for displaying and managing chat message history.
+ * 
+ * Fetches the user's saved chat messages from the backend API and displays them
+ * in a chronological list. Requires authentication via JWT token stored in localStorage.
+ * 
+ * Features:
+ * - Displays chat history with questions and answers
+ * - Delete individual history entries
+ * - Clear entire chat history at once
+ * - Shows appropriate message when user is not logged in
+ * - Supports both legacy single-field and new Q/A pair data formats
+ * 
+ * @component
+ * @returns {React.ReactElement} The rendered History component
+ * 
+ * @example
+ * // Usage in a parent component
+ * &lt;History />
+ * 
+ * @requires useState - React hook for state management
+ * @requires useEffect - React hook for side effects (fetching data)
+ * @requires localStorage - Browser API for storing authentication token
+ */
+export default function History() {
+
+    const [history, setHistory] = useState([])
+    const [loggedIn, setLoggedIn] = useState(true)
+
+    useEffect(() => {
+        document.title = 'Chat History | Amelia Earhart Chatbot'
+
+        const token = localStorage.getItem('authToken')
+        if (!token) {
+            setLoggedIn(false)
+            setHistory([])
+            return
+        }
+
+        setLoggedIn(true)
+
+        fetch('http://localhost:3000/api/messages', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(res => {
+                if (!res.ok) throw new Error('Failed to fetch history')
+                return res.json()
+            })
+            .then(data => {
+                setHistory(data)
+            })
+            .catch(err => {
+                console.error('Failed to load history:', err)
+                setHistory([])
+            })
+    }, [])
+
+
+    const clearHistory = async () => {
+        const token = localStorage.getItem('authToken')
+        if (!token) return
+
+        try {
+            const res = await fetch('http://localhost:3000/api/messages', {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+            })
+
+            if (!res.ok) {
+            throw new Error('Failed to clear history')
+            }
+
+            setHistory([])
+        } catch (err) {
+            console.error('Clear history failed:', err)
+        }
+    }
+
+
+    const deleteEntry = async (id) => {
+        const token = localStorage.getItem('authToken')
+        if (!token) return
+
+        try {
+            const res = await fetch(`http://localhost:3000/api/messages/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            if (!res.ok) {
+                throw new Error('Failed to delete message')
+            }
+
+            setHistory(prev => prev.filter(h => h._id !== id))
+        } catch (err) {
+            console.error('Delete failed:', err)
+        }
+    }
+
+    if (!loggedIn) {
+        return (
+            &lt;div>
+                &lt;h1>Chat History&lt;/h1>
+                &lt;p>Please sign in to view your saved questions.&lt;/p>
+            &lt;/div>
+        )
+    }
+
+    return (
+        &lt;div>
+            &lt;h1>Chat History&lt;/h1>
+            {history.length === 0 ? (
+                &lt;p>No saved questions yet.&lt;/p>
+            ) : (
+                &lt;div className="history-list">
+                    {history.map((h, i) => {
+                        const entryId = h._id || h.id
+                        const timestamp = h.createdAt || h.ts
+
+                    return (
+                        &lt;article key={entryId} className="history-card">
+                            &lt;div className="history-meta">
+                                &lt;strong>#{i + 1}&lt;/strong>
+                                &lt;span className="history-ts">{timestamp ? new Date(timestamp).toLocaleString() : ''}&lt;/span>
+                            &lt;/div>
+                            {/* support both legacy single-field entries and new Q/A pairs */}
+                            {h.question &amp;&amp; h.answer ? (
+                                &lt;div className="history-qa">
+                                    &lt;div className="history-question">&lt;strong>Q:&lt;/strong> {h.question}&lt;/div>
+                                    &lt;div className="history-answer">&lt;strong>A:&lt;/strong> {h.answer}&lt;/div>
+                                &lt;/div>
+                            ) : (
+                                &lt;div className="history-text">{h.text || JSON.stringify(h)}&lt;/div>
+                            )}
+                            &lt;div className="history-actions">
+                                &lt;button className="btn small" onClick={() => deleteEntry(h._id)}>
+                                    Delete
+                                &lt;/button>
+                            &lt;/div>
+                        &lt;/article>
+                    )})}
+                &lt;/div>
+            )}
+
+            &lt;div style={{ marginTop: 12 }}>
+                &lt;button onClick={clearHistory} disabled={history.length === 0}>
+                    Clear history
+                &lt;/button>
+            &lt;/div>
+        &lt;/div>
+    )
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_ChatField.html">components/ChatField</a></li><li><a href="module-components_ChatPage.html">components/ChatPage</a></li><li><a href="module-components_ForgotPassword.html">components/ForgotPassword</a></li><li><a href="module-components_History.html">components/History</a></li><li><a href="module-components_Home.html">components/Home</a></li><li><a href="module-components_Login.html">components/Login</a></li><li><a href="module-components_NavBar.html">components/NavBar</a></li><li><a href="module-components_Register.html">components/Register</a></li><li><a href="module-components_Settings.html">components/Settings</a></li><li><a href="module-components_TypingIndicator.html">components/TypingIndicator</a></li><li><a href="module-config_cors.html">config/cors</a></li><li><a href="module-config_database.html">config/database</a></li><li><a href="module-config_gemini.html">config/gemini</a></li><li><a href="module-main.html">main</a></li><li><a href="module-routes_auth.html">routes/auth</a></li><li><a href="module-routes_chat.html">routes/chat</a></li><li><a href="module-routes_history.html">routes/history</a></li><li><a href="module-routes_user.html">routes/user</a></li><li><a href="module-server.html">server</a></li><li><a href="module-services_airportService.html">services/airportService</a></li><li><a href="module-services_chatService.html">services/chatService</a></li><li><a href="module-services_responseService.html">services/responseService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#TokenVerificationSecret">TokenVerificationSecret</a></li><li><a href="global.html#requestLogger">requestLogger</a></li><li><a href="global.html#searchFlights">searchFlights</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Dec 15 2025 15:44:47 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

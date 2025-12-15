@@ -10,7 +10,9 @@
     "build": "cd FrontEnd && vite build",
     "lint": "eslint .",
     "preview": "cd FrontEnd && vite preview",
-    "start": "concurrently \"npm run client\" \"npm run server\""
+    "start": "concurrently \"npm run client\" \"npm run server\"",
+    "docs": "npx jsdoc -c docs/jsdoc.json",
+    "docs:serve": "npx http-server docs -o -p 8080"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

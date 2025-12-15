@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: FrontEnd/src/Settings.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: FrontEnd/src/Settings.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module components/Settings
+ */
+
+import {useState, useEffect, useRef, useCallback} from 'react'
+
+/**
+ * Settings component for managing user accessibility preferences.
+ * 
+ * Provides a modal dialog for users to customize:
+ * - Font size (75%, 100%, 125%, 150%, 200%)
+ * - Theme (dark, light, high contrast)
+ * - Keyboard tips visibility
+ * - Message density/spacing (default, comfortable)
+ * 
+ * Settings are persisted to localStorage and applied to the document root via data attributes.
+ * Changes trigger an 'accessibilitySettingsChanged' event for other components to listen to.
+ * 
+ * The modal supports:
+ * - Closing via Escape key or clicking outside the modal
+ * - Backspace key handling (only closes if not typing in an input)
+ * - Focus management for keyboard accessibility
+ * - ARIA attributes for screen reader support
+ * 
+ * @component
+ * @param {Object} props - Component props
+ * @param {boolean} [props.visible=true] - Controls initial visibility of the settings modal
+ * @param {Function} [props.onClose] - Callback invoked when the modal is closed
+ * @returns {React.ReactElement|null} The settings modal dialog, or null if not visible
+ */
+export default function Settings({ visible = true, onClose }) {
+    const [showSettings, setShowSettings] = useState(visible);
+    const [fontSize, setFontSize] = useState('100%');
+    const [theme, setTheme] = useState('dark');
+    const [showKeyboardTips, setShowKeyboardTips] = useState(false);
+    const [messageDensity, setMessageDensity] = useState('default');
+
+    useEffect(() => setShowSettings(visible), [visible]);
+
+    useEffect(() => {
+        try {
+            const raw = localStorage.getItem('userAccessibilitySettings');
+            if (!raw) return;
+            const saved = JSON.parse(raw);
+            if (saved.fontSize) setFontSize(saved.fontSize);
+            if (saved.theme) setTheme(saved.theme);
+            if (typeof saved.showKeyboardTips === 'boolean') setShowKeyboardTips(saved.showKeyboardTips);
+            if (saved.messageDensity) setMessageDensity(saved.messageDensity);
+        } catch (e) {
+            console.warn('Failed to load accessibility settings', e);
+        }
+    }, []);
+
+    useEffect(() => {
+        const root = document.documentElement;
+        root.dataset.fontSize = fontSize;
+        root.dataset.theme = theme;
+        root.dataset.showKeyboardTips = showKeyboardTips ? 'true' : 'false';
+        root.dataset.messageDensity = messageDensity;
+        try {
+                localStorage.setItem('userAccessibilitySettings', JSON.stringify({ fontSize, theme, showKeyboardTips, messageDensity }));
+                // notify other components in same window that settings have changed
+                window.dispatchEvent(new Event('accessibilitySettingsChanged'));
+            } catch (e) {
+                console.warn('Failed to save accessibility settings', e);
+            }
+    }, [fontSize, theme, showKeyboardTips, messageDensity]);
+
+    const overlayRef = useRef();
+    const modalRef = useRef();
+
+    const close = useCallback(() => {
+        setShowSettings(false);
+        if (onClose) onClose();
+    }, [onClose]);
+
+    // Close when clicking outside the modal box
+    const onOverlayClick = useCallback((e) => {
+        if (e.target === overlayRef.current) close();
+    }, [close]);
+
+    // Focus the modal when it becomes visible so keyboard events are predictable
+    useEffect(() => {
+        if (showSettings &amp;&amp; modalRef.current &amp;&amp; typeof modalRef.current.focus === 'function') {
+            modalRef.current.focus();
+        }
+    }, [showSettings]);
+
+    // Close on Escape or Backspace (but avoid closing while typing in inputs)
+    useEffect(() => {
+        const onKeyDown = (e) => {
+            const key = e.key || e.code;
+            if (key !== 'Escape' &amp;&amp; key !== 'Backspace') return;
+            const active = document.activeElement;
+            const tag = active?.tagName?.toLowerCase();
+            const isEditable = active?.isContentEditable;
+            const isInput = tag === 'input' || tag === 'textarea' || tag === 'select' || isEditable;
+            if (key === 'Backspace' &amp;&amp; isInput) return; // avoid interfering with typing
+            close();
+        };
+        window.addEventListener('keydown', onKeyDown);
+        return () => window.removeEventListener('keydown', onKeyDown);
+    }, [close]);
+
+    if (!showSettings) return null;
+
+        return (
+                &lt;div
+            className="settings-overlay"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="settings-title"
+            data-theme={theme}
+            data-font-size={fontSize}
+            data-show-keyboard-tips={showKeyboardTips ? 'true' : 'false'}
+            data-message-density={messageDensity}
+          
+                    ref={overlayRef}
+                    onMouseDown={onOverlayClick}
+                    >
+            &lt;div
+              className="settings-modal"
+              data-theme={theme}
+              data-font-size={fontSize}
+              data-show-keyboard-tips={showKeyboardTips ? 'true' : 'false'}
+              data-message-density={messageDensity}
+                                ref={modalRef}
+                                tabIndex={-1}
+            >
+                &lt;button className="settings-close" onClick={close}> x &lt;/button>
+                &lt;div className="settings-body">
+                    &lt;h2 id="settings-title">Settings&lt;/h2>
+                    &lt;section className="settings-section">
+                        &lt;h3>Text Size&lt;/h3>
+                        &lt;div className="text-sizing">
+                            &lt;label>
+                                &lt;input type="radio" name="text-size" value="75%" checked={fontSize === '75%'} onChange={(e) => setFontSize(e.target.value)}/>
+                                75%
+                            &lt;/label>
+                            &lt;label>
+                                &lt;input type="radio" name="text-size" value="100%" checked={fontSize === '100%'} onChange={(e) => setFontSize(e.target.value)}/>
+                                100%
+                            &lt;/label>
+                            &lt;label>
+                                &lt;input type="radio" name="text-size" value="125%" checked={fontSize === '125%'} onChange={(e) => setFontSize(e.target.value)}/>
+                                125%
+                            &lt;/label>
+                            &lt;label>
+                                &lt;input type="radio" name="text-size" value="150%" checked={fontSize === '150%'} onChange={(e) => setFontSize(e.target.value)}/>
+                                150%
+                            &lt;/label>
+                            &lt;label>
+                                &lt;input type="radio" name="text-size" value="200%" checked={fontSize === '200%'} onChange={(e) => setFontSize(e.target.value)}/>
+                                200%
+                            &lt;/label>
+                        &lt;/div>
+                    &lt;/section>
+                    &lt;section className="accessibility-section">
+                        &lt;h3>Theme&lt;/h3>
+                        &lt;div className="theme-buttons">
+                            &lt;button type="button" className={`theme-button ${theme === 'dark' ? 'theme-button--active' : ''}`} onClick={() => setTheme('dark')}>Dark Mode&lt;/button>
+                            &lt;button type="button" className={`theme-button ${theme === 'light' ? 'theme-button--active' : ''}`} onClick={() => setTheme('light')}>Light Mode&lt;/button>
+                            &lt;button type="button" className={`theme-button ${theme === 'contrast' ? 'theme-button--active' : ''}`} onClick={() => setTheme('contrast')}>High Contrast&lt;/button>
+                        &lt;/div>
+                    &lt;/section>
+                    &lt;section className="accessibility-section">
+                        &lt;h3>Keyboard Tips&lt;/h3>
+                        &lt;label>
+                            &lt;input type="checkbox" checked={showKeyboardTips} onChange={(e) => setShowKeyboardTips(e.target.checked)}/>
+                            Show Keyboard Tips
+                        &lt;/label>
+                    &lt;/section>
+                    &lt;section className="accessibility-section">
+                        &lt;h3>Message Spacing&lt;/h3>
+                        &lt;div className="theme-buttons">
+                                &lt;button type="button" className={`theme-button ${messageDensity === 'default' ? 'theme-button--active' : ''}`} onClick={() => setMessageDensity('default')}>Default&lt;/button>
+                                &lt;button type="button" className={`theme-button ${messageDensity === 'comfortable' ? 'theme-button--active' : ''}`} onClick={() => setMessageDensity('comfortable')}>Comfortable&lt;/button>
+                        &lt;/div>
+                    &lt;/section>
+                &lt;/div>
+            &lt;/div>
+        &lt;/div>
+    );
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_ChatField.html">components/ChatField</a></li><li><a href="module-components_ChatPage.html">components/ChatPage</a></li><li><a href="module-components_ForgotPassword.html">components/ForgotPassword</a></li><li><a href="module-components_History.html">components/History</a></li><li><a href="module-components_Home.html">components/Home</a></li><li><a href="module-components_Login.html">components/Login</a></li><li><a href="module-components_NavBar.html">components/NavBar</a></li><li><a href="module-components_Register.html">components/Register</a></li><li><a href="module-components_Settings.html">components/Settings</a></li><li><a href="module-components_TypingIndicator.html">components/TypingIndicator</a></li><li><a href="module-config_cors.html">config/cors</a></li><li><a href="module-config_database.html">config/database</a></li><li><a href="module-config_gemini.html">config/gemini</a></li><li><a href="module-main.html">main</a></li><li><a href="module-routes_auth.html">routes/auth</a></li><li><a href="module-routes_chat.html">routes/chat</a></li><li><a href="module-routes_history.html">routes/history</a></li><li><a href="module-routes_user.html">routes/user</a></li><li><a href="module-server.html">server</a></li><li><a href="module-services_airportService.html">services/airportService</a></li><li><a href="module-services_chatService.html">services/chatService</a></li><li><a href="module-services_responseService.html">services/responseService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#TokenVerificationSecret">TokenVerificationSecret</a></li><li><a href="global.html#requestLogger">requestLogger</a></li><li><a href="global.html#searchFlights">searchFlights</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Dec 15 2025 15:44:47 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

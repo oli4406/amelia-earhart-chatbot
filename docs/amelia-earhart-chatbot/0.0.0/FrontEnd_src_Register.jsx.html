@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: FrontEnd/src/Register.jsx</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: FrontEnd/src/Register.jsx</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module components/Register
+ */
+import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+
+/**
+ * Register component for user account creation
+ * 
+ * Handles user registration by collecting first name, last name, email, and password.
+ * Validates input fields, ensures password confirmation matches, and sends registration
+ * request to the backend API. On successful registration, navigates to login page.
+ * 
+ * @component
+ * @returns {JSX.Element} The register form UI with input fields and submission button
+ * 
+ * @example
+ * return (
+ *   &lt;Register />
+ * )
+ * 
+ * @state {string} firstName - User's first name
+ * @state {string} lastName - User's last name
+ * @state {string} email - User's email address
+ * @state {string} password - User's password
+ * @state {string} confirmPassword - Password confirmation field
+ * @state {string} error - Error message to display to user
+ * @state {boolean} loading - Loading state during registration request
+ * @state {boolean} registered - Flag indicating registration completion
+ * 
+ * @requires useState - React hook for state management
+ * @requires useEffect - React hook for side effects
+ * @requires useNavigate - React Router hook for navigation
+ * @requires Link - React Router component for linking
+ */
+export default function Register() {
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [error, setError] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [registered, setRegistered] = useState(false)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    try {
+      localStorage.removeItem('hasUser')
+    } catch (e) {
+      console.error(`Error removing 'hasUser': \n${e}`)
+      /* ignore storage errors */
+    }
+
+    document.title = 'Register | Amelia Earhart Chatbot'
+    setRegistered(false)
+  }, [])
+
+  const handleRegister = async (e) => {
+    e.preventDefault()
+    setError('')
+
+    if (!firstName || !lastName || !email || !password || !confirmPassword) {
+      setError('All fields are required')
+      return
+    }
+    if (password !== confirmPassword) {
+      setError('Passwords do not match')
+      return
+    }
+
+    setLoading(true)
+    try {
+      const payload = { firstName, lastName, email, password }
+      console.log('Register payload:', payload)
+      const res = await fetch('http://localhost:3000/api/auth/register',  {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+
+      if (!res.ok) {
+        const text = await res.text().catch(() => '')
+        const data = text ? JSON.parse(text) : {}
+        setError(data.message || `Registration failed (status ${res.status})`)
+        return
+      }
+
+      localStorage.setItem('hasUser', '1')
+      setRegistered(true)
+      navigate('/login')
+    } catch (err) {
+      console.error('Register error:', err)
+      setError('Network or server error. Check backend and try again.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    &lt;div className="register-container">
+      &lt;h2>Register Account&lt;/h2>
+      {registered ? (
+        &lt;p>Already registered.&lt;/p>
+      ) : (
+        &lt;form onSubmit={handleRegister} className="register-form" noValidate>
+          &lt;div className="input-group">
+            &lt;input type="text" placeholder="First Name" value={firstName} onChange={(e) => { setFirstName(e.target.value); if (error) setError('') }} />
+          &lt;/div>
+          &lt;div className="input-group">
+            &lt;input type="text" placeholder="Last Name" value={lastName} onChange={(e) => { setLastName(e.target.value); if (error) setError('') }} />
+          &lt;/div>
+          &lt;div className="input-group">
+            &lt;input type="email" placeholder="Email" value={email} onChange={(e) => { setEmail(e.target.value); if (error) setError('') }} />
+          &lt;/div>
+          &lt;div className="input-group">
+            &lt;input type="password" placeholder="Password" value={password} onChange={(e) => { setPassword(e.target.value); if (error) setError('') }} />
+          &lt;/div>
+          &lt;div className="input-group">
+            &lt;input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => { setConfirmPassword(e.target.value); if (error) setError('') }} />
+          &lt;/div>
+          {error &amp;&amp; &lt;p className="error">{error}&lt;/p>}
+          &lt;button className="register-button" type="submit" disabled={loading}>
+            {loading ? 'Processing...' : 'Register'}
+          &lt;/button>
+          &lt;p className="login-link">Already have an account? &lt;Link to="/login">Login here&lt;/Link>&lt;/p>
+        &lt;/form>
+      )}
+    &lt;/div>
+  )
+}
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-components_ChatField.html">components/ChatField</a></li><li><a href="module-components_ChatPage.html">components/ChatPage</a></li><li><a href="module-components_ForgotPassword.html">components/ForgotPassword</a></li><li><a href="module-components_History.html">components/History</a></li><li><a href="module-components_Home.html">components/Home</a></li><li><a href="module-components_Login.html">components/Login</a></li><li><a href="module-components_NavBar.html">components/NavBar</a></li><li><a href="module-components_Register.html">components/Register</a></li><li><a href="module-components_Settings.html">components/Settings</a></li><li><a href="module-components_TypingIndicator.html">components/TypingIndicator</a></li><li><a href="module-config_cors.html">config/cors</a></li><li><a href="module-config_database.html">config/database</a></li><li><a href="module-config_gemini.html">config/gemini</a></li><li><a href="module-main.html">main</a></li><li><a href="module-routes_auth.html">routes/auth</a></li><li><a href="module-routes_chat.html">routes/chat</a></li><li><a href="module-routes_history.html">routes/history</a></li><li><a href="module-routes_user.html">routes/user</a></li><li><a href="module-server.html">server</a></li><li><a href="module-services_airportService.html">services/airportService</a></li><li><a href="module-services_chatService.html">services/chatService</a></li><li><a href="module-services_responseService.html">services/responseService</a></li></ul><h3>Global</h3><ul><li><a href="global.html#TokenVerificationSecret">TokenVerificationSecret</a></li><li><a href="global.html#requestLogger">requestLogger</a></li><li><a href="global.html#searchFlights">searchFlights</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Mon Dec 15 2025 15:44:47 GMT+0000 (Greenwich Mean Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
