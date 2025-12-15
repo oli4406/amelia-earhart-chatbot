@@ -1,6 +1,32 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
+/**
+ * Login component for user authentication
+ * 
+ * Handles user login with email and password validation.
+ * On successful login, stores authentication token in localStorage and navigates to chat page.
+ * 
+ * @component
+ * @returns {JSX.Element} Login form with email/password inputs and error handling
+ * 
+ * @example
+ * return <Login />
+ * 
+ * @requires useState - React hook for state management
+ * @requires useEffect - React hook for side effects
+ * @requires useNavigate - React Router hook for navigation
+ * @requires Link - React Router component for navigation links
+ * 
+ * @state {string} email - User's email input
+ * @state {string} password - User's password input
+ * @state {string} error - Error message to display
+ * @state {boolean} loading - Loading state during login request
+ * 
+ * @function handleLogin - Validates input, sends login request to API, and handles response
+ * @param {Event} e - Form submit event
+ * @throws {Error} Catches and displays login errors to user
+ */
 export default function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')

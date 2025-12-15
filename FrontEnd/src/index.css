@@ -1,3 +1,61 @@
+/**
+ * 
+ * Main stylesheet for the Amelia Earhart Chatbot frontend application.
+ * 
+ * SECTIONS:
+ * 1. Root Variables & Global Styles
+ *    - Sets default font family, line height, color scheme
+ *    - Defines accent color for form controls
+ *    - Configures font rendering optimization
+ * 
+ * 2. Link Styles
+ *    - Default link color and hover state
+ * 
+ * 3. Body & Typography
+ *    - Body layout with flexbox centering
+ *    - Heading sizing
+ * 
+ * 4. Button Styles
+ *    - Default button appearance with hover and focus states
+ * 
+ * 5. Form Input Styles
+ *    - Input groups and text fields
+ *    - Login-specific form styling
+ *    - Textarea styling with consistent sizing
+ * 
+ * 6. Settings Modal
+ *    - Overlay and modal container styles
+ *    - Custom scrollbar styling for settings body
+ *    - Close button and modal layout
+ * 
+ * 7. Navigation Sidebar
+ *    - Fixed left sidebar with navigation links
+ *    - Collapsible sidebar functionality (70px collapsed width)
+ *    - Navigation item hover states
+ *    - Icon sizing utilities
+ *    - Sidebar button image variants
+ * 
+ * 8. Theme Support
+ *    - Light/dark color scheme preference
+ *    - Theme variables (--panel-color, --text-color, --bg-color, --accent-color)
+ *    - Per-theme customizations via theme.css
+ * 
+ * 9. Accessibility & Utilities
+ *    - Font size scaling (75%, 100%, 125%, 150%, 200%)
+ *    - Theme switcher buttons
+ *    - Visually hidden helper class for screen readers
+ *    - Radio and checkbox accent color support
+ * 
+ * 10. Responsive Design
+ *     - Media query for light color scheme preference
+ *     - Mobile-first approach with 320px minimum width
+ * 
+ * NOTES:
+ * - Theme-specific variables and overrides are maintained in theme.css
+ * - Sidebar button images vary by theme and are swapped via CSS background-image
+ * - Settings modal and sidebar use CSS custom properties for theme consistency
+ * - All form inputs use !important to ensure consistent styling across selectors
+ */
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

@@ -6,6 +6,36 @@ import './App.css'
 
 let nextId = 1
 
+/**
+ * ChatPage Component
+ * 
+ * A chat interface for interacting with an Amelia Earhart-themed chatbot.
+ * Manages conversation state, handles message submission, persists chat history
+ * for logged-in users, and provides real-time UI updates with typing indicators.
+ * 
+ * @component
+ * @returns {React.ReactElement} The chat page UI with messages window and input field
+ * 
+ * @description
+ * - Maintains a messages array storing user and bot messages with unique IDs
+ * - Handles async communication with backend API at /api/chat/message
+ * - Supports optional JWT authentication via localStorage authToken
+ * - Persists Q&A pairs to server for logged-in users via /api/messages
+ * - Falls back to localStorage storage with a legacy hasUser flag for unlogged users
+ * - Shows transient save notices when history isn't persisted
+ * - Auto-scrolls to latest messages with smooth scrolling behavior
+ * - Displays typing indicator while awaiting bot response
+ * - Handles both JSON and plain text responses from server
+ * - Provides error recovery with user-friendly error messages
+ * - Sets browser document title to 'Chat | Amelia Earhart Chatbot'
+ * 
+ * @state {string} value - Current input field text
+ * @state {Array} messages - Array of message objects {id, role, text}
+ * @state {boolean} isTyping - Whether bot is currently composing a reply
+ * @state {boolean} saveNotice - Whether to show unsaved history notification
+ * 
+ * @throws {Error} Logs warnings for localStorage access failures and API errors
+ */
 function ChatPage() {
   const [value, setValue] = useState('')
   const [messages, setMessages] = useState([   /* messages are stored as an array*/
