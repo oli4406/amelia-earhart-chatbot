@@ -153,6 +153,7 @@ textarea {
     background-color: #f9f9f9;
   }
 }
+/* Theme rules moved to FrontEnd/src/theme.css */
 
 nav {
   height: 100%;
@@ -315,20 +316,7 @@ nav {
   background-image: url('./assets/dark_mode/left_panel_open.png');
 }
 
-/* Light-mode variants */
-:root[data-theme="light"] .SidebarBtn-Expanded {
-  background-image: url('./assets/light_mode/left_panel.png');
-}
-:root[data-theme="light"] .SidebarBtn-Expanded:hover {
-  background-image: url('./assets/light_mode/left_panel_close.png');
-}
-:root[data-theme="light"] .SidebarBtn-Collapsed {
-  background-image: url('./assets/light_mode/left_panel.png');
-}
-:root[data-theme="light"] .SidebarBtn-Collapsed:hover {
-  background-image: url('./assets/light_mode/left_panel_open.png');
-}
-
+/* Sidebar button image variants moved to FrontEnd/src/theme.css */
 .page-user-name {
   position: fixed;
   right: 20px;
@@ -360,16 +348,7 @@ nav {
   position: relative;
 }
 
-/* Theme-aware overlay tweaks */
-:root[data-theme="light"] .settings-overlay {
-  /* lighter dim for light theme */
-  background: rgba(0, 0, 0, 0.12);
-}
-
-:root[data-theme="contrast"] .settings-overlay {
-  /* yellow-tinted dim for high-contrast mode */
-  background: rgba(255, 255, 0, 0.06);
-}
+/* settings-overlay per-theme tweaks moved to FrontEnd/src/theme.css */
 
 
 .settings-close {
@@ -410,36 +389,7 @@ nav {
 justify-content: center;
 }
 
-:root[data-theme="dark"] {
-  --panel-color: #73503F;
-  --sidebar-color: #513629;
-  --text-color: #f5f7ff;
-  --accent-color: #513629; 
-}
-
-:root[data-theme="light"] {
-  --bg-color: #e5e7eb;
-  --text-color: #111827;
-  --panel-color: #e5e7eb;
-  --sidebar-color: #d1d5db;
-  --accent-color: #C3B495; 
-}
-
-:root[data-theme="light"] .nav-toggle {
-  color: #111827;
-}
-
-:root[data-theme="contrast"] {
-  --bg-color: #000000;
-  --text-color: #ffff00;
-  --panel-color: #000000;
-  --sidebar-color: #000000;
-  --accent-color: #ffff00; 
-}
-
-:root[data-theme="contrast"] .nav-toggle {
-  color: #ffff00;
-}
+/* Theme variables and small per-theme tweaks moved to FrontEnd/src/theme.css */
 
 .theme-buttons {
   display: flex;
@@ -462,24 +412,7 @@ justify-content: center;
   color: #8b8b8b
 }
 
-:root[data-theme="light"] .theme-button--active .input- {
-  background: #C3B495;
-  
-}
-
-:root[data-theme="dark"] .theme-button--active {
-  background: #513629;
-}
-
-:root[data-theme="contrast"] .theme-button--active {
-  background: #ffff00;
-  
-}
-
-
-
-
-
+/* Per-theme theme-button, settings-close, nav-text color overrides moved to FrontEnd/src/theme.css */
 body {
   background-color: var(--bg-color);
   color: var(--text-color);

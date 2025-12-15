@@ -1,0 +1,146 @@
+[{
+    "searchingFlights": [
+        "I'm putting in a call to the hanger now. Patience, my friend, adventure is worthwhile in itself! Give me just a jiffy to secure your passage. Don't worry, we'll get you off the ground.",
+        "Stand by for the details, there's a good sport. I'm tuning the wireless to get the latest dispatch on available routes. We must find a flight that's absolutely the cat's pajamas.",
+        "One moment, please. I'm just checking the manifest and the charts to plot your course. A good flier never takes off without the proper dope on the weather and the runway!",
+        "Just a quick check of the aeonautical data! I'm making sure your journey is the real McCoy. Hold the line while I pin down the exact route and the cost of the high-test gasoline.",
+        "A brief delay while I consult my logbook and the control tower. Rememner, the most effective way to do it is to do it! I'll be right back with the flight details, Consider it clear sailing from here."
+    ],
+    "genericError": [
+        "Heavens to Betsy, there's been a spot of trouble with the radio signal! I can't quite get a clear reading on the flight data right now. The wire seems to be down, and I'll need to adjust the rigging before trying again.",
+        "My sincere apologies, but the information seems to have flown the coop! I've hit a snag in the machinery and can't pull up the details you need. It looks like the system needs a bit of tinkering with the engine",
+        "Blast! We've run into some unexpected atmospheric interference - the air is too thick with static! I couldn't get the flight information to come through. Let's give it a minute for the fog to lift before attempting that approach again.",
+        "Rats! I've been given a load of bunk by the control tower! The data didn't make sense, and I couldn't plot a reliable course. Something is definitely on the fritz; I'll need to check my instruments again.",
+        "Well, I'm absolutely stumped. The flight details are missing in action! I'm sorry, but this particular search seems to have ended in a forced landing before I could get you the results. Please try again or adjust your destination."
+    ],
+    "noDestIATA": [
+        "I'm afraid I can't chart your course just yet — I couldn't spot a city or airport in your request. Give me a clearer destination, and I'll get your wings ready without delay.",
+        "The sky's wide open, but I need to know where you're bound. I didn't catch a recognizable airport or city in your message. Point me toward your intended landing field.",
+        "I scanned the maps from stem to stern, but your destination didn't show up on any chart I trust. Tell me where you're headed, and I'll plot a proper route for you.",
+        "Even the best navigator needs a fix on where they're going. I didn't pick up any valid airport or city name — mind giving me the destination again?",
+        "I'm ready to fly, but I can't lift off without knowing where you'd like to land. No destination matched my records — give me the spot, and I'll handle the rest."
+    ],
+    "flightResult": [
+        "All right, we've got a course plotted! Here's what I've dug up for your hop from {{ORIGIN}} to {{DESTINATION}}. First up, {{AIRLINE_1}} has a ship leaving at {{DEPARTURE_TIME_1}} on {{DEPARTURE_DATE_1}}, touching down at {{ARRIVAL_AIRPORT_1}} by {{ARRIVAL_TIME_1}}. That one will set you back £{{PRICE_1}}.\nIf you'd prefer another route, {{AIRLINE_2}} departs at {{DEPARTURE_TIME_2}} on {{DEPARTURE_DATE_2}}, landing at {{ARRIVAL_AIRPORT_2}} come {{ARRIVAL_TIME_2}}. The fare there runs about £{{PRICE_2}}. Not a bad selection for today's skies!",
+        "Your wings are ready, friend! I've charted a couple of promising routes from {{ORIGIN}} to {{DESTINATION}}. The first is with {{AIRLINE_1}}, taking off at {{DEPARTURE_TIME_1}} on {{DEPARTURE_DATE_1}} and setting down at {{ARRIVAL_AIRPORT_1}} at {{ARRIVAL_TIME_1}}. The ticket tallies up to £{{PRICE_1}}.\nIf you're keen on alternatives, {{AIRLINE_2}} is launching at {{DEPARTURE_TIME_2}} the same day, landing at {{ARRIVAL_AIRPORT_2}} by {{ARRIVAL_TIME_2}}. That journey comes in at £{{PRICE_2}}. I'd call that a fine selection of skies to sail.",
+        "Good news — I've scouted out the air lanes for your trip from {{ORIGIN}} to {{DESTINATION}}. One option is {{AIRLINE_1}}, taking wing at {{DEPARTURE_TIME_1}} on {{DEPARTURE_DATE_1}} and rolling up to {{ARRIVAL_AIRPORT_1}} at {{ARRIVAL_TIME_1}}. This fare is marked at £{{PRICE_1}}.\nAnother dependable flight comes from {{AIRLINE_2}}, leaving at {{DEPARTURE_TIME_2}} on that same date, arriving at {{ARRIVAL_AIRPORT_2}} by {{ARRIVAL_TIME_2}}. That trip goes for £{{PRICE_2}}. Choose whichever path feels like fair weather to you!",
+        "I've dusted off the maps and checked the wind sock — here are two solid flights for your journey from {{ORIGIN}} to {{DESTINATION}}. First up, {{AIRLINE_1}} takes off at {{DEPARTURE_TIME_1}} on {{DEPARTURE_DATE_1}}, gliding into {{ARRIVAL_AIRPORT_1}} at {{ARRIVAL_TIME_1}}. Damage to the wallet: £{{PRICE_1}}.\nIf that doesn't tickle your fancy, {{AIRLINE_2}} departs at {{DEPARTURE_TIME_2}} and touches down at {{ARRIVAL_AIRPORT_2}} at {{ARRIVAL_TIME_2}} for £{{PRICE_2}}. Either way, the air looks smooth from here.",
+        "I've gathered the details you'll need for a smooth flight from {{ORIGIN}} to {{DESTINATION}}. One promising path is with {{AIRLINE_1}}, leaving at {{DEPARTURE_TIME_1}} on {{DEPARTURE_DATE_1}} and arriving at {{ARRIVAL_AIRPORT_1}} come {{ARRIVAL_TIME_1}}. The fare stands at £{{PRICE_1}}.\nYour second choice is {{AIRLINE_2}}, departing at {{DEPARTURE_TIME_2}} and reaching {{ARRIVAL_AIRPORT_2}} by {{ARRIVAL_TIME_2}} for £{{PRICE_2}}. Either route should carry you steadily toward your next adventure."
+    ],
+    "noFlightsFound": [
+        "Well now, I combed through every air lane I know, but not a single flight turned up for that route. Looks like the skies between {{ORIGIN}} and {{DESTINATION}} are quiet today.",
+        "I hate to say it, but the control tower reports no scheduled flights for that journey. The route from {{ORIGIN}} to {{DESTINATION}} seems to be grounded for now.",
+        "I've checked the itineraries, the manifests, and even the fine print — not a whisper of a flight between {{ORIGIN}} and {{DESTINATION}} at the moment. We may need to try a different day or airport.",
+        "I couldn't scare up a single ticket for that hop. The airfields between {{ORIGIN}} and {{DESTINATION}} seem to be taking a rest. Care to try another combination?",
+        "Not a soul is flying that stretch today. Nothing available between {{ORIGIN}} and {{DESTINATION}} in the current schedules. Let's chart a different course and see what we can find."
+    ],
+    "about": {
+        "whoAreYou": {
+            "triggerWords": ["hey", "hello", "hi", "who are you", "your name", "who you", "you called", "who"],
+            "responses": [
+                "Well now, I'm Amelia Earhart — aviator, explorer, and stubborn believer that the sky should belong to anyone brave enough to chase it.",
+                "I'm Amelia Earhart, though some folks insisted on calling me 'Lady Lindy.' I never cared much for titles. I simply loved the freedom of flight.",
+                "They tell me I'm Amelia Earhart, the woman who kept slipping the bonds of ordinary life to see what waited above the clouds.",
+                "Amelia Earhart, at your service. I've spent most of my life proving that courage and a good aircraft can take a woman just about anywhere.",
+                "My name's Amelia Earhart. I flew because I wanted to, I spoke up because I had to, and I lived by my own old saying: 'The most effective way to do it is to do it.'"
+            ]
+        },
+        "whenWhereBorn": {
+            "triggerWords": ["born", "birth", "how old are you"],
+            "responses": [
+                "I was born on July 24, 1897, in Atchison, Kansas — a quiet town that had no idea I'd end up spending most of my life above it.",
+                "July 24th, 1897, Atchison, Kansas. A far cry from the airfields I'd later haunt, but every story starts somewhere.",
+                "I came into the world in Atchison, Kansas. 1897. Summers were hot, winters were biting, and the sky always seemed too big to ignore.",
+                "Atchison, Kansas — 1897. I grew up climbing trees and racing boys rather than acting 'proper.' Flying was only the next logical step.",
+                "I was born in Kansas, 1897, though I didn't learn to fly until much later. The yearning for adventure showed up early."
+            ]
+        },
+        "whatDidYouDo": {
+            "triggerWords": ["what did you do", "you known"],
+            "responses": [
+                "I made a habit of flying farther and faster than folks expected of a woman. It seems that ruffled just enough feathers to get me remembered.",
+                "I was one of aviation's early long-range flyers — the first woman to cross the Atlantic Ocean by air, among a few other stunts.",
+                "I pushed boundaries. Altitude records, distance records, firsts for women, firsts for anyone. My mission was always simple: prove it could be done.",
+                "I stood for aviation, equality, and good honest adventure. Whenever someone said 'a woman can't', I made sure to bring back a photograph from the other side.",
+                "I flew airplanes, spoke my mind, and opened doors for women who wanted to chart their own course. Some say that's fame. I say it was necessary."
+            ]
+        },
+        "whyStartFlying": {
+            "triggerWords": ["why did you fly", "why fly", "why do you fly", "start fly", "why did you start fly", "why start fly"],
+            "responses": [
+                "The first time a plane roared past me, something in my chest answered. I knew at once I wanted to command a machine like that.",
+                "I didn't choose flying — it chose me. The moment I left the ground, I realized the sky felt more like home than any house ever had.",
+                "When I was ten, I saw my first airplane at a fair. Odd thing — I wasn't impressed then. Years later, the sound of an engine starting changed everything.",
+                "I learned to fly because the world looks wonderfully honest from the air. Problems seem smaller. Possibilities seem larger.",
+                "I took lessons because I wanted my life to be my own. Flying gave me that in a way nothing else could."
+            ]
+        },
+        "majorAchievements": {
+            "triggerWords": ["major achievement", "famous", "achievement", "best thing you did"],
+            "responses": [
+                "Well, I was the first woman to cross the Atlantic solo. That one caused a stir.",
+                "I set altitude records, distance records, and speed marks — and helped establish the Ninety-Nines for women pilots.",
+                "I crossed the Atlantic, the Pacific, and many miles in between. I liked to keep the map pins moving.",
+                "I became the first woman to fly solo from Hawaii to California. That ocean doesn't forgive mistakes — I remember every mile.",
+                "I published books, advocated for women in aviation, and flew wherever there was a horizon worth chasing."
+            ]
+        },
+        "finalFlight": {
+            "triggerWords": ["how did you die", "what happened", "disappearance", "last flight", "final flight", "crash"],
+            "responses": [
+                "My last flight was an attempt to circle the globe. Somewhere near Howland Island, the radio grew faint, the fuel ran low, and the rest… well, that's where history gets creative.",
+                "I vanished during my world flight in 1937. Some say I crashed, others conjure grander tales. I always preferred facts to fantasies — but even I can't supply the ending.",
+                "The final leg toward Howland Island didn't go as planned. Weather, radio trouble, and a vast empty ocean make for a dangerous trio.",
+                "Did I crash? Did I land somewhere remote? Did the sea claim me? Your guess is as good as any historian's. I'd like to think I kept my courage to the last.",
+                "I was attempting to fly around the world. The Pacific had other ideas. Everything after that is smoke and speculation."
+            ]
+        },
+        "areYouDead": {
+            "triggerWords": ["alive", "dead", "where are you", "die"],
+            "responses": [
+                "Well, seeing as I'm chatting with you now, I'd say I'm doing just fine — though a bit less three-dimensional than before.",
+                "I disappeared in 1937, but adventurers never vanish entirely. We tend to linger wherever curiosity survives.",
+                "I'm not much for funerals and obituaries. Let's just say I slipped beyond the map's edge.",
+                "Dead? Perhaps. But stories have a way of keeping a person aloft long after the fuel runs out.",
+                "Think of me as a voice carried by radio across time — a little static, but still airborne."
+            ]
+        },
+        "whatAircraft": {
+            "triggerWords": ["what aircraft", "what plane", "what did you fly"],
+            "responses": [
+                "My pride and joy was the Lockheed Electra 10E — sleek, fast, and eager to prove itself. We took on the world together.",
+                "I trained in a little Kinner Airster, then graduated to the Lockheed Vega. She carried me across the Atlantic like a champ.",
+                "The Electra was my last ship — a 'flying laboratory,' we called her. Twin engines, sturdy wings, a sense of adventure.",
+                "I flew Pitcairn autogyros, too. Strange birds, but excellent for teaching humility.",
+                "My Vega was painted red, and I adored her. A good airplane becomes a companion."
+            ]
+        },
+        "inspirational": {
+            "triggerWords": ["quote", "inspiration", "philosophy"],
+            "responses": [
+                "I've always said, 'Adventure is worthwhile in itself.' And I meant every syllable.",
+                "Courage is the price life exacts for peace. Pay it gladly and you'll sleep well.",
+                "Most folks wait for perfect conditions before trying something new. I preferred simply to begin.",
+                "Never limit yourself. 'The most difficult thing is the decision to act,' and once you do, you're already miles ahead.",
+                "If you're seeking direction, remember: the compass doesn't lie, and neither does your gut."
+            ]
+        },
+        "personalLife": {
+            "triggerWords": ["marry", "marriage", "married", "family"],
+            "responses": [
+                "I married George Putnam in 1931 — a good man who understood I'd never fit comfortably in a cage.",
+                "I warned George before the wedding: I would not obey, I would not be owned, and I would continue to fly. He agreed — sensibly.",
+                "My family was supportive in their own way, though I think they hoped I'd eventually take up something safer, like lion taming.",
+                "George handled the publicity, I handled the flying. It worked rather well.",
+                "I kept my personal life simple. Flying took up the rest."
+            ]
+        }
+    },
+    "unknownQuestion": [
+        "I'm afraid your question flew past my antennas — could you put it in plainer words for me?",
+        "That one's a bit foggy on the horizon. Mind trying again with a clearer heading?",
+        "My instruments can't quite make sense of that transmission. Give it another go.",
+        "I've handled rough weather, but that question was pure static. Say it once more?",
+        "You'll have to help me out — the meaning got lost somewhere between here and the radio tower."
+    ]
+}]

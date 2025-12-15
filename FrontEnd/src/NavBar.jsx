@@ -9,15 +9,18 @@ import accountIcon from './assets/dark_mode/account.png';
 import historyIcon from './assets/dark_mode/history.png';
 import homeIconLight from './assets/light_mode/home.png';
 import chatIconLight from './assets/light_mode/chat.png';
-//import settingsIconLight from './assets/light_mode/settings.png';
-//import accountIconLight from './assets/light_mode/account.png';
 import historyIconLight from './assets/light_mode/history.png';
+import homeIconContrast from './assets/high_contrast/home.png';
+import chatIconContrast from './assets/high_contrast/chat.png';
+import historyIconContrast from './assets/high_contrast/history.png';
+import settingsIconContrast from './assets/high_contrast/settings.png';
+import accountIconContrast from './assets/high_contrast/account.png';
 
 
 export default function NavBar() {
 
   const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem('authToken')));
-  const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(true)
   const toggleNav = () => {setCollapsed((prev) => !prev);};
   const [showSettings, setShowSettings] = useState(false);
   const [fontSize, setFontSize] = useState('100%');
@@ -177,28 +180,28 @@ export default function NavBar() {
           </button>
           <div className="nav-inner">
             <Link className="nav-link" title="Home" to="/">
-              <span className="nav-icon"><img className="icon" src={theme === 'light' ? homeIconLight : homeIcon} alt="Home"/></span>
+              <span className="nav-icon"><img className="icon" src={theme === 'light' ? homeIconLight : theme === 'contrast' ? homeIconContrast : homeIcon} alt="Home"/></span>
               <span className="nav-text">Hanger</span>
             </Link>
             <Link className="nav-link" title="Chat" to="/chat">
-              <span className="nav-icon"><img className="icon" src={theme === 'light' ? chatIconLight : chatIcon} alt="Chat"/></span>
+              <span className="nav-icon"><img className="icon" src={theme === 'light' ? chatIconLight : theme === 'contrast' ? chatIconContrast : chatIcon} alt="Chat"/></span>
               <span className="nav-text">Communications</span>
             </Link>
             {loggedIn && (
               <Link className="nav-link" title="History" to="/history">
-                <span className="nav-icon"><img className="icon" src={theme === 'light' ? historyIconLight : historyIcon} alt="History"/></span>
+                <span className="nav-icon"><img className="icon" src={theme === 'light' ? historyIconLight : theme === 'contrast' ? historyIconContrast : historyIcon} alt="History"/></span>
                 <span className="nav-text">Flight Log</span>
               </Link>
             )}
 
             <div className='navButtons'>
-              <button className="nav-btn" onClick={loggedIn ? handleLogoutClick : handleLoginClick} title={loggedIn ? 'Log out' : 'Login/Signup'}>
-                <span className="nav-icon"><img className="icon" src={/*theme === 'light' ? accountIconLight : */accountIcon} alt="Account"/></span>
-                <span className="nav-text">{loggedIn ? 'Disembark' : 'Pilot Login'}</span>
-              </button>
               <button className="nav-btn" onClick={handleSettingsClick} title="Settings">
-                <span className="nav-icon"><img className="icon" src={/*theme === 'light' ? settingsIconLight : */settingsIcon} alt="Settings"/></span>
+                <span className="nav-icon"><img className="icon" src={theme === 'contrast' ? settingsIconContrast : settingsIcon} alt="Settings"/></span>
                 <span className="nav-text">Flight Systems</span>
+              </button>
+              <button className="nav-btn" onClick={loggedIn ? handleLogoutClick : handleLoginClick} title={loggedIn ? 'Log out' : 'Login/Signup'}>
+                <span className="nav-icon"><img className="icon" src={theme === 'contrast' ? accountIconContrast : accountIcon} alt="Account"/></span>
+                <span className="nav-text">{loggedIn ? 'Disembark' : 'Pilot Login'}</span>
               </button>
             </div>
           </div>

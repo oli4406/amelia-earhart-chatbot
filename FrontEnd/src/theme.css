@@ -1,0 +1,265 @@
+
+/* styling in dark mode, light mode, and contrast overrides for forms */
+:root[data-theme="dark"] .register-form input {
+  background-color: #73503F;
+  color: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06); 
+}
+:root[data-theme="dark"] .register-form input::placeholder {
+  color: rgba(255,255,255,0.8);
+}
+:root[data-theme="dark"] .register-button {
+  background-color: #73503F;
+  color: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 10px 16px;
+  border-radius: 8px;
+}
+:root[data-theme="dark"] .register-button:hover {
+  filter: brightness(0.98);
+}
+
+:root[data-theme="dark"] .login-button {
+  background-color: #73503F;
+  color: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06); 
+}
+:root[data-theme="dark"] .login-form input {
+  background-color: #73503F;
+  color: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+:root[data-theme="dark"] .login-form input::placeholder {
+  color: rgba(255,255,255,0.8);
+}
+
+:root[data-theme="dark"] .forgotpassword-form input {
+  background-color: #73503F;
+  color: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+:root[data-theme="dark"] .forgotpassword-form input::placeholder {
+  color: rgba(255,255,255,0.8);
+}
+:root[data-theme="dark"] .forgotpassword-button {
+  background-color: #73503F;
+  color: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 10px 16px;
+  border-radius: 8px;
+}
+:root[data-theme="dark"] .forgotpassword-button:hover {
+  filter: brightness(0.98);
+}
+:root[data-theme="dark"] .message-line.user .message-bubble {
+  background: #73503F;
+  color: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+/* Light-mode specific overrides for login/register/forgot inputs */
+:root[data-theme="light"] .login-form input,
+:root[data-theme="light"] .register-form input,
+:root[data-theme="light"] .forgotpassword-form input {
+  background-color: #C3B495;
+  color: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+:root[data-theme="light"] .login-form input::placeholder,
+:root[data-theme="light"] .register-form input::placeholder,
+:root[data-theme="light"] .forgotpassword-form input::placeholder {
+  color: rgba(255,255,255,0.8);
+}
+:root[data-theme="light"] .forgotpassword-button,
+:root[data-theme="light"] .register-button,
+:root[data-theme="light"] .login-button {
+  background-color: #C3B495;
+  color: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 10px 16px;
+  border-radius: 8px;
+}
+:root[data-theme="light"] .forgotpassword-button:hover,
+:root[data-theme="light"] .register-button:hover,
+:root[data-theme="light"] .login-button:hover {
+  filter: brightness(0.98);
+}
+
+/* Light mode overrides for input row, send button, user message and bot response bubble */
+:root[data-theme="light"] .input-field,
+:root[data-theme="light"] .send-button {
+  background-color: #C3B495;
+  color: #111827;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+:root[data-theme="light"] .message-line.bot .message-bubble {
+  background: #C3B495;
+  color: #111827;
+}
+:root[data-theme="light"] .message-line.user .message-bubble {
+  background: #bfa269;
+  color: #ffffff;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+:root[data-theme="light"] .theme-button {
+    color: #ffffff;
+}
+/* High-contrast theme overrides */
+:root[data-theme="contrast"] .register-form input,
+:root[data-theme="contrast"] .login-form input,
+:root[data-theme="contrast"] .forgotpassword-form input {
+  background-color: #87E911;
+  color: #000000;
+  border: 1px solid rgba(0,0,0,0.06); 
+}
+:root[data-theme="contrast"] .register-form input::placeholder,
+:root[data-theme="contrast"] .login-form input::placeholder,
+:root[data-theme="contrast"] .forgotpassword-form input::placeholder {
+  color: rgba(0, 0, 0, 0.8);
+}
+:root[data-theme="contrast"] .register-button,
+:root[data-theme="contrast"] .login-button,
+:root[data-theme="contrast"] .forgotpassword-button {
+  background-color: #87E911;
+  color: #000000;
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 10px 16px;
+  border-radius: 8px;
+}
+:root[data-theme="contrast"] .register-button:hover,
+:root[data-theme="contrast"] .login-button:hover,
+:root[data-theme="contrast"] .forgotpassword-button:hover {
+  filter: brightness(0.98);
+}
+
+:root[data-theme="contrast"] .input-field,
+:root[data-theme="contrast"] .send-button {
+  background-color: #87E911;
+  color: #000000;
+  border: 2px solid #000000;
+}
+
+:root[data-theme="contrast"] .message-line.bot .message-bubble {
+  background: #87E911;
+  color: #000000;
+  border: 2px solid #000000;
+}
+
+:root[data-theme="contrast"] .message-line.user .message-bubble {
+  background: #FF00BD;
+  color: #000000;
+  border: 2px solid #000000;
+}
+
+/* Theme variables and small per-theme tweaks */
+:root[data-theme="dark"] {
+    --bg-color: #543C1C;
+  --panel-color: #73503F;
+  --sidebar-color: #513629;
+  --text-color: #f5f7ff;
+  --accent-color: #513629; 
+}
+
+:root[data-theme="light"] {
+  --bg-color: #ad8c6b;
+  --text-color: #111827;
+  --panel-color: #a08761;
+  --sidebar-color: #d1d5db;
+  --accent-color: #C3B495; 
+}
+
+:root[data-theme="contrast"] {
+  --bg-color: #000000;
+  --text-color: #ffff00;
+  --panel-color: #000000;
+  --sidebar-color: #000000;
+  --accent-color: #ffff00; 
+}
+
+:root[data-theme="light"] .nav-toggle {
+  color: #111827;
+}
+
+:root[data-theme="contrast"] .nav-toggle {
+  color: #ffff00;
+}
+
+:root[data-theme="contrast"] .theme-button {
+  color: #ffff00;
+}
+
+:root[data-theme="contrast"] .settings-close {
+  color: #ffff00;
+}
+
+:root[data-theme="light"] .settings-close {
+  color: #000000;
+}
+
+:root[data-theme="contrast"] .nav-text {
+  color: #ffff00;
+}
+
+/* no-op placeholder removed */
+
+/* Apply background and text from theme variables */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* accent-color for native inputs */
+input[type="radio"],
+input[type="checkbox"] {
+  accent-color: var(--accent-color);
+}
+
+/* ensure text-sizing radios use accent */
+.text-sizing input[type="radio"] {
+  accent-color: var(--accent-color);
+}
+
+/* theme-button color variants */
+:root[data-theme="dark"] .theme-button--active {
+  background: #513629;
+}
+:root[data-theme="contrast"] .theme-button--active {
+  background: #87E911;
+  color: #ffff00;
+}
+
+:root[data-theme="contrast"] .theme-button--active {
+  background: #87E911;
+}
+
+:root[data-theme="contrast"] .settings-close {
+  color: #ffff00;
+}
+
+/* Light-mode variants */
+:root[data-theme="light"] .SidebarBtn-Expanded {
+  background-image: url('./assets/light_mode/left_panel.png');
+}
+:root[data-theme="light"] .SidebarBtn-Expanded:hover {
+  background-image: url('./assets/light_mode/left_panel_close.png');
+}
+:root[data-theme="light"] .SidebarBtn-Collapsed {
+  background-image: url('./assets/light_mode/left_panel.png');
+}
+:root[data-theme="light"] .SidebarBtn-Collapsed:hover {
+  background-image: url('./assets/light_mode/left_panel_open.png');
+}
+
+/* High-contrast-mode variants */
+:root[data-theme="contrast"] .SidebarBtn-Expanded {
+  background-image: url('./assets/high_contrast/left_panel.png');
+}
+:root[data-theme="contrast"] .SidebarBtn-Expanded:hover {
+  background-image: url('./assets/high_contrast/left_panel_close.png');
+}
+:root[data-theme="contrast"] .SidebarBtn-Collapsed {
+  background-image: url('./assets/high_contrast/left_panel.png');
+}
+:root[data-theme="contrast"] .SidebarBtn-Collapsed:hover {
+  background-image: url('./assets/high_contrast/left_panel_open.png');
+}

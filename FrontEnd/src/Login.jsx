@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
-// harry watson will be working on this file next
 export default function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -31,7 +30,7 @@ export default function Login() {
         setLoading(true)
         try {
             // use Vite env var if provided, fallback to localhost:3000
-            const res = await fetch('http://localhost:3000/api/login', {
+            const res = await fetch('http://localhost:3000/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })

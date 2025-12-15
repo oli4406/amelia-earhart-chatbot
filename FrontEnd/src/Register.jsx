@@ -13,10 +13,10 @@ export default function Register() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    // remove legacy local-only flag that caused the UI to show "Already registered"
     try {
       localStorage.removeItem('hasUser')
     } catch (e) {
+      console.error(`Error removing 'hasUser': \n${e}`)
       /* ignore storage errors */
     }
 
@@ -41,7 +41,7 @@ export default function Register() {
     try {
       const payload = { firstName, lastName, email, password }
       console.log('Register payload:', payload) // <-- add this
-      const res = await fetch('http://localhost:3000/api/register',  {
+      const res = await fetch('http://localhost:3000/api/auth/register',  {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
