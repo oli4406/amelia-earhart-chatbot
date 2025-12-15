@@ -1,5 +1,29 @@
 import {useState, useEffect, useRef, useCallback} from 'react'
 
+/**
+ * Settings component for managing user accessibility preferences.
+ * 
+ * Provides a modal dialog for users to customize:
+ * - Font size (75%, 100%, 125%, 150%, 200%)
+ * - Theme (dark, light, high contrast)
+ * - Keyboard tips visibility
+ * - Message density/spacing (default, comfortable)
+ * 
+ * Settings are persisted to localStorage and applied to the document root via data attributes.
+ * Changes trigger an 'accessibilitySettingsChanged' event for other components to listen to.
+ * 
+ * The modal supports:
+ * - Closing via Escape key or clicking outside the modal
+ * - Backspace key handling (only closes if not typing in an input)
+ * - Focus management for keyboard accessibility
+ * - ARIA attributes for screen reader support
+ * 
+ * @component
+ * @param {Object} props - Component props
+ * @param {boolean} [props.visible=true] - Controls initial visibility of the settings modal
+ * @param {Function} [props.onClose] - Callback invoked when the modal is closed
+ * @returns {React.ReactElement|null} The settings modal dialog, or null if not visible
+ */
 export default function Settings({ visible = true, onClose }) {
     const [showSettings, setShowSettings] = useState(visible);
     const [fontSize, setFontSize] = useState('100%');

@@ -1,6 +1,30 @@
 import {useState, useEffect} from 'react'
 import {Link} from 'react-router-dom'
 
+/**
+ * ForgotPassword component for handling password reset requests.
+ * 
+ * This component displays a form where users can enter their email to request a password reset.
+ * Currently, the password reset functionality is out of scope and displays a message directing
+ * users to contact their administrator.
+ * 
+ * @component
+ * @returns {JSX.Element} A forgot password form with email input, password input, error messaging,
+ *                        and a reset password button with a link back to the login page.
+ * 
+ * @example
+ * return (
+ *   <ForgotPassword />
+ * )
+ * 
+ * @requires useState from 'react'
+ * @requires useEffect from 'react'
+ * @requires Link from 'react-router-dom'
+ * 
+ * @state {string} email - The email address entered by the user
+ * @state {string} password - The password entered by the user
+ * @state {string} error - Error message to display to the user
+ */
 export default function ForgotPassword(){
 
     const [email, setEmail] = useState('')

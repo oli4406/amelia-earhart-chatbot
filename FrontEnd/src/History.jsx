@@ -1,6 +1,30 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
+/**
+ * History component for displaying and managing chat message history.
+ * 
+ * Fetches the user's saved chat messages from the backend API and displays them
+ * in a chronological list. Requires authentication via JWT token stored in localStorage.
+ * 
+ * Features:
+ * - Displays chat history with questions and answers
+ * - Delete individual history entries
+ * - Clear entire chat history at once
+ * - Shows appropriate message when user is not logged in
+ * - Supports both legacy single-field and new Q/A pair data formats
+ * 
+ * @component
+ * @returns {React.ReactElement} The rendered History component
+ * 
+ * @example
+ * // Usage in a parent component
+ * <History />
+ * 
+ * @requires useState - React hook for state management
+ * @requires useEffect - React hook for side effects (fetching data)
+ * @requires localStorage - Browser API for storing authentication token
+ */
 export default function History() {
 
     const [history, setHistory] = useState([])

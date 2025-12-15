@@ -1,6 +1,35 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
+/**
+ * Register component for user account creation
+ * 
+ * Handles user registration by collecting first name, last name, email, and password.
+ * Validates input fields, ensures password confirmation matches, and sends registration
+ * request to the backend API. On successful registration, navigates to login page.
+ * 
+ * @component
+ * @returns {JSX.Element} The register form UI with input fields and submission button
+ * 
+ * @example
+ * return (
+ *   <Register />
+ * )
+ * 
+ * @state {string} firstName - User's first name
+ * @state {string} lastName - User's last name
+ * @state {string} email - User's email address
+ * @state {string} password - User's password
+ * @state {string} confirmPassword - Password confirmation field
+ * @state {string} error - Error message to display to user
+ * @state {boolean} loading - Loading state during registration request
+ * @state {boolean} registered - Flag indicating registration completion
+ * 
+ * @requires useState - React hook for state management
+ * @requires useEffect - React hook for side effects
+ * @requires useNavigate - React Router hook for navigation
+ * @requires Link - React Router component for linking
+ */
 export default function Register() {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')

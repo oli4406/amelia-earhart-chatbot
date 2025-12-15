@@ -1,3 +1,41 @@
+/**
+ * Theme Stylesheet - Multi-theme Support (Dark, Light, High-Contrast)
+ * 
+ * This stylesheet provides comprehensive theme styling for the Amelia Earhart Chatbot application.
+ * It supports three distinct themes: dark mode, light mode, and high-contrast mode for accessibility.
+ * 
+ * THEME VARIABLES:
+ * - Dark Theme: Brown/bronze color scheme (#543C1C background, #73503F panels)
+ * - Light Theme: Tan/beige color scheme (#ad8c6b background, #C3B495 accent)
+ * - Contrast Theme: High-visibility yellow/magenta (#87E911, #FF00BD) for accessibility
+ * 
+ * COMPONENTS STYLED:
+ * - Form inputs (login, register, forgot password) - background, text, placeholder colors
+ * - Buttons (register, login, forgot password, send) - styling and hover effects
+ * - Chat interface (message bubbles for user and bot messages)
+ * - Navigation elements (theme toggle, sidebar buttons, settings)
+ * - Input fields and theme toggle buttons
+ * 
+ * STYLING APPROACH:
+ * - Uses CSS custom properties (variables) for theme consistency
+ * - Applies theme-specific styles via :root[data-theme="..."] selectors
+ * - Implements filter-based hover effects (brightness adjustment)
+ * - Maintains consistent padding, border-radius, and border styles across themes
+ * 
+ * ACCESSIBILITY FEATURES:
+ * - High-contrast theme with 2px solid borders for better visibility
+ * - High contrast text colors (#ffff00 on black, #000000 on lime green)
+ * - Theme toggle support for users with vision-related accessibility needs
+ * 
+ * COLOR PALETTES:
+ * - Dark: #543C1C (bg), #73503F (panels), #ffffff (text)
+ * - Light: #ad8c6b (bg), #C3B495 (panels), #111827 (text)
+ * - Contrast: #000000 (bg), #87E911 (panels), #ffff00 (text)
+ * 
+ * ASSET VARIANTS:
+ * - Sidebar button images vary by theme (light_mode/, high_contrast/ folders)
+ * - Dark theme uses default asset directory
+ */
 
 /* styling in dark mode, light mode, and contrast overrides for forms */
 :root[data-theme="dark"] .register-form input {

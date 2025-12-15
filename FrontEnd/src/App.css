@@ -1,3 +1,50 @@
+/**
+ * App.css - Main stylesheet for Amelia Earhart Chatbot application
+ * 
+ * Layout & Root Styles:
+ * - #root: Centers content with max-width constraint and padding
+ * - Custom cursor: Uses Heinkel He111 aircraft image as pointer
+ * 
+ * Logo Animations:
+ * - .logo: Interactive logo with hover drop-shadow effect
+ * - .logo.react: React-specific hover styling
+ * - @keyframes logo-spin: 360-degree rotation animation
+ * - Media query: Respects prefers-reduced-motion accessibility setting
+ * 
+ * Chat Interface:
+ * - .chat-container: Main chat wrapper with padding
+ * - .messages-window: Scrollable message display area (60vh height)
+ *   - Custom scrollbar styling for webkit and Firefox browsers
+ *   - Transparent background with rounded corners
+ * - .message-line: Individual message row with flex layout
+ *   - .user: Right-aligned user messages with #BE8435 background
+ *   - .bot: Left-aligned bot (Amelia) messages with #3B221D background
+ * - .message-bubble: Message content container with max-width constraint
+ *   - Responsive padding with paragraph spacing
+ * 
+ * Input Controls:
+ * - .input-row: Flexbox container for input field and send button
+ * - .input-field: Text input with dark background
+ * - .send-button: Clickable button for message submission
+ * 
+ * History Panel:
+ * - .history-list: CSS Grid layout with auto-fill columns (280px minimum)
+ * - .history-card: Individual history entry with subtle styling
+ * - .history-meta: Timestamp and metadata display
+ * - .history-text: Pre-wrapped conversation text
+ * - .history-actions: Button container for card actions
+ * 
+ * Accessibility & Density:
+ * - .keyboard-tips: Hidden by default, toggleable via data-show-keyboard-tips
+ * - [data-message-density]: Adjustable spacing for comfortable/default viewing
+ * - Respects prefers-reduced-motion media query for motion-sensitive users
+ * 
+ * Color Palette:
+ * - Primary background: #3B221D (dark brown)
+ * - User message: #BE8435 (tan/gold)
+ * - Text: #ffffff, #f5f7ff (light)
+ * - Accents: #646cff (blue), #61dafb (cyan)
+ */
 #root {
   max-width: 1280px;
   margin: 0 auto;

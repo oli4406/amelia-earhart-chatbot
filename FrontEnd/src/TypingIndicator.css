@@ -1,3 +1,31 @@
+/**
+ * TypingIndicator Component Styles
+ * 
+ * Provides animated typing indicator animation with three blinking dots.
+ * Used to show that the chatbot is processing or composing a response.
+ * 
+ * .typing-indicator
+ * - Container for the typing indicator animation
+ * - Dimensions: 50px width × 20px height
+ * - Transparent background with rounded corners
+ * - Flexbox layout to evenly space child elements
+ * 
+ * .typing-indicator span
+ * - Individual dot element (8px × 8px circle)
+ * - Dark gray color (#6c6c6c)
+ * - Animated with blink keyframes (1.4s infinite)
+ * - Opacity and vertical translation effects
+ * 
+ * Animation delays create sequential blinking effect:
+ * - First dot: 0s delay
+ * - Second dot: 0.2s delay
+ * - Third dot: 0.4s delay
+ * 
+ * @keyframes blink
+ * - Opacity fades from 0.2 to 1 and back to 0.2
+ * - Y-axis translation of -2px at peak opacity
+ * - Creates smooth bobbing animation effect
+ */
 .typing-indicator {
   width: 50px;
   height: 20px;

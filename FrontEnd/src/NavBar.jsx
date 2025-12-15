@@ -17,6 +17,29 @@ import settingsIconContrast from './assets/high_contrast/settings.png';
 import accountIconContrast from './assets/high_contrast/account.png';
 
 
+/**
+ * NavBar component - Main navigation bar for the Amelia Earhart chatbot application.
+ * 
+ * Manages:
+ * - Authentication state (login/logout)
+ * - Navigation menu collapse/expand
+ * - User accessibility settings (font size, theme, keyboard tips, message density)
+ * - Current user information display
+ * - Settings modal visibility
+ * 
+ * Features:
+ * - Responsive collapsible navigation menu
+ * - Cross-window localStorage synchronization for accessibility settings
+ * - Theme-aware icon selection (light, dark, high contrast)
+ * - Conditional navigation links based on authentication status
+ * - Persistent accessibility preferences
+ * 
+ * @component
+ * @returns {JSX.Element} Navigation bar with theme support and accessibility settings
+ * 
+ * @example
+ * return <NavBar />
+ */
 export default function NavBar() {
 
   const [loggedIn, setLoggedIn] = useState(Boolean(localStorage.getItem('authToken')));
