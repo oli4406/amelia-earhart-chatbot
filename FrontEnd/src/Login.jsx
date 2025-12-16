@@ -26,11 +26,11 @@ import { Link, useNavigate } from 'react-router-dom'
  * @state {string} error - Error message to display
  * @state {boolean} loading - Loading state during login request
  * 
- * @function handleLogin - Validates input, sends login request to API, and handles response
- * @param {Event} e - Form submit event
- * @throws {Error} Catches and displays login errors to user
+ * @description
+ * Internal handleLogin function validates input, sends login request to API, and handles response.
+ * Catches and displays login errors to user.
  */
-export default function Login() {
+function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
@@ -41,7 +41,6 @@ export default function Login() {
         document.title = 'Login | Amelia Earhart Chatbot'
     }, [])
 
-    // make handler async and only set loading once validation passes
     const handleLogin = async (e) => {
         e.preventDefault()
         setError('')
@@ -58,7 +57,6 @@ export default function Login() {
 
         setLoading(true)
         try {
-            // use Vite env var if provided, fallback to localhost:3000
             const res = await fetch('http://localhost:3000/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -124,3 +122,5 @@ export default function Login() {
         </div>
     )
 }
+
+export default Login
